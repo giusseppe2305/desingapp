@@ -1,0 +1,39 @@
+{
+  "all_categories": [
+    {
+      "id": 1,
+      "title": "prueba 1",
+      "image": "ic_profile"
+    },
+    {
+      "id": 2,
+      "title": "prueba 2",
+      "image": "ic_example2"
+    },
+    {
+      "id": 3,
+      "title": "prueba 3",
+      "image": "ic_profile"
+    },
+    {
+      "id": 4,
+      "title": "prueba 4",
+      "image": "ic_example2"
+    },
+    {
+      "id": 5,
+      "title": "prueba 5",
+      "image": "ic_profile"
+    },
+    {
+      "id": 6,
+      "title": "prueba 6",
+      "image": "ic_example2"
+    },
+    {
+      "id": 7,
+      "title": "prueba 7",
+      "image": "ic_profile"
+    }
+  ]
+}
