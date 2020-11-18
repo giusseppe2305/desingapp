@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="Posts" android:id="@+id/btnMenuPosts"/>
-    <item android:title="Chats" android:id="@+id/btnMenuChats" />
-    <item android:title="Profile" android:id="@+id/btnMenuProfile"/>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:title="Posts" android:id="@+id/btnMenuPosts" app:showAsAction="always" android:icon="@drawable/ic_menu_worker"/>
+    <item android:title="Chats" android:id="@+id/btnMenuChats"   app:showAsAction="always"  android:icon="@drawable/ic_comentario" />
+    <item android:title="Profile"  app:showAsAction="always"  android:id="@+id/btnMenuProfile" android:icon="@drawable/ic_profile"/>
 </menu>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.appbar.MaterialToolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbarChat"
+    app:contentInsetStartWithNavigation="0dp"
+    android:elevation="0.2dp"
+    >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/photoUserToToolbar"
+            android:layout_width="40dp"
+            android:layout_height="55dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:src="@drawable/prueba"
+            />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="5dp"
+        android:gravity="center|left">
+
+
+        <TextView
+            android:id="@+id/nameUserToToolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Frank Rodriguez Aguirre"
+            android:textColor="@color/teal_700" />
+
+        <TextView
+            android:id="@+id/statusUserToToolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Conectado"
+            android:textColor="@color/purple_200"
+            android:textStyle="italic" />
+    </LinearLayout>
+</com.google.android.material.appbar.MaterialToolbar>

@@ -2,30 +2,28 @@ package com.optic.projectofinal.activites;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
-
+import android.graphics.Color;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.optic.projectofinal.R;
-import com.optic.projectofinal.fragments.ChatsFragment;
-import com.optic.projectofinal.fragments.PostsFragment;
+import com.optic.projectofinal.activites.fragments.ChatsFragment;
+import com.optic.projectofinal.activites.fragments.PostsFragment;
+import com.optic.projectofinal.activites.fragments.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigation;
     private PostsFragment postsFragment;
     private ChatsFragment chatsFragment;
-    private Toolbar mToolbar;
+    private ProfileFragment profileFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,30 +31,25 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigation = findViewById(R.id.bottomNavigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
-        mToolbar=findViewById(R.id.TOOLBAR);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Main Principal");
+
+        BadgeDrawable bg = bottomNavigation.getOrCreateBadge(R.id.btnMenuChats);
+        bg.setBackgroundColor(Color.RED);
+        bg.setVisible(true);
+        bg.setNumber(13);
+
+
+
+//        mToolbar=findViewById(R.id.TOOLBAR);
+//        setSupportActionBar(mToolbar);
+//        getSupportActionBar().setTitle("Main Principal");
 
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main_activity , menu);
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.menuSeeProfile:{
-               startActivity(new Intent(this,ScrollingActivity.class));
-                break;
-            }
-        }
-        return false;
-    }
+
 
     BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -65,12 +58,14 @@ public class MainActivity extends AppCompatActivity {
                     switch (item.getItemId()) {
                         case R.id.btnMenuPosts:
                             openFragment((postsFragment==null)?postsFragment=new PostsFragment():postsFragment);
+                           
                             return true;
                         case R.id.btnMenuChats:
                             openFragment((chatsFragment==null)?chatsFragment=new ChatsFragment():chatsFragment);
                             return true;
                         case R.id.btnMenuProfile:
-                            startActivity(new Intent(MainActivity.this,ProfileActivity.class));
+                            //startActivity(new Intent(MainActivity.this, ScrollingActivity.class));
+                            openFragment((profileFragment==null)?profileFragment=new ProfileFragment():profileFragment);
                             return true;
                     }
                     return false;
@@ -82,4 +77,6 @@ public class MainActivity extends AppCompatActivity {
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
+
 }

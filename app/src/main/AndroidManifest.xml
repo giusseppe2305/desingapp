@@ -9,21 +9,34 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectoFinal">
-        <activity
-            android:name=".activites.ScrollingActivity"
-            android:label="@string/title_activity_scrolling"
-            android:theme="@style/Theme.ProjectoFinal.NoActionBar"></activity>
-        <activity android:name=".activites.ProfileActivity" />
-        <activity
-            android:name=".activites.CategorySelectedActivity"
-            android:parentActivityName=".activites.MainActivity" />
-        <activity android:name=".activites.MainActivity">
+        <activity android:name=".activites.SignInActivity"></activity>
+        <activity android:name=".activites.login.RegisterActivity" />
+        <activity android:name=".activites.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activites.NotificationActivity" />
+        <activity
+            android:name=".activites.ChatConversationActivity"
+            android:label="@string/title_activity_chat_conversation"
+            android:theme="@style/Theme.ProjectoFinal.NoActionBar" />
+        <activity android:name=".activites.options_profile.settings.EditProfileActivity" />
+        <activity android:name=".activites.options_profile.SettingsActivity" />
+        <activity android:name=".activites.options_profile.JobsActivity" />
+        <activity android:name=".activites.options_profile.Auctions_Activity" />
+        <activity android:name=".activites.options_profile.Favourites_Workers_Activity" />
+        <activity android:name=".activites.JobDoneActivity" />
+        <activity
+            android:name=".activites.ProfileDetailsActivity"
+            android:label="@string/title_activity_scrolling"
+            android:theme="@style/Theme.ProjectoFinal.NoActionBar" />
+        <activity
+            android:name=".activites.CategorySelectedActivity"
+            android:parentActivityName=".activites.MainActivity" />
+        <activity android:name=".activites.MainActivity" />
     </application>
 
 </manifest>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activites.ChatConversationActivity"
+    android:fitsSystemWindows="true"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <include layout="@layout/toolbar_chat_conversation"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingBottom="10dp">
+            <include layout="@layout/cardview_message_from_me"/>
+            <include layout="@layout/cardview_message_from_me"/>
+            <include layout="@layout/cardview_message_from_me"/>
+            <include layout="@layout/cardview_message_from_me"/>
+            <include layout="@layout/cardview_message_from_me"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal"
+            android:layout_gravity="bottom"
+
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            >
+
+            <EditText
+                android:id="@+id/editTextMessageChat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/edit_text_chat"
+                android:hint="Escribir mensaje..."
+                android:inputType="textMultiLine"
+                android:layout_marginRight="5dp"
+
+                />
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/btnSendMessageChat"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:src="@android:drawable/ic_menu_send"
+                app:civ_border_width="1dp"
+                android:layout_gravity="center"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

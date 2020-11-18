@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.google.android.material.chip.Chip;
 import com.optic.projectofinal.R;
-import com.optic.projectofinal.Utils;
+import com.optic.projectofinal.utils.Utils;
 import com.optic.projectofinal.actionsButtomSheets.ActionBottomCheckBox;
 import com.optic.projectofinal.actionsButtomSheets.ActionBottomDialogFragment;
 import com.optic.projectofinal.models.Category;

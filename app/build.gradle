@@ -6,6 +6,10 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.1"
 
+    buildFeatures {
+        viewBinding true
+    }
+
     defaultConfig {
         applicationId "com.optic.projectofinal"
         minSdkVersion 21
@@ -29,6 +33,11 @@ android {
 }
 
 dependencies {
+    implementation 'com.jaredrummler:material-spinner:1.3.1'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    implementation 'com.aurelhubert:ahbottomnavigation:2.3.4'//bottom navigation
+
+    implementation 'com.github.smarteist:autoimageslider:1.4.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.github.stfalcon:stfalcon-imageviewer:1.0.1'
     implementation 'com.ms-square:expandableTextView:0.1.4'
@@ -41,6 +50,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.navigation:navigation-fragment:2.3.1'
+    implementation 'androidx.navigation:navigation-ui:2.3.1'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

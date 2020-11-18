@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:title="gustar" android:icon="@drawable/ic_heart" app:showAsAction="always" android:iconTint="#E0E0E0" />
+    <item android:title="compartir" android:icon="@drawable/share" app:showAsAction="always"/>
+</menu>

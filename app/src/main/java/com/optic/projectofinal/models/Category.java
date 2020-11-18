@@ -1,7 +1,7 @@
 package com.optic.projectofinal.models;
 
 import com.optic.projectofinal.R;
-import com.optic.projectofinal.Utils;
+import com.optic.projectofinal.utils.Utils;
 
 public class Category {
     private int id;
