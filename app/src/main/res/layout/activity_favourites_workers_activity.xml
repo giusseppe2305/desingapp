@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activites.options_profile.Favourites_Workers_Activity"
+    tools:context=".UI.activities.options_profile.Favourites_Workers_Activity"
     android:fitsSystemWindows="true">
     <include layout="@layout/own_toolbar"/>
     <LinearLayout

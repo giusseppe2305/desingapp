@@ -1,7 +1,6 @@
 package com.optic.projectofinal.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,18 +8,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.optic.projectofinal.R;
-import com.optic.projectofinal.activites.CategorySelectedActivity;
-import com.optic.projectofinal.models.Category;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
     Context context;
@@ -42,7 +36,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull PostsAdapter.ViewHolder holder, int position) {
         holder.title.setText("titulo "+numeros.get(position));
         if(position%2==0){
-
             Glide.with(context).load(R.drawable.prueba2).placeholder(R.drawable.handshake).centerInside().into(holder.ivPost);
         }else{
             Glide.with(context).load(R.drawable.prueba).placeholder(R.drawable.handshake).centerInside().into(holder.ivPost);

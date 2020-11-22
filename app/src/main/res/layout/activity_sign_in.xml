@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activites.SignInActivity"
+    tools:context=".UI.activities.login.SignInActivity"
     android:fitsSystemWindows="true">
     <include layout="@layout/own_toolbar" android:id="@+id/toolbar"/>
     <LinearLayout
@@ -18,21 +18,20 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtEmail"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             app:boxBackgroundColor="@color/white"
-            app:counterEnabled="true"
-            app:counterMaxLength="20"
             app:endIconMode="clear_text"
-            app:helperTextEnabled="true"
-            app:helperText="texto ayuda">
+            app:errorEnabled="true"
+         >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Correo electronico"
+                android:hint="@string/activity_register_hint_email_input_text"
                 android:inputType="textEmailAddress"
 
                 />
@@ -40,6 +39,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtPassword"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,13 +48,13 @@
             app:counterEnabled="true"
             app:counterMaxLength="20"
             app:endIconMode="password_toggle"
-            app:helperTextEnabled="true"
-            app:helperText="texto ayuda">
+            app:errorEnabled="true"
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Contraseña"
+                android:hint="@string/activity_register_hint_password_input_text"
                 android:inputType="textPassword"
 
                 />
@@ -64,10 +64,11 @@
 
 
         <Button
+            android:id="@+id/btnSignIn"
             android:layout_marginTop="25dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Iniciar Sesion" />
+            android:text="@string/btn_sign_in" />
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

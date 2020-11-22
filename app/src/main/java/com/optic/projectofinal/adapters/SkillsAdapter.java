@@ -5,17 +5,12 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.optic.projectofinal.R;
-import com.optic.projectofinal.activites.CategorySelectedActivity;
-import com.optic.projectofinal.activites.JobDoneActivity;
-import com.optic.projectofinal.models.Category;
+import com.optic.projectofinal.UI.activities.JobDoneActivity;
 
 import java.util.List;
 

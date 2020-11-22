@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.optic.projectofinal">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,34 +12,69 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectoFinal">
-        <activity android:name=".activites.SignInActivity"></activity>
-        <activity android:name=".activites.login.RegisterActivity" />
-        <activity android:name=".activites.login.LoginActivity">
+        <activity android:name=".UI.activities.SplashScreenActivity"
+            >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activites.NotificationActivity" />
         <activity
-            android:name=".activites.ChatConversationActivity"
+            android:name=".UI.activities.login.SignInActivity"
+            android:parentActivityName=".UI.activities.login.LoginActivity"></activity>
+        <activity
+            android:name=".UI.activities.login.RegisterActivity"
+            android:parentActivityName=".UI.activities.login.LoginActivity"></activity>
+        <activity android:name=".UI.activities.login.LoginActivity">
+
+
+
+        </activity>
+        <activity android:name=".UI.activities.NotificationActivity" />
+        <activity
+            android:name=".UI.activities.ChatConversationActivity"
             android:label="@string/title_activity_chat_conversation"
             android:theme="@style/Theme.ProjectoFinal.NoActionBar" />
-        <activity android:name=".activites.options_profile.settings.EditProfileActivity" />
-        <activity android:name=".activites.options_profile.SettingsActivity" />
-        <activity android:name=".activites.options_profile.JobsActivity" />
-        <activity android:name=".activites.options_profile.Auctions_Activity" />
-        <activity android:name=".activites.options_profile.Favourites_Workers_Activity" />
-        <activity android:name=".activites.JobDoneActivity" />
+        <activity android:name=".UI.activities.options_profile.settings.EditProfileActivity" />
+        <activity android:name=".UI.activities.options_profile.SettingsActivity" />
+        <activity android:name=".UI.activities.options_profile.JobsActivity" />
+        <activity android:name=".UI.activities.options_profile.Auctions_Activity" />
+        <activity android:name=".UI.activities.options_profile.Favourites_Workers_Activity" />
+        <activity android:name=".UI.activities.JobDoneActivity" />
         <activity
-            android:name=".activites.ProfileDetailsActivity"
-            android:label="@string/title_activity_scrolling"
-            android:theme="@style/Theme.ProjectoFinal.NoActionBar" />
+            android:name=".UI.activities.ProfileDetailsActivity"
+            android:theme="@style/Theme.ProjectoFinal.NoActionBar"></activity>
         <activity
-            android:name=".activites.CategorySelectedActivity"
-            android:parentActivityName=".activites.MainActivity" />
-        <activity android:name=".activites.MainActivity" />
+            android:name=".UI.activities.CategorySelectedActivity"
+            android:parentActivityName=".UI.activities.MainActivity" />
+        <activity android:name=".UI.activities.MainActivity">
+
+
+        </activity>
+
+
+
+        <!-- meta data login facebook -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

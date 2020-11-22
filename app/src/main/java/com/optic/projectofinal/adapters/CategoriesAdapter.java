@@ -13,10 +13,9 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.optic.projectofinal.R;
-import com.optic.projectofinal.activites.CategorySelectedActivity;
+import com.optic.projectofinal.UI.activities.CategorySelectedActivity;
 import com.optic.projectofinal.models.Category;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.ViewHolder> {

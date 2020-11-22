@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "323186056005",
+    "firebase_url": "https://projecto-final-b5adb.firebaseio.com",
+    "project_id": "projecto-final-b5adb",
+    "storage_bucket": "projecto-final-b5adb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:323186056005:android:7b852c4b9407c169017c2c",
+        "android_client_info": {
+          "package_name": "com.optic.projectofinal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "323186056005-mmt530pgvm902u4dnpmbp0jroalmr02j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwxb66IBDiwrnoADzXKWrnrJYJhw6lOnY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "323186056005-mmt530pgvm902u4dnpmbp0jroalmr02j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
