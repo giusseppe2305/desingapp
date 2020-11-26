@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="8dp"
+    android:background="@drawable/bottom_sheet_background">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textSize="20dp"
+            android:text="Selecciona una subcategoria"
+            android:textAlignment="textStart" />
+        <RadioGroup
+            android:id="@+id/RadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+         >
+
+            <RadioButton
+                android:id="@+id/priceLowerToHigher"
+                android:tag="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Precio (Menor a mayor)" />
+
+            <RadioButton
+                android:id="@+id/priceHigherToLower"
+                android:tag="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Precio (Mayor a menor)" />
+
+            <RadioButton
+                android:id="@+id/distance"
+                android:tag="3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Distancia" />
+        </RadioGroup>
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

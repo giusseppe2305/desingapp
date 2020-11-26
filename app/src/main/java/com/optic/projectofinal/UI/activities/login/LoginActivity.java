@@ -1,12 +1,12 @@
 package com.optic.projectofinal.UI.activities.login;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -23,7 +23,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.optic.projectofinal.R;
@@ -98,6 +97,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
+
         binding.loginHaveAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,6 +106,8 @@ public class LoginActivity extends AppCompatActivity {
                 //set binding FRAME SIGN IN FRAGMENT
                 LayoutLoginBottomSheetBinding fragmentBinding = LayoutLoginBottomSheetBinding.inflate(getLayoutInflater());
                 View vista = fragmentBinding.getRoot();
+                bottomSheetDialog.setContentView(vista);
+
                 fragmentBinding.btnContinueEmail.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -135,7 +138,6 @@ public class LoginActivity extends AppCompatActivity {
                         bottomSheetDialog.dismiss();
                     }
                 });
-                bottomSheetDialog.setContentView(vista);
                 bottomSheetDialog.show();
 
             }

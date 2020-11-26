@@ -36,7 +36,8 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull CategoriesAdapter.ViewHolder holder, int position) {
         final Category iteratedCategory=myCategories.get(position);
-        holder.tvTitle.setText(iteratedCategory.getTitle());
+        holder.tvTitle.setText(context.getResources().getString(iteratedCategory.getIdTitle()));
+
         holder.ivImage.setImageResource(iteratedCategory.getIdImage());
         holder.cardViewParent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,9 +55,9 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle;
-        ImageView ivImage;
-        CardView cardViewParent;
+        private TextView tvTitle;
+        private ImageView ivImage;
+        private CardView cardViewParent;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle=itemView.findViewById(R.id.tvTitle);

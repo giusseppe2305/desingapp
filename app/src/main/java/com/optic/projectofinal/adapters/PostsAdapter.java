@@ -52,8 +52,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         TextView title;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            ivPost=itemView.findViewById(R.id.ivImagePost);
-            title=itemView.findViewById(R.id.titulo);
+            ivPost=itemView.findViewById(R.id.imageWorker);
+            title=itemView.findViewById(R.id.nameWorker);
         }
     }
 }

@@ -2,38 +2,33 @@
   "all_categories": [
     {
       "id": 1,
-      "title": "prueba 1",
-      "image": "ic_profile"
+      "title": "homeCategory",
+      "image": "ic_category_home"
     },
     {
       "id": 2,
-      "title": "prueba 2",
-      "image": "ic_example2"
+      "title": "computingAndAudiovisualCategory",
+      "image": "ic_category_computing_audiovisual"
     },
     {
       "id": 3,
-      "title": "prueba 3",
-      "image": "ic_profile"
+      "title": "educationAndSportsCategory",
+      "image": "ic_category_education_sports"
     },
     {
       "id": 4,
-      "title": "prueba 4",
-      "image": "ic_example2"
+      "title": "estheticCategory",
+      "image": "ic_category_esthetic"
     },
     {
       "id": 5,
-      "title": "prueba 5",
-      "image": "ic_profile"
+      "title": "careAndHealhCategory",
+      "image": "ic_category_care_health"
     },
     {
       "id": 6,
-      "title": "prueba 6",
-      "image": "ic_example2"
-    },
-    {
-      "id": 7,
-      "title": "prueba 7",
-      "image": "ic_profile"
+      "title": "othersCategory",
+      "image": "ic_category_others"
     }
   ]
 }

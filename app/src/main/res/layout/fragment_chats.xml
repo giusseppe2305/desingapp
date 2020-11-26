@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         >
-        <include layout="@layout/own_toolbar"/>
+
 
         <include layout="@layout/cardview_chat_preview" android:id="@+id/pruebaclickchat"/>
         <include layout="@layout/cardview_chat_preview"/>

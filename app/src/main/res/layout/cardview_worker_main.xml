@@ -18,7 +18,7 @@
 
         <!-- Media -->
         <ImageView
-            android:id="@+id/ivImagePost"
+            android:id="@+id/imageWorker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="80dp"
@@ -37,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="10dp">
 
                 <!-- Title, secondary and supporting text -->
                 <me.zhanghai.android.materialratingbar.MaterialRatingBar
@@ -50,14 +50,29 @@
                 android:numStars="5"
                 android:progressTint="#E81919"
                 android:rating="3.5" />
-                <TextView
-                    android:id="@+id/titulo"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="titulo"
-                    android:textAppearance="?attr/textAppearanceHeadline6" />
+                    android:orientation="horizontal">
+                    <TextView
+
+                        android:id="@+id/nameWorker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="titulo"
+                        android:textAppearance="?attr/textAppearanceHeadline6" />
+                    <TextView
+                        android:layout_marginLeft="5dp"
+                        android:textSize="10sp"
+                        android:id="@+id/lastNameWorker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="apellidos"
+                        android:textAppearance="?attr/textAppearanceCaption"/>
+                </LinearLayout>
 
                 <TextView
+                    android:id="@+id/aboutWorker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -75,12 +90,17 @@
             </LinearLayout>
 
             <ImageView
+                android:id="@+id/likeWorker"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="bottom|right"
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="5dp"
-                app:srcCompat="@drawable/ic_heart_liked" />
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/ic_heart_liked"
+                android:tag="false"
+                android:backgroundTint="@color/unLikedWorker"/>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </LinearLayout>
 

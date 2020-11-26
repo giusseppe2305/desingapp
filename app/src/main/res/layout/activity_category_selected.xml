@@ -7,7 +7,7 @@
     tools:context=".UI.activities.CategorySelectedActivity"
     android:fitsSystemWindows="true">
 
-    <include layout="@layout/own_toolbar" />
+    <include layout="@layout/own_toolbar" android:id="@+id/toolbar"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,43 +26,48 @@
                 android:orientation="horizontal"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:paddingBottom="10dp">
+                android:paddingBottom="5dp">
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chip1"
+                    android:id="@+id/chipOrder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="10dp"
+                    android:layout_marginRight="2dp"
                     android:text="Ordenar"
                     app:chipBackgroundColor="@color/purple_200" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chip2"
+                    android:id="@+id/chipSubCategory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="otro parametro"
+                    android:layout_marginRight="2dp"
+                    android:text="Subcategoria"
                     app:chipBackgroundColor="@color/purple_200" />
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chipPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="otro parametro 2"
+                    android:layout_marginRight="2dp"
+                    android:text="Precio"
+                    app:chipBackgroundColor="@color/purple_200" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipLastConexion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="2dp"
+                    android:text="Ultima conexion"
                     app:chipBackgroundColor="@color/purple_200" />
 
-                <com.google.android.material.chip.Chip
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="otro parametro 3"
-                    app:chipBackgroundColor="@color/purple_200" />
-
-                <com.google.android.material.chip.Chip
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="otro parametro 4"
-                    app:chipBackgroundColor="@color/purple_200" />
             </LinearLayout>
         </HorizontalScrollView>
-
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rvCategorySelected"
+            android:padding="10dp"
+            android:layout_marginBottom="20dp"/>
     </LinearLayout>
 
 

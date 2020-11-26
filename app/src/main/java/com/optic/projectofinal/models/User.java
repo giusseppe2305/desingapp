@@ -15,38 +15,68 @@ public class User implements Serializable {
     private String about;
     private Long birthdate;
     private String location;
+    private double pricePerHour;
     private int sex;
-    private boolean isProfessional;
-    private boolean isOnline;
+    private boolean professional;
+    private boolean online;
     private long lastConnection;
     private long timestamp;
+    private ArrayList<String> idsSubCategories;
+    private ArrayList<String> idsCategories;
 
-    public User() {
-        isProfessional=false;
-        timestamp=new Date().getTime();
-        isOnline=false;
+    public double getPricePerHour() {
+        return pricePerHour;
     }
 
-    public User(String name, String lastName, String schedule, String about, String location, int sex) {
+    public void setPricePerHour(double pricePerHour) {
+        this.pricePerHour = pricePerHour;
+    }
+
+
+
+    public ArrayList<String> getIdsSubCategories() {
+        return idsSubCategories;
+    }
+
+    public void setIdsSubCategories(ArrayList<String> idsSubCategories) {
+        this.idsSubCategories = idsSubCategories;
+    }
+
+    public ArrayList<String> getIdsCategories() {
+        return idsCategories;
+    }
+
+    public void setIdsCategories(ArrayList<String> idsCategories) {
+        this.idsCategories = idsCategories;
+    }
+
+    public User() {
+        professional =false;
+        timestamp=new Date().getTime();
+        online =false;
+    }
+
+    public User(String name, String lastName, String schedule, String about, String location, int sex,String profileImage) {
         this.name = name;
         this.lastName = lastName;
         this.schedule = schedule;
         this.about = about;
         this.location = location;
         this.sex = sex;
+        this.profileImage=profileImage;
         ///
-        isProfessional=false;
+        professional =true;
         timestamp=new Date().getTime();
-        isOnline=false;
+        online =false;
         birthdate=910972059L;
     }
 
     public boolean isProfessional() {
-        return isProfessional;
+        return professional;
     }
 
     public void setProfessional(boolean professional) {
-        isProfessional = professional;
+        this.professional = professional;
     }
 
     public ArrayList<String> getSkills() {
@@ -107,11 +137,11 @@ public class User implements Serializable {
 
 
     public boolean isOnline() {
-        return isOnline;
+        return online;
     }
 
     public void setOnline(boolean online) {
-        this.isOnline = online;
+        this.online = online;
     }
 
     public long getLastConnection() {

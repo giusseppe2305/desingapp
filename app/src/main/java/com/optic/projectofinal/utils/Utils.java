@@ -17,6 +17,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Utils {
     public static int getResId(String resName, Class<?> c) {
@@ -79,6 +81,27 @@ public class Utils {
                 + '/' + context.getResources().getResourceTypeName(drawableId)
                 + '/' + context.getResources().getResourceEntryName(drawableId) );
         return imageUri;
+    }
+
+    public static String capitalizeString(String string) {
+        char[] chars = string.toLowerCase().toCharArray();
+        boolean found = false;
+        for (int i = 0; i < chars.length; i++) {
+            if (!found && Character.isLetter(chars[i])) {
+                chars[i] = Character.toUpperCase(chars[i]);
+                found = true;
+            } else if (Character.isWhitespace(chars[i]) || chars[i]=='.' || chars[i]=='\'') { // You can add other chars here
+                found = false;
+            }
+        }
+        return String.valueOf(chars);
+    }
+
+    public static String getDateFormatted(Long timestamp){
+        Date date = new Date(timestamp);
+        SimpleDateFormat df2 = new SimpleDateFormat("HH:mm - dd MMMM yyyy");
+        String dateText = df2.format(date);
+        return dateText;
     }
 }
 

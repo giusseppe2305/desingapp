@@ -5,11 +5,19 @@
     <!-- TODO: Remove or change this placeholder text -->
 
 
+    <!-- Strings used for tittles categories-->
+    <string name="homeCategory">Hogar</string>
+    <string name="educationAndSportsCategory">Educacion y Deportes</string>
+    <string name="estheticCategory">Estetica</string>
+    <string name="careAndHealhCategory">Cuidados y Salud</string>
+    <string name="computingAndAudiovisualCategory">Informatica y Audiovisuales</string>
+    <string name="othersCategory">Otros</string>
 
     <!-- Strings used for tittles appbar of activities-->
     <string name="register_activity_title">Registrarse</string>
+    <string name="job_offered_activity_title">Trabajos ofertados</string>
     <string name="sign_in_activity_title">Iniciar sesion</string>
-    <string name="title_activity_chat_conversation">ChatConversationActivity</string>
+    <string name="title_activity_chat_conversation">Conversacion</string>
     <string name="post_fragment_title">Menu principal</string>
     <!-- Register Activiy values-->
     <string name="activity_register_hint_password_input_text">Contraseña <font fgcolor='red'>*</font></string>
@@ -39,6 +47,12 @@
     <string name="register_with_google">Registrate con google</string>
     <string name="register_with_facebook">Registrate con facebook</string>
     <string name="register_with_email">Registrarte con e-mail</string>
+    <!-- name values bottomnavigation -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="menuNameWorkers">Trabajadores</string>
+    <string name="menuNameJobs">Trabajos</string>
+    <string name="menuNameChats">Chats</string>
+    <string name="menuNameProfile">Perfil</string>
 
 
 </resources>

@@ -2,7 +2,14 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    style="@style/Base.CardView"
+    app:contentPaddingLeft="5dp"
+    app:contentPaddingRight="5dp"
+    android:layout_marginBottom="0.5dp"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +37,8 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="Titulo del trabajo"
                     android:textStyle="bold|italic"
@@ -39,10 +47,19 @@
 
 
             </LinearLayout>
-
             <TextView
+                android:id="@+id/countApplyWorkers"
+                android:textSize="8sp"
+                android:textStyle="italic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Se el primero"
+                />
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="4"
                 android:text="Linea 1 \nLinea 2\nLinea 2\nLinea 2" />
 
             <LinearLayout
@@ -50,11 +67,13 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TextView
+                    android:id="@+id/averagePrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Media: 87.00 €"
                     android:textStyle="bold"/>
                 <TextView
+                    android:id="@+id/timestamp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"

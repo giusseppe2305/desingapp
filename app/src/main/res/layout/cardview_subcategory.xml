@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:id="@+id/cardViewSubCategory"
+
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:gravity="center|left"
+        android:background="?attr/selectableItemBackground"
+        >
+        <TextView
+            android:id="@+id/nameSubcategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:text="Fontanero"/>
+        <TextView
+            android:layout_marginLeft="2dp"
+            android:textStyle="italic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="("/>
+        <TextView
+            android:textStyle="italic"
+            android:id="@+id/sizeSubcategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="17"/>
+        <TextView
+            android:textStyle="italic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text=")"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

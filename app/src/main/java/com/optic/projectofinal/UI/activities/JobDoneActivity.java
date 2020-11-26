@@ -1,12 +1,11 @@
 package com.optic.projectofinal.UI.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.graphics.Color;
 import android.os.Bundle;
 
-import com.ms.square.android.expandabletextview.ExpandableTextView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.adapters.SliderAdapterExample;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
@@ -35,9 +34,6 @@ public class JobDoneActivity extends AppCompatActivity {
         sliderView.setAutoCycle(false);
 
 
-        ///ExpandableTextView expTv1 = (ExpandableTextView) findViewById(R.id.expand_text_view_desc_buyer);
-       // ExpandableTextView expTv2 = (ExpandableTextView) findViewById(R.id.expand_text_view_desc_worker);
-        //expTv1.setText("linea1 \r\n linea2 \r\n linea2 \r\n linea2 \r\n linea2 \r\n linea2 \r\n linea2 \r\n linea2  ");
-        //expTv2.setText("linea1 \r\n linea2 \r\n linea2 \r\n linea2 \r\n linea2 \r\n linea2 \r\n linea2 \r\n linea2  ");
+
     }
 }

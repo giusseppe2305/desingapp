@@ -2,14 +2,12 @@ package com.optic.projectofinal.UI.activities.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.UI.activities.ChatConversationActivity;
@@ -70,8 +68,7 @@ public class ChatsFragment extends Fragment {
         // Inflate the layout for this fragment
         View vista= inflater.inflate(R.layout.fragment_chats, container, false);
         mToolbar=vista.findViewById(R.id.ownToolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Chats");
+
         vista.findViewById(R.id.pruebaclickchat).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

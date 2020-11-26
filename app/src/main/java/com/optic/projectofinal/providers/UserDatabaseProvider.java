@@ -8,6 +8,9 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.optic.projectofinal.models.SubCategory;
 import com.optic.projectofinal.models.User;
 
 import java.util.Date;
@@ -28,11 +31,11 @@ public class UserDatabaseProvider {
     public Task<Void> createUser(User miUser) {
         return database.document(miUser.getId()).set(miUser);
     }
-    public Task<Void> createUser2(User miUser) {
-        DocumentReference inter = database.document();
-        miUser.setId(inter.getId());
-        return inter.set(miUser);
-    }
+//    public Task<Void> createUser2(User miUser) {
+//        DocumentReference inter = database.document();
+//        miUser.setId(inter.getId());
+//        return inter.set(miUser);
+//    }
     public Task<DocumentSnapshot> getUser(String idUser){
         return database.document(idUser).get();
     }
@@ -53,5 +56,39 @@ public class UserDatabaseProvider {
 
     public DocumentReference getIsOnlineUser(String idCurrentUser) {
         return database.document(idCurrentUser);
+    }
+
+    public Query getAllWorkers(){
+        return database.whereEqualTo("professional",true);
+    }
+
+    public Task<QuerySnapshot> getUsersBySubcategory(String sub) {
+        return database.whereArrayContains("idsSubCategories",sub).get();
+    }
+
+    public Query filterWorkers(int category,SubCategory subCategory, String priceSince, String priceUntil, Order order){
+        Query query = database.whereEqualTo("professional", true).whereArrayContains("idsCategories",category);
+        if(subCategory!=null){
+            query.whereArrayContains("idsSubCategories",subCategory.getId());
+        }
+        if(priceSince!=null&&priceUntil!=null){
+            query.whereGreaterThanOrEqualTo("pricePerHour",priceSince).whereLessThanOrEqualTo("pricePerHour",priceUntil);
+        }
+        if(order!=null){
+            switch (order){
+                case HIGHER_TO_LOWER:query.orderBy("pricePerHour", Query.Direction.DESCENDING);
+                    break;
+                case DISTANCE:
+                    break;
+                case LOWER_TO_HIGHER:query.orderBy("pricePerHour", Query.Direction.ASCENDING);
+                    break;
+            }
+        }
+        return query;
+    }
+    public enum Order{
+        LOWER_TO_HIGHER,
+        HIGHER_TO_LOWER,
+        DISTANCE
     }
 }

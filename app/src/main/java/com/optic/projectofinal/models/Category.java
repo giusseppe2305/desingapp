@@ -5,7 +5,16 @@ import com.optic.projectofinal.utils.Utils;
 
 public class Category {
     private int id;
+    private String title;
+    private String image;
+    private int idImage;
+    public Category() {
+    }
+    public Category(String title,String image) {
+        this.title = title;
+        this.image =  image;
 
+    }
     public int getId() {
         return id;
     }
@@ -13,13 +22,6 @@ public class Category {
     public void setId(int id) {
         this.id = id;
     }
-
-    private String title;
-    private String image;
-    private int idImage;
-    public Category() {
-    }
-
     public int getIdImage() {
         return   Utils.getResId(image, R.drawable.class);
     }
@@ -45,9 +47,7 @@ public class Category {
 
     }
 
-    public Category(String title,String image) {
-        this.title = title;
-        this.image =  image;
-
+    public int getIdTitle() {
+        return   Utils.getResId(title, R.string.class);
     }
 }

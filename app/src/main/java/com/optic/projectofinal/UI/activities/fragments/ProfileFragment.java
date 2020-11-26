@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
@@ -53,8 +52,7 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View vista = inflater.inflate(R.layout.activity_profile, container, false);
         mToolbar=vista.findViewById(R.id.ownToolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Perfil");
+
 
        vista.findViewById(R.id.option_auctions).setOnClickListener(new View.OnClickListener() {
            @Override

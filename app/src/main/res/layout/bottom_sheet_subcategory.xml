@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="500dp"
+    android:background="@drawable/bottom_sheet_background"
+    android:orientation="vertical"
+    android:paddingBottom="8dp"
+
+    > <View
+    android:layout_width="100dp"
+    android:layout_height="5dp"
+    android:layout_gravity="center"
+    android:layout_marginTop="10dp"
+    android:background="@color/browser_actions_bg_grey"
+    />
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:text="Selecciona una subcategoria"
+            android:textAlignment="textStart"
+            android:textSize="20dp" />
+
+        <ImageView
+            android:id="@+id/closeFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_close" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSubCategoriesList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+</LinearLayout>

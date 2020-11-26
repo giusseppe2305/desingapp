@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.activities.fragments.PostsFragment"
+    tools:context=".UI.activities.fragments.WorkersFragment"
     android:background="@color/primaryColor"
     >
 
@@ -13,26 +13,30 @@
         android:orientation="vertical"
 
         >
-        <include layout="@layout/own_toolbar" android:id="@+id/appbar"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCategories"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
             />
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="5dp">
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            >
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvPosts"
+                android:id="@+id/rvWorkers"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
 
                 />
+
         </LinearLayout>
 
     </LinearLayout>

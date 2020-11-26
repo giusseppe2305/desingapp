@@ -1,12 +1,12 @@
 package com.optic.projectofinal.UI.activities.login;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,7 +29,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         View vista = binding.getRoot();
         setContentView(vista);
         ///set toolbar
-        setSupportActionBar(binding.toolbar.TOOLBAR);
+        setSupportActionBar(binding.toolbar.ownToolbar);
         getSupportActionBar().setTitle(R.string.sign_in_activity_title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

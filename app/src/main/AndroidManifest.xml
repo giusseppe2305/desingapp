@@ -12,24 +12,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectoFinal">
-        <activity android:name=".UI.activities.SplashScreenActivity"
-            >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
+        <activity android:name=".UI.activities.JobOfferedActivity"></activity>
+        <activity android:name=".UI.activities.SplashScreenActivity"></activity>
         <activity
             android:name=".UI.activities.login.SignInActivity"
-            android:parentActivityName=".UI.activities.login.LoginActivity"></activity>
+            android:parentActivityName=".UI.activities.login.LoginActivity" />
         <activity
             android:name=".UI.activities.login.RegisterActivity"
-            android:parentActivityName=".UI.activities.login.LoginActivity"></activity>
-        <activity android:name=".UI.activities.login.LoginActivity">
-
-
-
-        </activity>
+            android:parentActivityName=".UI.activities.login.LoginActivity" />
+        <activity android:name=".UI.activities.login.LoginActivity"></activity>
         <activity android:name=".UI.activities.NotificationActivity" />
         <activity
             android:name=".UI.activities.ChatConversationActivity"
@@ -43,18 +34,17 @@
         <activity android:name=".UI.activities.JobDoneActivity" />
         <activity
             android:name=".UI.activities.ProfileDetailsActivity"
-            android:theme="@style/Theme.ProjectoFinal.NoActionBar"></activity>
+            android:theme="@style/Theme.ProjectoFinal.NoActionBar" />
         <activity
             android:name=".UI.activities.CategorySelectedActivity"
             android:parentActivityName=".UI.activities.MainActivity" />
         <activity android:name=".UI.activities.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-
-        </activity>
-
-
-
-        <!-- meta data login facebook -->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- meta data login facebook -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />

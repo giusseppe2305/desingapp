@@ -1,17 +1,15 @@
 package com.optic.projectofinal.UI.activities.login;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.UI.activities.MainActivity;
@@ -20,8 +18,6 @@ import com.optic.projectofinal.models.User;
 import com.optic.projectofinal.providers.AuthenticationProvider;
 import com.optic.projectofinal.providers.UserDatabaseProvider;
 import com.optic.projectofinal.utils.UtilsUI;
-
-import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
     private ActivityRegiterBinding binding;
@@ -37,7 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(vista);
 
         //set toolbar
-        setSupportActionBar(binding.toolbar.TOOLBAR);
+        setSupportActionBar(binding.toolbar.ownToolbar);
         getSupportActionBar().setTitle(getResources().getString(R.string.register_activity_title));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

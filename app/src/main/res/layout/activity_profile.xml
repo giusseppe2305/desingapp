@@ -15,7 +15,7 @@
         android:orientation="vertical"
         >
 
-        <include layout="@layout/own_toolbar"/>
+
 
         <androidx.cardview.widget.CardView
             android:id="@+id/option_see_profile"
