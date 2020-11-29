@@ -34,7 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         //set toolbar
         setSupportActionBar(binding.toolbar.ownToolbar);
-        getSupportActionBar().setTitle(getResources().getString(R.string.register_activity_title));
+        getSupportActionBar().setTitle( getResources().getString(R.string.register_activity_title));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //instace objects
@@ -109,6 +109,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     final User mUser = new User();
+                    mUser.setDefaultData();
                     mUser.setEmail(email);
                     mUser.setId(mAuth.getIdCurrentUser());
                     mUserProvider.createUser(mUser).addOnCompleteListener(new OnCompleteListener<Void>() {

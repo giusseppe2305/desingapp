@@ -9,12 +9,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.UI.activities.JobOfferedActivity;
 import com.optic.projectofinal.databinding.CardviewJobOfferedBinding;
 import com.optic.projectofinal.models.Job;
+import com.optic.projectofinal.providers.StorageProvider;
 import com.optic.projectofinal.providers.UserDatabaseProvider;
 import com.optic.projectofinal.utils.Utils;
 
@@ -34,6 +36,11 @@ public class JobsAdapterFirebase extends FirestoreRecyclerAdapter<Job, JobsAdapt
         holder.binding.title.setText(model.getTitle());
         holder.binding.description.setText(model.getDescription());
         holder.binding.timestamp.setText(Utils.getDateFormatted(model.getTimestamp()));
+        String url=model.getImages().get(0);
+
+        new StorageProvider(context).getUrlImage(url,s -> {
+            Glide.with(context).load(s).apply(Utils.getOptionsGlide()).transform(Utils.getTransformSquareRound()).into(holder.binding.imageJob);
+        });//load image
         holder.binding.getRoot().setOnClickListener(v->{
             Intent i=new Intent(context, JobOfferedActivity.class);
             i.putExtra("idJobSelected",idIterated);

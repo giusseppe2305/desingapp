@@ -19,7 +19,8 @@ import com.optic.projectofinal.UI.activities.fragments.WorkersFragment;
 import com.optic.projectofinal.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-    ActivityMainBinding binding;
+    private static final String TAG = "own";
+    private ActivityMainBinding binding;
     private WorkersFragment workersFragment;
     private JobsFragment jobsFragment;
     private ChatsFragment chatsFragment;
@@ -64,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
 //        for(User i:misUser){
 //            userData.createUser2(i);
 //        }
+//        new AuthenticationProvider().getFirebaseAuth().getCurrentUser().sendEmailVerification().addOnFailureListener(v-> Log.e(TAG, "onCreate: "+v.getMessage() ));
+       // new AuthenticationProvider().getFirebaseAuth().getCurrentUser().updateEmail("cameracafetv98@gmail.com").addOnFailureListener(v-> Log.e(TAG, "onCreate: "+v.getMessage() ));
+
     }
 
 

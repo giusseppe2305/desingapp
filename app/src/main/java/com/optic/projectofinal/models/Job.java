@@ -1,9 +1,75 @@
 package com.optic.projectofinal.models;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Job {
+    public enum State{PUBLISHED,CONTRACTED,FINISHED}
+    private String id;
+    private String idUserOffer;
+    private String idUserApply;
+    private long timestamp;
+    private String description;
+    private String opinionUserOffer;
+    private String opinionUserApply;
+    private ArrayList<String> images;
+    private Valuation valuation;
     private String title;
+    private State state;
+    private int category;
+    private String subcategory;
+
+    public Job() {
+        timestamp=new Date().getTime();
+    }
+
+    public int getCategory() {
+        return category;
+    }
+
+    public void setCategory(int category) {
+        this.category = category;
+    }
+
+    public String getSubcategory() {
+        return subcategory;
+    }
+
+    public void setSubcategory(String subcategory) {
+        this.subcategory = subcategory;
+    }
+
+    public String getIdUserApply() {
+        return idUserApply;
+    }
+
+    public void setIdUserApply(String idUserApply) {
+        this.idUserApply = idUserApply;
+    }
+
+    public String getOpinionUserOffer() {
+        return opinionUserOffer;
+    }
+
+    public void setOpinionUserOffer(String opinionUserOffer) {
+        this.opinionUserOffer = opinionUserOffer;
+    }
+
+    public String getOpinionUserApply() {
+        return opinionUserApply;
+    }
+
+    public void setOpinionUserApply(String opinionUserApply) {
+        this.opinionUserApply = opinionUserApply;
+    }
+
+    public Valuation getValuation() {
+        return valuation;
+    }
+
+    public void setValuation(Valuation valuation) {
+        this.valuation = valuation;
+    }
 
     public String getTitle() {
         return title;
@@ -13,11 +79,13 @@ public class Job {
         this.title = title;
     }
 
-    private String id;
-    private String idUserOffer;
-    private long timestamp;
-    private String description;
-    private ArrayList<String> images;
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
 
     public String getId() {
         return id;

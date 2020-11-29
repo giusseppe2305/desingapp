@@ -1,0 +1,66 @@
+package com.optic.projectofinal.providers;
+
+import android.content.Context;
+import android.net.Uri;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.optic.projectofinal.utils.IDo;
+import com.optic.projectofinal.utils.Utils;
+
+import java.util.Date;
+
+public class StorageProvider {
+    private static final String TAG = "own";
+    private StorageReference mStorage;
+    private Context context;
+    private AuthenticationProvider authenticationProvider;
+    public StorageProvider(Context c) {
+        authenticationProvider=new AuthenticationProvider();
+        mStorage= FirebaseStorage.getInstance().getReference();
+        context=c;
+    }
+    public UploadTask uploadImageNewJob(Uri mPhoto, String id){
+        return save(mPhoto,"jobs_photos",id);
+    }
+    private UploadTask save( Uri mPhoto,String root,String id){
+
+        StorageReference storage=mStorage.child("jobsPhotos").child(id).child(new Date()+Utils.getFileName(mPhoto,context));
+
+        UploadTask task=storage.putFile(mPhoto);
+        return task;
+    }
+
+    public StorageReference getStorage(){
+        return mStorage;
+    }
+
+    public Task<Uri> getUrlImage(String path, IDo funtion) {
+        return mStorage.child(path).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+               funtion.run(uri.toString());
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(TAG, "onFailure: StorageProvider->getUrlImage");
+            }
+        });
+    }
+
+    public UploadTask uploadImageUser(Uri uri, TYPE_IMAGE type) {
+        StorageReference route = mStorage.child("imagesUsers").child(authenticationProvider.getIdCurrentUser() + "_" + type );
+        UploadTask dev = route.putFile(uri);
+        return dev;
+    }
+
+    public enum TYPE_IMAGE{PROFILE_IMAGE,COVER_IMAGE};
+}

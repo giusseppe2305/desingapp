@@ -181,7 +181,7 @@ public class CategorySelectedActivity extends AppCompatActivity {
 
 
     private void loadCategories(SubCategoriesAdapterFirebase adapter){
-        mSubCategoriesDatabase.getAllByCategory(String.valueOf(categorySelected.getId())).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        mSubCategoriesDatabase.getAllByCategory(categorySelected.getId()).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if(queryDocumentSnapshots!=null){
@@ -195,7 +195,7 @@ public class CategorySelectedActivity extends AppCompatActivity {
                                 if(queryDocumentSnapshots!=null){
                                     int size=queryDocumentSnapshots.getDocuments().size();
                                     if(size>0){
-                                        own.setSize(size);
+
                                         adapter.getList().add(own);
                                         adapter.notifyDataSetChanged();
                                     }

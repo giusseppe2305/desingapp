@@ -30,5 +30,46 @@
       "title": "othersCategory",
       "image": "ic_category_others"
     }
+  ],
+  "all_resources": [
+    {
+      "id": 1,
+      "title": "resource_always_available",
+      "image": "ic_resource_always_available"
+    },
+    {
+      "id": 2,
+      "title": "resource_has_car",
+      "image": "ic_resource_has_car"
+    },
+    {
+      "id": 3,
+      "title": "resource_credit_card",
+      "image": "ic_resource_credit_card"
+    },
+    {
+      "id": 4,
+      "title": "resource_home_service",
+      "image": "ic_resource_home_service"
+    },
+    {
+      "id": 5,
+      "title": "resource_works_weekend_and_holidays",
+      "image": "ic_resource_works_weekend_and_holidays"
+    }
+  ],
+  "all_sex": [
+    {
+      "id": 1,
+      "title": "sex_male"
+    },
+    {
+      "id": 2,
+      "title": "sex_female"
+    },
+    {
+      "id": 3,
+      "title": "sex_other"
+    }
   ]
 }

@@ -11,4 +11,25 @@
     <color name="primaryColorDark">#FAF5FF</color>
     <color name="likedWorker">#CEFF1A1A</color>
     <color name="unLikedWorker">#F5F5F5</color>
+
+
+    <color name="ucrop_color_toolbar">@color/teal_200</color>
+    <color name="ucrop_color_statusbar">@color/teal_700</color>
+    <color name="ucrop_color_widget_active">@color/teal_200</color>
+
+    <color name="grey_50">#FAFAFA</color>
+    <color name="grey_100">#F5F5F5</color>
+    <color name="grey_200">#EEEEEE</color>
+    <color name="grey_250">#E7E7E7</color>
+    <color name="grey_300">#E0E0E0</color>
+    <color name="grey_400">#BDBDBD</color>
+    <color name="grey_500">#9E9E9E</color>
+    <color name="grey_600">#757575</color>
+    <color name="grey_700">#616161</color>
+    <color name="grey_800">#424242</color>
+    <color name="grey_900">#212121</color>
+
+
+    <color name="swipe_remove">@color/purple_500</color>
+    <color name="swipe_edit" >@color/teal_700</color>
 </resources>

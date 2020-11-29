@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:title="Crear trabajo" android:id="@+id/btnMenuCreateJob" android:icon="@drawable/ic_create" app:showAsAction="always"
+        android:iconTint="@color/purple_700"/>
+</menu>

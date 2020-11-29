@@ -9,18 +9,25 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectoFinal">
-        <activity android:name=".UI.activities.JobOfferedActivity"></activity>
-        <activity android:name=".UI.activities.SplashScreenActivity"></activity>
+        <activity android:name=".UI.activities.options_profile.settings.EditSettingsWorkerActivity"></activity>
+        <activity android:name=".UI.activities.CreateJobActivity"></activity>
+        <activity android:name=".UI.activities.JobOfferedActivity" />
+        <activity android:name=".UI.activities.SplashScreenActivity" >
+
+        </activity>
         <activity
             android:name=".UI.activities.login.SignInActivity"
             android:parentActivityName=".UI.activities.login.LoginActivity" />
         <activity
             android:name=".UI.activities.login.RegisterActivity"
             android:parentActivityName=".UI.activities.login.LoginActivity" />
-        <activity android:name=".UI.activities.login.LoginActivity"></activity>
+        <activity android:name=".UI.activities.login.LoginActivity" >
+
+        </activity>
         <activity android:name=".UI.activities.NotificationActivity" />
         <activity
             android:name=".UI.activities.ChatConversationActivity"

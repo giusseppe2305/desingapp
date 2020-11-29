@@ -5,6 +5,10 @@
     <!-- TODO: Remove or change this placeholder text -->
 
 
+    <!-- Strings used for titles sex-->
+    <string name="sex_male">Hombre</string>
+    <string name="sex_female">Mujer</string>
+    <string name="sex_other">Otro</string>
     <!-- Strings used for tittles categories-->
     <string name="homeCategory">Hogar</string>
     <string name="educationAndSportsCategory">Educacion y Deportes</string>
@@ -12,10 +16,16 @@
     <string name="careAndHealhCategory">Cuidados y Salud</string>
     <string name="computingAndAudiovisualCategory">Informatica y Audiovisuales</string>
     <string name="othersCategory">Otros</string>
-
+    <!-- Strings used for tittles resources-->
+    <string name="resource_always_available">24 horas disponible</string>
+    <string name="resource_has_car">Tiene coche</string>
+    <string name="resource_credit_card">Acepta tarjeta credito</string>
+    <string name="resource_home_service">Servicio domicion</string>
+    <string name="resource_works_weekend_and_holidays">Trabaja findes</string>
     <!-- Strings used for tittles appbar of activities-->
     <string name="register_activity_title">Registrarse</string>
     <string name="job_offered_activity_title">Trabajos ofertados</string>
+    <string name="create_job_activity_title">Crear un trabajo</string>
     <string name="sign_in_activity_title">Iniciar sesion</string>
     <string name="title_activity_chat_conversation">Conversacion</string>
     <string name="post_fragment_title">Menu principal</string>
@@ -29,11 +39,20 @@
     <!-- Sign in Activiy values-->
     <string name="btn_sign_in">Iniciar Sesion</string>
 
+    <!-- Values pattern category spinner-->
+    <string name="patter_spinner_subcategories">Seleccione alguna categoria/subcategoria</string>
+    <string name="patter_select_almost_one_image">Selecciona una imagen</string>
     <!-- Values pattern password-->
     <string name="pattern_password_digits_between_0_9">Debe tener menos un numero entre 0-9.</string>
     <string name="pattern_password_min_lower_case">Debe tener al menos una minúscula.</string>
     <string name="pattern_password_min_upper_case">Debe tener al menos una mayúscula.</string>
     <string name="pattern_password_corretly_length">Debe ser entre 8-20 caracteres.</string>
+    <!-- Values pattern title-->
+    <string name="pattern_title_correct_length">Debe ser entre 0-40 caracteres.</string>
+    <string name="pattern_title_void_field">Debe introducir algun titulo.</string>
+    <!-- Values pattern description job-->
+    <string name="pattern_description_correct_length">Debe ser entre 0-240 caracteres.</string>
+    <string name="pattern_description_void_field">Debe introducir alguna descripcion.</string>
     <!-- Values pattern email-->
     <string name="pattern_email_void_field">Introduzca algun correo.</string>
     <string name="pattern_email_wrong_pattern">Introduzca algun correo valido.</string>
@@ -53,6 +72,18 @@
     <string name="menuNameJobs">Trabajos</string>
     <string name="menuNameChats">Chats</string>
     <string name="menuNameProfile">Perfil</string>
+    <!--    values job offered activity-->
+    <string name="spinner_category_hint">Selecciona una categoria</string>
+    <string name="spinner_subcategories_hint">Selecciona una subcateogria</string>
+    <string name="description_new_job">Description</string>
+    <string name="title_new_job">Titulo</string>
+    <string name="basic_information_new_job">Informacion basica</string>
+    <string name="max_10_photos">Sube hasta 10 fotos</string>
+    <!--    values dialog close create job activity-->
+    <string name="dialog_confirm_close_create_job_activity_title">¿Desea salir?</string>
+    <string name="dialog_confirm_close_create_job_activity_message">El trabajo no se ha creado, si sale se perderan todos los datos.</string>
+    <string name="dialog_confirm_close_create_job_activity_cancel">¡Me quedo!</string>
+    <string name="dialog_confirm_close_create_job_activity_ok">Salir</string>
 
 
 </resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:backgroundTint="@android:color/transparent"
+    app:contentPadding="5dp"
+    app:cardElevation="0dp"
+    >
+    <ImageView
+        android:id="@+id/imageSelected"
+        android:layout_gravity="center"
+        android:layout_width="110dp"
+        android:layout_height="150dp"
+        android:src="@color/teal_700"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/deleteImage"
+        android:layout_gravity="right|top"
+        android:layout_height="20dp"
+        android:layout_width="25dp"
+        app:civ_circle_background_color="@color/white"
+        android:src="@drawable/ic_close"
+        />
+</androidx.cardview.widget.CardView>

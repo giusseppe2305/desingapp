@@ -7,11 +7,11 @@
     android:background="#F8F8F8"
     android:fitsSystemWindows="true"
     tools:context=".UI.activities.options_profile.settings.EditProfileActivity">
-
+    <include layout="@layout/own_toolbar" android:id="@+id/toolbar"/>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         >
 
         <LinearLayout
@@ -20,10 +20,10 @@
             android:orientation="vertical"
             android:paddingBottom="30dp">
 
-            <include layout="@layout/own_toolbar" />
+
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/option_see_profile"
+                android:id="@+id/btnChangeCoverImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
@@ -40,11 +40,12 @@
                     android:paddingRight="10dp"
                     android:paddingBottom="10dp">
 
-                    <androidx.cardview.widget.CardView
+                    <ImageView
+                        android:id="@+id/coverPageImage"
                         android:layout_width="60dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="@color/purple_200"
-                        app:cardCornerRadius="5dp" />
+                        android:src="@color/grey_100"
+                      />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -78,7 +79,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-
+                android:id="@+id/btnChangeImageProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
@@ -91,14 +92,15 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingLeft="20dp"
-                    android:paddingTop="10dp"
+                    android:paddingTop="5dp"
                     android:paddingRight="10dp"
-                    android:paddingBottom="10dp">
+                    android:paddingBottom="5dp">
 
                     <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/imageProfile"
                         android:layout_width="60dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/prueba" />
+                        android:layout_height="50dp"
+                        android:src="@color/grey_100" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -131,9 +133,9 @@
 
             </androidx.cardview.widget.CardView>
 
-
+<!--            GONE-->
             <androidx.cardview.widget.CardView
-
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -157,7 +159,6 @@
                         android:layout_weight="1"
                         android:orientation="horizontal"
                         android:paddingLeft="10dp">
-
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -167,6 +168,7 @@
                             android:textStyle="bold" />
 
                         <Button
+                            android:id="@+id/changeEmail"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="70dp"
                             android:layout_height="30dp"
@@ -211,6 +213,7 @@
                         android:text="Informacion basica" />
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/name"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -234,6 +237,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/lastName"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -242,20 +246,20 @@
                         android:layout_marginRight="10dp"
                         app:boxBackgroundColor="@color/white"
                         app:counterEnabled="true"
-                        app:counterMaxLength="20"
+                        app:counterMaxLength="40"
                         app:endIconMode="clear_text">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
-
                             android:layout_height="wrap_content"
                             android:hint="Apellidos"
                             android:inputType="text"
-                            android:text="Rodriguez Aguirre" />
+                        />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/about"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -278,6 +282,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/schedule"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -322,27 +327,24 @@
                         android:text="Informacion privada" />
 
                     <com.google.android.material.textfield.TextInputLayout
-
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginRight="10dp"
                         app:boxBackgroundColor="@color/white">
-
                         <AutoCompleteTextView
-                            android:id="@+id/inputTextSex"
+                            android:id="@+id/sex"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Sexo"
                             android:inputType="none" />
-
                     </com.google.android.material.textfield.TextInputLayout>
 
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/birthDate"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -353,8 +355,8 @@
                         app:endIconMode="clear_text">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/datePicker"
 
+                            android:id="@+id/datePicker"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:clickable="true"
@@ -365,6 +367,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/location"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -375,7 +378,6 @@
                         app:endIconMode="clear_text">
 
                         <com.google.android.material.textfield.TextInputEditText
-
 
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

@@ -14,6 +14,8 @@ public class User implements Serializable {
     private String schedule;
     private String about;
     private Long birthdate;
+    private int codeCountry;
+    private int phoneNumber;
     private String location;
     private double pricePerHour;
     private int sex;
@@ -23,6 +25,57 @@ public class User implements Serializable {
     private long timestamp;
     private ArrayList<String> idsSubCategories;
     private ArrayList<String> idsCategories;
+    private boolean verified;
+    private ArrayList<Integer> resources;
+    private ArrayList<Skill> skills;
+
+
+    public User() {
+
+    }
+
+    public User(String name, String lastName, String schedule, String about, String location, int sex,String profileImage) {
+        this.name = name;
+        this.lastName = lastName;
+        this.schedule = schedule;
+        this.about = about;
+        this.location = location;
+        this.sex = sex;
+        this.profileImage=profileImage;
+        ///
+
+    }
+    public ArrayList<Integer> getResources() {
+        return resources;
+    }
+
+    public void setResources(ArrayList<Integer> resources) {
+        this.resources = resources;
+    }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+
+    public int getCodeCountry() {
+        return codeCountry;
+    }
+
+    public void setCodeCountry(int codeCountry) {
+        this.codeCountry = codeCountry;
+    }
+
+    public int getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     public double getPricePerHour() {
         return pricePerHour;
@@ -31,8 +84,6 @@ public class User implements Serializable {
     public void setPricePerHour(double pricePerHour) {
         this.pricePerHour = pricePerHour;
     }
-
-
 
     public ArrayList<String> getIdsSubCategories() {
         return idsSubCategories;
@@ -50,27 +101,6 @@ public class User implements Serializable {
         this.idsCategories = idsCategories;
     }
 
-    public User() {
-        professional =false;
-        timestamp=new Date().getTime();
-        online =false;
-    }
-
-    public User(String name, String lastName, String schedule, String about, String location, int sex,String profileImage) {
-        this.name = name;
-        this.lastName = lastName;
-        this.schedule = schedule;
-        this.about = about;
-        this.location = location;
-        this.sex = sex;
-        this.profileImage=profileImage;
-        ///
-        professional =true;
-        timestamp=new Date().getTime();
-        online =false;
-        birthdate=910972059L;
-    }
-
     public boolean isProfessional() {
         return professional;
     }
@@ -79,15 +109,14 @@ public class User implements Serializable {
         this.professional = professional;
     }
 
-    public ArrayList<String> getSkills() {
+    public ArrayList<Skill> getSkills() {
         return skills;
     }
 
-    public void setSkills(ArrayList<String> skills) {
+    public void setSkills(ArrayList<Skill> skills) {
         this.skills = skills;
     }
 
-    private ArrayList<String> skills;
     public String getCoverPageImage() {
         return coverPageImage;
     }
@@ -210,4 +239,9 @@ public class User implements Serializable {
     }
 
 
+    public void setDefaultData() {
+        professional =false;
+        timestamp=new Date().getTime();
+        online =false;
+    }
 }

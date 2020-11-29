@@ -2,7 +2,6 @@ package com.optic.projectofinal.providers;
 
 import android.content.Context;
 
-import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.Task;
@@ -10,8 +9,8 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.optic.projectofinal.models.User;
 
 public class AuthenticationProvider {
     private FirebaseAuth auth;
@@ -32,6 +31,9 @@ public class AuthenticationProvider {
     public String getIdCurrentUser() {
         return auth.getCurrentUser().getUid();
     }
+    public FirebaseUser getCurrentUser() {
+        return auth.getCurrentUser();
+    }
 
     public FirebaseAuth getFirebaseAuth() {
         return auth;
@@ -48,8 +50,6 @@ public class AuthenticationProvider {
                 new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
         ).signOut();
         ///cerrar en facebbok
-
-
     }
    
     public Task logInGoogle(String idToken) {

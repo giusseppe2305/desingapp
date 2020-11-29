@@ -1,32 +1,29 @@
 package com.optic.projectofinal.UI.activities.options_profile;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
-import com.optic.projectofinal.R;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.optic.projectofinal.UI.activities.options_profile.settings.EditProfileActivity;
+import com.optic.projectofinal.UI.activities.options_profile.settings.EditSettingsWorkerActivity;
+import com.optic.projectofinal.databinding.ActivitySettingsBinding;
 
 public class SettingsActivity extends AppCompatActivity {
+    private ActivitySettingsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        binding=ActivitySettingsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        Toolbar mToolbar = findViewById(R.id.ownToolbar);
-        setSupportActionBar(mToolbar);
-      getSupportActionBar().setTitle("Ajustes");
-      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setSupportActionBar(binding.toolbar.ownToolbar);
+        getSupportActionBar().setTitle("Ajustes");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-      findViewById(R.id.option_edit_profile).setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-              startActivity(new Intent(SettingsActivity.this, EditProfileActivity.class));
-          }
-      });
+        binding.optionEditProfile.setOnClickListener(v -> startActivity(new Intent(SettingsActivity.this, EditProfileActivity.class)));
+        binding.optionEditSettingsWorker.setOnClickListener(v -> startActivity(new Intent(SettingsActivity.this, EditSettingsWorkerActivity.class)));
+
     }
 }

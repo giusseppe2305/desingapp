@@ -17,21 +17,14 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.Query;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.UI.activities.ProfileDetailsActivity;
 import com.optic.projectofinal.adapters.CategoriesAdapter;
 import com.optic.projectofinal.adapters.WorkersAdapterFirebase;
-import com.optic.projectofinal.models.Category;
 import com.optic.projectofinal.models.User;
 import com.optic.projectofinal.providers.AuthenticationProvider;
 import com.optic.projectofinal.providers.UserDatabaseProvider;
 import com.optic.projectofinal.utils.Utils;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -83,10 +76,8 @@ public class WorkersFragment extends Fragment {
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
 
-        Type typeOfObjectsList = new TypeToken<ArrayList<Category>>() {
-        }.getType();
-        List<Category> myCategoriesList = new Gson().fromJson(Utils.getArrayCategoriosJson(getContext()), typeOfObjectsList);
-        adapterCategories = new CategoriesAdapter(getContext(), myCategoriesList);
+
+        adapterCategories = new CategoriesAdapter(getContext(), Utils.getListCategoriesJson(getContext()));
         rvCategories.setAdapter(adapterCategories);
 
 

@@ -34,7 +34,6 @@ public class SubCategoriesAdapterFirebase extends RecyclerView.Adapter<SubCatego
     public void onBindViewHolder(@NonNull SubCategoriesAdapterFirebase.ViewHolder holder, int position) {
         SubCategory iterated=listSubcatories.get(position);
         holder.nameSubcategory.setText(Utils.capitalizeString(iterated.getName()));
-        holder.sizeSubcategory.setText(String.valueOf(iterated.getSize()));
         holder.parent.setOnClickListener(v->context.selectionCategoryDone(iterated));
     }
 

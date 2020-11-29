@@ -6,27 +6,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.optic.projectofinal.R;
+import com.optic.projectofinal.databinding.ImageSliderLayoutItemBinding;
 import com.smarteist.autoimageslider.SliderViewAdapter;
-import com.squareup.picasso.Picasso;
 import com.stfalcon.imageviewer.StfalconImageViewer;
 import com.stfalcon.imageviewer.loader.ImageLoader;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SliderAdapterExample extends
         SliderViewAdapter<SliderAdapterExample.SliderAdapterVH> {
 
     private Context context;
-    private List<SliderItem> mSliderItems = new ArrayList<>();
+    private List<SliderItem> mSliderItems;
 
-    public SliderAdapterExample(Context context) {
+    public SliderAdapterExample(Context context,List<SliderItem> images) {
         this.context = context;
-        mSliderItems.add(new SliderItem("des",R.drawable.prueba));
-        mSliderItems.add(new SliderItem("des",R.drawable.prueba2));
+        mSliderItems=images;
     }
 
     public void renewItems(List<SliderItem> sliderItems) {
@@ -37,11 +35,13 @@ public class SliderAdapterExample extends
     public void deleteItem(int position) {
         this.mSliderItems.remove(position);
         notifyDataSetChanged();
+
     }
 
     public void addItem(SliderItem sliderItem) {
         this.mSliderItems.add(sliderItem);
         notifyDataSetChanged();
+
     }
 
     @Override
@@ -55,10 +55,12 @@ public class SliderAdapterExample extends
 
         SliderItem sliderItem = mSliderItems.get(position);
 
-        viewHolder.textViewDescription.setText(sliderItem.getDescription());
-        viewHolder.textViewDescription.setTextSize(16);
-        viewHolder.textViewDescription.setTextColor(Color.WHITE);
-        Picasso.get().load(sliderItem.getImageUrl()).into(viewHolder.imageViewBackground);
+        viewHolder.binding.tvAutoImageSlider.setText(sliderItem.getDescription());
+        viewHolder.binding.tvAutoImageSlider.setTextSize(16);
+        viewHolder.binding.tvAutoImageSlider.setTextColor(Color.WHITE);
+        System.out.println("adapter url > "+sliderItem.getImage());
+
+        Glide.with(context).load(sliderItem.getImage()).placeholder(R.drawable.loading_).thumbnail(Glide.with(context).load(R.drawable.loading_)).error(R.drawable.ic_error_404).into(viewHolder.binding.ivAutoImageSlider);
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,8 +69,8 @@ public class SliderAdapterExample extends
 
                     @Override
                     public void loadImage(ImageView imageView, SliderItem image) {
-                        Picasso.get().load(image.getImageUrl()).into(imageView);
 
+                        Glide.with(context).load(image.getImage()).placeholder(R.drawable.loading_).thumbnail(Glide.with(context).load(R.drawable.loading_)).error(R.drawable.ic_error_404).into(imageView);
                     }
                 }).withStartPosition(mSliderItems.indexOf(sliderItem)).withHiddenStatusBar(false).show();
             }
@@ -83,17 +85,10 @@ public class SliderAdapterExample extends
 
     class SliderAdapterVH extends SliderViewAdapter.ViewHolder {
 
-        View itemView;
-        ImageView imageViewBackground;
-
-        TextView textViewDescription;
-
+        private ImageSliderLayoutItemBinding binding;
         public SliderAdapterVH(View itemView) {
             super(itemView);
-            imageViewBackground = itemView.findViewById(R.id.iv_auto_image_slider);
-
-            textViewDescription = itemView.findViewById(R.id.tv_auto_image_slider);
-            this.itemView = itemView;
+            binding=ImageSliderLayoutItemBinding.bind(itemView);
         }
     }
 

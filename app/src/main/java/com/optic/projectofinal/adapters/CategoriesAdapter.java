@@ -19,8 +19,8 @@ import com.optic.projectofinal.models.Category;
 import java.util.List;
 
 public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.ViewHolder> {
-    Context context;
-    List<Category> myCategories;
+    private Context context;
+    private List<Category> myCategories;
     public CategoriesAdapter(Context c,List<Category> myCategories) {
         context=c;
         this.myCategories=myCategories;

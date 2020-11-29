@@ -1,20 +1,20 @@
 package com.optic.projectofinal.models;
 
 public class SubCategory {
-    String id;
-    String name;
-    int size;
+    private int idCategory;
+    private String name;
+    private String id;
 
     public SubCategory() {
 
     }
 
-    public String getId() {
-        return id;
+    public int getIdCategory() {
+        return idCategory;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setIdCategory(int idCategory) {
+        this.idCategory = idCategory;
     }
 
     public String getName() {
@@ -25,12 +25,16 @@ public class SubCategory {
         this.name = name;
     }
 
-    public int getSize() {
-        return size;
+    public String getId() {
+        return id;
     }
 
-    public void setSize(int size) {
-        this.size = size;
+    public void setId(String id) {
+        this.id = id;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

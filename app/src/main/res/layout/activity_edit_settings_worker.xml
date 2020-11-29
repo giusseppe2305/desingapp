@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+
+    tools:context=".UI.activities.options_profile.settings.EditSettingsWorkerActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/own_toolbar" />
+
+   <androidx.core.widget.NestedScrollView
+       app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:fillViewport="true">
+       <LinearLayout
+           android:id="@+id/container"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="vertical"
+           android:layout_marginStart="15dp"
+           android:layout_marginEnd="15dp">
+
+           <androidx.cardview.widget.CardView
+               android:layout_width="match_parent"
+               android:layout_height="350dp"
+               app:cardCornerRadius="12dp"
+               app:cardPreventCornerOverlap="false"
+               app:cardUseCompatPadding="true"
+               >
+               <RelativeLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent">
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="50dp"
+                       android:background="@color/white"
+                       android:orientation="horizontal"
+                       android:id="@+id/headerSkills"
+                       >
+                       <TextView
+                           android:layout_gravity="center"
+                           android:layout_width="0dp"
+                           android:layout_weight="1"
+                           android:layout_height="wrap_content"
+                           android:layout_marginStart="20dp"
+                           android:text="Skills"
+                           android:textSize="20dp"/>
+
+                       <ImageView
+                           android:background="?selectableItemBackground"
+                           android:clickable="true"
+                           android:id="@+id/addSkill"
+                           android:layout_width="50dp"
+                           android:layout_height="wrap_content"
+                           android:src="@drawable/ic_add_photo"
+                           android:paddingTop="10dp"
+                           app:tint="@color/purple_200"
+                           android:paddingBottom="10dp"
+                           android:layout_marginEnd="10dp"
+                           />
+                   </LinearLayout>
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:layout_below="@+id/headerSkills"
+                       android:orientation="vertical"
+                       android:background="@color/grey_200">
+                       <androidx.recyclerview.widget.RecyclerView
+                           android:layout_width="match_parent"
+                           android:layout_height="match_parent"
+                           android:id="@+id/rvSkilsList"/>
+                   </LinearLayout>
+               </RelativeLayout>
+
+
+           </androidx.cardview.widget.CardView>
+           <androidx.cardview.widget.CardView
+               android:layout_width="match_parent"
+               android:layout_height="350dp"
+               android:layout_marginTop="10dp"
+               app:cardCornerRadius="12dp"
+               app:cardPreventCornerOverlap="false"
+               app:cardUseCompatPadding="true"
+               >
+               <RelativeLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent">
+
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="50dp"
+                       android:background="@color/white"
+                       android:orientation="horizontal"
+                       android:id="@+id/headerResources"
+                       >
+                       <TextView
+                           android:layout_gravity="center"
+                           android:layout_width="0dp"
+                           android:layout_weight="1"
+                           android:layout_height="wrap_content"
+                           android:layout_marginStart="20dp"
+                           android:text="Resources"
+                           android:textSize="20dp"/>
+                       <ImageView
+                           android:background="?selectableItemBackground"
+                           android:clickable="true"
+                           android:id="@+id/addResource"
+                           android:layout_width="50dp"
+                           android:layout_height="wrap_content"
+                           android:src="@drawable/ic_add_photo"
+                           android:paddingTop="10dp"
+                           app:tint="@color/purple_200"
+                           android:paddingBottom="10dp"
+                           android:layout_marginEnd="10dp"
+                           />
+                   </LinearLayout>
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:layout_below="@+id/headerResources"
+                       android:orientation="vertical"
+                       android:background="@color/grey_200">
+                       <androidx.recyclerview.widget.RecyclerView
+                           android:layout_width="match_parent"
+                           android:layout_height="match_parent"
+                           android:id="@+id/rvResourcesList"/>
+                   </LinearLayout>
+               </RelativeLayout>
+
+
+           </androidx.cardview.widget.CardView>
+
+       </LinearLayout>
+
+   </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

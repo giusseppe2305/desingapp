@@ -64,4 +64,12 @@
     <style name="splash" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
     </style>
+
+    <style name="swipe">
+        <item name="android:gravity">center|start</item>
+        <item name="android:background">?selectableItemBackground</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="android:clickable">true</item>
+        <item name="android:padding">8dp</item>
+    </style>
 </resources>

@@ -24,7 +24,7 @@ public class JobDoneActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         SliderView sliderView = findViewById(R.id.imageSlider);
-        sliderView.setSliderAdapter(new SliderAdapterExample(this));
+        sliderView.setSliderAdapter(new SliderAdapterExample(this,null));
 
         sliderView.setIndicatorAnimation(IndicatorAnimationType.WORM); //set indicator animation by using IndicatorAnimationType. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);

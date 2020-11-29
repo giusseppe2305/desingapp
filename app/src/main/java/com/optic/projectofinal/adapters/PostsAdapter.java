@@ -36,9 +36,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull PostsAdapter.ViewHolder holder, int position) {
         holder.title.setText("titulo "+numeros.get(position));
         if(position%2==0){
-            Glide.with(context).load(R.drawable.prueba2).placeholder(R.drawable.handshake).centerInside().into(holder.ivPost);
+            Glide.with(context).load(R.drawable.prueba2).placeholder(R.drawable.loading_).thumbnail(Glide.with(context).load(R.drawable.loading_)).error(R.drawable.ic_error_404).centerInside().into(holder.ivPost);
         }else{
-            Glide.with(context).load(R.drawable.prueba).placeholder(R.drawable.handshake).centerInside().into(holder.ivPost);
+            Glide.with(context).load(R.drawable.prueba).placeholder(R.drawable.loading_).thumbnail(Glide.with(context).load(R.drawable.loading_)).error(R.drawable.ic_error_404).centerInside().into(holder.ivPost);
         }
     }
 

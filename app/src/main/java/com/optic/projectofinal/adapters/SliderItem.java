@@ -3,9 +3,22 @@ package com.optic.projectofinal.adapters;
 public class SliderItem {
     String Description;
     int ImageUrl;
+    String image;
+
+    public SliderItem(String image) {
+        this.image=image;
+    }
 
     public String getDescription() {
         return Description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public void setDescription(String description) {

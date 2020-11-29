@@ -1,6 +1,7 @@
 package com.optic.projectofinal.models;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class JobDone {
     private String id;
@@ -11,7 +12,11 @@ public class JobDone {
     private String opinionUserOffer;
     private String opinionUserApply;
     private ArrayList<String> images;
-    private Valation valuation;
+    private Valuation valuation;
+
+    public JobDone() {
+        timestamp=new Date().getTime();
+    }
 
     public String getId() {
         return id;
@@ -77,11 +82,11 @@ public class JobDone {
         this.images = images;
     }
 
-    public Valation getValuation() {
+    public Valuation getValuation() {
         return valuation;
     }
 
-    public void setValuation(Valation valuation) {
+    public void setValuation(Valuation valuation) {
         this.valuation = valuation;
     }
 }

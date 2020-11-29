@@ -19,6 +19,7 @@ import java.util.Map;
 
 public class UserDatabaseProvider {
 
+    private static final String TAG = "own";
     private CollectionReference database;
 
     public UserDatabaseProvider() {

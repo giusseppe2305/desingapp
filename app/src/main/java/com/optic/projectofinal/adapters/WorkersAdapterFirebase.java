@@ -71,7 +71,7 @@ public class WorkersAdapterFirebase extends FirestoreRecyclerAdapter<User, Worke
         holder.lastName.setText(Utils.capitalizeString(model.getLastName()));
         holder.name.setText(Utils.capitalizeString(model.getName()));
         holder.aboutWorker.setText(model.getAbout());
-        Glide.with(context).load(model.getProfileImage()).placeholder(R.drawable.loading).centerInside().into(holder.imageProfile);
+        Glide.with(context).load(model.getProfileImage()).placeholder(R.drawable.loading_).thumbnail(Glide.with(context).load(R.drawable.loading_)).error(R.drawable.ic_error_404).centerInside().into(holder.imageProfile);
     }
 
     private void checkIfExistLike(ImageView btnLikeWorker, String id) {

@@ -51,7 +51,7 @@ public class ApplyJobAdapterFirebase extends FirestoreRecyclerAdapter<ApplyJob, 
                     String profileImage=documentSnapshot.getString("profileImage");
                     System.out.println("nombrere "+name);
                     holder.binding.nameUser.setText(name);
-                    Glide.with(context).load(profileImage).placeholder(R.drawable.loading).centerInside().into(holder.binding.imageProfile);
+                    Glide.with(context).load(profileImage).placeholder(R.drawable.loading_).thumbnail(Glide.with(context).load(R.drawable.loading_)).error(R.drawable.ic_error_404).centerInside().into(holder.binding.imageProfile);
                 }else{
                     Log.e("own", "onSuccess ApplyJobAdapterFirebase->onBindViewHolder : null" );
                 }

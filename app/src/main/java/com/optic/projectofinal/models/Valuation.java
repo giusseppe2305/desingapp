@@ -1,6 +1,6 @@
 package com.optic.projectofinal.models;
 
-public class Valation {
+public class Valuation {
     private double speedContact;
     private double amiability;
     private double speedEndJob;

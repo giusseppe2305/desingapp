@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.activities.JobOfferedActivity"
     android:fitsSystemWindows="true"
-    >
+    tools:context=".UI.activities.JobOfferedActivity">
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
@@ -21,8 +21,8 @@
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:toolbarId="@+id/toolbar"
-            >
+            app:toolbarId="@+id/toolbar">
+
             <com.smarteist.autoimageslider.SliderView
                 android:id="@+id/imageSlider"
                 android:layout_width="match_parent"
@@ -53,42 +53,74 @@
 
 
     </com.google.android.material.appbar.AppBarLayout>
+
     <androidx.core.widget.NestedScrollView
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="5dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="Categoria: "
-                    />
-                <com.google.android.material.chip.Chip
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Fontaneria"/>
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="Categoria: " />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipCategory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fontaneria" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="Subcategoria: " />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipSubCategory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fontaneria" />
+                </LinearLayout>
+
 
             </LinearLayout>
+
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/black"
-                android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
-                />
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/black" />
+
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
@@ -96,9 +128,8 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="10dp"
-                android:elevation="3dp"
                 android:backgroundTint="@color/white"
-                >
+                android:elevation="3dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -113,8 +144,7 @@
                         android:layout_height="70dp"
                         android:src="@drawable/prueba"
                         app:civ_border_color="@color/primaryColorDark"
-                        app:civ_border_width="3dp"
-                        />
+                        app:civ_border_width="3dp" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -132,64 +162,72 @@
                             android:id="@+id/lastNameUser"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:textSize="10sp"
-                            android:text="Otro dato" />
+                            android:text="Otro dato"
+                            android:textSize="10sp" />
                     </LinearLayout>
 
                     <Button
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:id="@+id/btnSeeProfileDetail"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
-                        android:text="Ver Perfil"
-                        />
+                        android:text="Ver Perfil" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/black"
-                android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
-                />
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/black" />
+            <TextView
+                android:id="@+id/title"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descripcion" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Descripcion del profesional"/>
+                android:text="Descripcion" />
+
             <TextView
                 android:id="@+id/description"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Descripcion del proda sdaasd asdfesional"/>
+                android:text="" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/black"
-                android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
-                />
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/black" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:paddingBottom="10dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Profesionales aplicando"/>
+                    android:text="Profesionales aplicando" />
+
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/applyWorkers"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/applyWorkers"/>
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
         </LinearLayout>
