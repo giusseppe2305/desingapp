@@ -60,15 +60,15 @@
   ],
   "all_sex": [
     {
-      "id": 1,
+      "id": 0,
       "title": "sex_male"
     },
     {
-      "id": 2,
+      "id": 1,
       "title": "sex_female"
     },
     {
-      "id": 3,
+      "id": 2,
       "title": "sex_other"
     }
   ]

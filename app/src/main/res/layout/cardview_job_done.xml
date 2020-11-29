@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -8,16 +7,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.cardview.widget.CardView
+        <ImageView
+            android:id="@+id/image"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:padding="0dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="0dp"
-            app:cardBackgroundColor="@color/teal_700"
-            android:layout_margin="5dp">
-
-        </androidx.cardview.widget.CardView>
+            android:layout_margin="5dp"
+            android:src="@color/grey_200"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,6 +27,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="Opinion" />
@@ -40,6 +38,7 @@
                     android:layout_marginRight="10dp"
                     android:gravity="right">
                     <TextView
+                        android:id="@+id/average"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="4.7"
@@ -56,6 +55,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Linea 1 \nLinea 2\nLinea 2\nLinea 2" />
@@ -66,6 +66,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/timestamp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"

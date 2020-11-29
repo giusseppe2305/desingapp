@@ -19,9 +19,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.databinding.ActivityEditProfileBinding;
 import com.optic.projectofinal.models.Sex;
@@ -74,6 +76,10 @@ public class EditProfileActivity extends AppCompatActivity {
             System.out.println("sex selected " + i);
             sexSelected = listSex.get(i).getId();
         });
+        ///load data
+        loadUserData();
+
+
         MaterialDatePicker.Builder buider = MaterialDatePicker.Builder.datePicker();
         buider.setTitleText("Selecciona una fecha");
         buider.setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR);
@@ -111,6 +117,27 @@ public class EditProfileActivity extends AppCompatActivity {
 
     }
 
+    private void loadUserData() {
+        userDatabaseProvider.getUser(authenticationProvider.getIdCurrentUser()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User userIterated=documentSnapshot.toObject(User.class);
+                binding.name.getEditText().setText(userIterated.getName());
+                binding.lastName.getEditText().setText(userIterated.getLastName());
+                binding.about.getEditText().setText(userIterated.getAbout());
+                binding.schedule.getEditText().setText(userIterated.getSchedule());
+                Sex sex=Utils.getSexByIdJson(EditProfileActivity.this,userIterated.getSex());
+                sexSelected=sex.getId();
+                binding.sex.setText(sex.getTitleString(),false);
+                binding.birthDate.getEditText().setText(Utils.getStringFromTimestamp(userIterated.getBirthdate()));
+                binding.location.getEditText().setText(userIterated.getLocation());
+                //images
+                Glide.with(EditProfileActivity.this).load(userIterated.getCoverPageImage()).apply(Utils.getOptionsGlide(false)).transform(Utils.getTransformSquareRound()).into(binding.coverPageImage);
+                Glide.with(EditProfileActivity.this).load(userIterated.getProfileImage()).apply(Utils.getOptionsGlide(false)).into(binding.imageProfile);
+            }
+        }).addOnFailureListener(v-> Log.e(TAG, "loadUserData: "+v.getMessage() ));
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_edit_done, menu);
@@ -136,7 +163,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 //Image Uri will not be null for RESULT_OK
                 Uri fileUri = data.getData();
                 uriCoverImage = fileUri;
-                Glide.with(this).load(uriCoverImage).apply(Utils.getOptionsGlide()).transform(Utils.getTransformSquareRound()).into(binding.coverPageImage);
+                Glide.with(this).load(uriCoverImage).apply(Utils.getOptionsGlide(true)).transform(Utils.getTransformSquareRound()).into(binding.coverPageImage);
             } else if (resultCode == ImagePicker.RESULT_ERROR) {
                 Toast.makeText(this, ImagePicker.Companion.getError(data), Toast.LENGTH_SHORT).show();
             } else {
@@ -148,7 +175,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 //Image Uri will not be null for RESULT_OK
                 Uri fileUri = data.getData();
                 uriImageProfile = fileUri;
-                Glide.with(this).load(uriImageProfile).apply(Utils.getOptionsGlide()).into(binding.imageProfile);
+                Glide.with(this).load(uriImageProfile).apply(Utils.getOptionsGlide(true)).into(binding.imageProfile);
             } else if (resultCode == ImagePicker.RESULT_ERROR) {
                 Toast.makeText(this, ImagePicker.Companion.getError(data), Toast.LENGTH_SHORT).show();
             } else {

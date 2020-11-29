@@ -383,7 +383,7 @@
                             android:layout_height="wrap_content"
 
                             android:hint="Ubicacion"
-                            android:inputType="date" />
+                            android:inputType="text" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 

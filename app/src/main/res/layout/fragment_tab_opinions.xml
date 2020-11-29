@@ -22,13 +22,10 @@
             android:layout_gravity="right"
             android:layout_marginRight="10dp"
             />
-        <LinearLayout
-            android:id="@+id/jobDone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <include layout="@layout/cardview_job_done"/>
-        </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/listOpinions"/>
     </LinearLayout>
 
 </FrameLayout>

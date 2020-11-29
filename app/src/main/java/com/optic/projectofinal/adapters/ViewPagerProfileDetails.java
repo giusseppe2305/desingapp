@@ -13,13 +13,15 @@ import com.optic.projectofinal.UI.activities.fragments.tabsFragments.profileDeta
 public class ViewPagerProfileDetails extends FragmentStateAdapter {
     private static final int CARD_ITEM_SIZE = 3;
     private  AuctionFragment tercero;
-
-    public ViewPagerProfileDetails(@NonNull FragmentActivity fragmentActivity) {
+    private String idUser;
+    public ViewPagerProfileDetails(@NonNull FragmentActivity fragmentActivity, String idUserToSee) {
 
         super(fragmentActivity);
-        primero=SkillsFragmentTab.newInstance();
+        this.idUser=idUserToSee;
+        primero=SkillsFragmentTab.newInstance(idUser);
         tercero=new AuctionFragment().newInstance();
-        segundo= OpinionsFragment.newInstance();
+        segundo= OpinionsFragment.newInstance(idUser);
+
     }
 
     OpinionsFragment  segundo;

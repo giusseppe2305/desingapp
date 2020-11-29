@@ -2,7 +2,9 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:clickable="true">
+    android:clickable="true"
+    android:backgroundTint="@color/grey_100"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -5,15 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UI.activities.fragments.tabsFragments.profileDetails.SkillsFragmentTab"
-    android:background="#924CAF50">
-
+    android:background="@color/grey_300">
     <!-- TODO: Update blank fragment layout -->
     <androidx.recyclerview.widget.RecyclerView
-
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/rvSkilsList"
         android:orientation="vertical"
+
         />
 
 </FrameLayout>

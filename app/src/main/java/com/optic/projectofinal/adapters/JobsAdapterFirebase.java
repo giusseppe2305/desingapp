@@ -39,7 +39,7 @@ public class JobsAdapterFirebase extends FirestoreRecyclerAdapter<Job, JobsAdapt
         String url=model.getImages().get(0);
 
         new StorageProvider(context).getUrlImage(url,s -> {
-            Glide.with(context).load(s).apply(Utils.getOptionsGlide()).transform(Utils.getTransformSquareRound()).into(holder.binding.imageJob);
+            Glide.with(context).load(s).apply(Utils.getOptionsGlide(true)).transform(Utils.getTransformSquareRound()).into(holder.binding.imageJob);
         });//load image
         holder.binding.getRoot().setOnClickListener(v->{
             Intent i=new Intent(context, JobOfferedActivity.class);

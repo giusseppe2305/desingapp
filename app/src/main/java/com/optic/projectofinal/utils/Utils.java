@@ -179,6 +179,11 @@ public class Utils {
         dev2.addAll(dev);
         return dev2;
     }
+    public static Sex getSexByIdJson(Context context,int id){
+        Sex dev = getObjectFromJsonByKeyAndId(context, "all_sex", id, Sex.class);
+        dev.loadData(context);
+        return dev;
+    }
     public static ArrayList<Resource> getListResourcesJson(Context context){
         List<Resource> dev = getListItemsJson(context, "all_resources", Resource[].class);
         for(Resource i:dev){
@@ -227,11 +232,11 @@ public class Utils {
         return new MultiTransformation(new CenterCrop(), new RoundedCorners(30));
     }
 
-    public static BaseRequestOptions<?> getOptionsGlide() {
+    public static BaseRequestOptions<?> getOptionsGlide(boolean wantCache) {
         return   new RequestOptions()
                 .placeholder(R.color.grey_100)    // replace with your placeholder image or remove if don't want to set
                 .error(R.drawable.ic_error_404)     // replace with your placeholder image or remove if don't want to set
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+                .diskCacheStrategy(wantCache?DiskCacheStrategy.AUTOMATIC:DiskCacheStrategy.NONE);
     }
 
     public static String getMimeType(Uri uri,Context context) {
@@ -239,6 +244,12 @@ public class Utils {
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         String type = mime.getExtensionFromMimeType(cR.getType(uri));
         return type;
+    }
+
+    public static String getStringFromTimestamp(Long birthdate) {
+        Date n = new Date(birthdate);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        return dateFormat.format(n);
     }
 }
 

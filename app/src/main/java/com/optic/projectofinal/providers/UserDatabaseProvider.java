@@ -10,6 +10,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.optic.projectofinal.models.Opinion;
 import com.optic.projectofinal.models.SubCategory;
 import com.optic.projectofinal.models.User;
 
@@ -40,7 +41,9 @@ public class UserDatabaseProvider {
     public Task<DocumentSnapshot> getUser(String idUser){
         return database.document(idUser).get();
     }
-
+    public Task<QuerySnapshot> getOpinions(String idUser){
+        return database.document(idUser).collection("Opinions").get();
+    }
     public Task<Void> updateUser(String idUser, User user){
         //delete null fields
         Map<String, Object> update = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL).convertValue(user, Map.class);
@@ -87,6 +90,11 @@ public class UserDatabaseProvider {
         }
         return query;
     }
+
+    public Task<Void> putOpinion(String idUser, Opinion opinion) {
+        return database.document(idUser).collection("Opinions").document().set(opinion);
+    }
+
     public enum Order{
         LOWER_TO_HIGHER,
         HIGHER_TO_LOWER,
