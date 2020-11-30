@@ -8,35 +8,41 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.optic.projectofinal.UI.activities.fragments.tabsFragments.profileDetails.AuctionFragment;
 import com.optic.projectofinal.UI.activities.fragments.tabsFragments.profileDetails.OpinionsFragment;
+import com.optic.projectofinal.UI.activities.fragments.tabsFragments.profileDetails.SkillsFragmentTab;
 
-public class ViewPagerProfileDetails extends FragmentStateAdapter {
+public class ViewPagerProfileDetailsWorker extends FragmentStateAdapter {
     private static final int CARD_ITEM_SIZE = 3;
-    private AuctionFragment segundo;
-    private OpinionsFragment  primero;
-
+    private AuctionFragment tercero;
     private String idUser;
 
-    public ViewPagerProfileDetails(@NonNull FragmentActivity fragmentActivity, String idUserToSee) {
+    public ViewPagerProfileDetailsWorker(@NonNull FragmentActivity fragmentActivity, String idUserToSee) {
 
         super(fragmentActivity);
         this.idUser = idUserToSee;
-        segundo = new AuctionFragment().newInstance(idUser);
-        primero = OpinionsFragment.newInstance(idUser);
+        primero = SkillsFragmentTab.newInstance(idUser);
+        tercero = new AuctionFragment().newInstance(idUser);
+        segundo = OpinionsFragment.newInstance(idUser);
 
     }
 
+    OpinionsFragment segundo;
+    SkillsFragmentTab primero;
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
         if (position == 0)
             return primero;
-        return segundo;
+
+        if (position == 1)
+            return segundo;
+        return tercero;
+
     }
 
     @Override
     public int getItemCount() {
-        return 2;
+        return 3;
     }
 
 

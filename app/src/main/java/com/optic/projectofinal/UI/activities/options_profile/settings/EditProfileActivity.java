@@ -129,6 +129,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 Sex sex=Utils.getSexByIdJson(EditProfileActivity.this,userIterated.getSex());
                 sexSelected=sex.getId();
                 binding.sex.setText(sex.getTitleString(),false);
+                if(userIterated.getBirthdate()!=null)
                 binding.birthDate.getEditText().setText(Utils.getStringFromTimestamp(userIterated.getBirthdate()));
                 binding.location.getEditText().setText(userIterated.getLocation());
                 //images

@@ -99,6 +99,7 @@
                     android:text="llamar" />
 
                 <Button
+                    android:id="@+id/openChat"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
                     app:icon="@android:drawable/stat_notify_chat"
                     app:rippleColor="@color/teal_200"

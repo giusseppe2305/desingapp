@@ -7,6 +7,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.optic.projectofinal.models.Job;
 
 public class JobsDatabaseProvider {
@@ -33,5 +34,9 @@ public class JobsDatabaseProvider {
 
     public Task<DocumentSnapshot> getJobById(String idJobSelected) {
         return database.document(idJobSelected).get();
+    }
+
+    public Task<QuerySnapshot> getAllJobsById(String idUser) {
+        return database.whereEqualTo("idUserOffer",idUser).get();
     }
 }

@@ -17,7 +17,11 @@
         <activity android:name=".UI.activities.CreateJobActivity"></activity>
         <activity android:name=".UI.activities.JobOfferedActivity" />
         <activity android:name=".UI.activities.SplashScreenActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".UI.activities.login.SignInActivity"
