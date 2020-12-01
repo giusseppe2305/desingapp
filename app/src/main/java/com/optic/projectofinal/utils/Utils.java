@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.OpenableColumns;
+import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 
 import androidx.annotation.AnyRes;
@@ -250,6 +252,20 @@ public class Utils {
         Date n = new Date(birthdate);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         return dateFormat.format(n);
+    }
+
+    public static void setEnabledAllViews(ViewGroup layout, boolean option) {
+        layout.setEnabled(option);
+        for (int i = 0; i < layout.getChildCount(); i++) {
+            View child = layout.getChildAt(i);
+            if (child instanceof ViewGroup) {
+                setEnabledAllViews((ViewGroup) child,option);
+            } else {
+                child.setEnabled(option);
+                child.setFocusable(option);
+                child.setClickable(option);
+            }
+        }
     }
 }
 

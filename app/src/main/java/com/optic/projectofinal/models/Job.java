@@ -1,10 +1,9 @@
 package com.optic.projectofinal.models;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Job {
-    public enum State{PUBLISHED,CONTRACTED,FINISHED}
+    public enum State{PUBLISHED,IN_PROGRESS,FINISHED}
     private String id;
     private String idUserOffer;
     private String idUserApply;
@@ -20,7 +19,7 @@ public class Job {
     private String subcategory;
 
     public Job() {
-        timestamp=new Date().getTime();
+
     }
 
     public int getCategory() {

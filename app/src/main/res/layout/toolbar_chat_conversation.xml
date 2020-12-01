@@ -20,7 +20,7 @@
             android:layout_height="55dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:src="@drawable/prueba"
+            android:src="@color/grey_200"
             />
     </LinearLayout>
 

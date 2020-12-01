@@ -95,6 +95,8 @@ public class UserDatabaseProvider {
         return database.document(idUser).collection("Opinions").document().set(opinion);
     }
 
+
+
     public enum Order{
         LOWER_TO_HIGHER,
         HIGHER_TO_LOWER,

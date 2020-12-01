@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -17,16 +18,20 @@ import com.optic.projectofinal.models.Message;
 import com.optic.projectofinal.providers.AuthenticationProvider;
 import com.optic.projectofinal.providers.UserDatabaseProvider;
 import com.optic.projectofinal.utils.RelativeTime;
+import com.optic.projectofinal.utils.UtilsUI;
 
 
-public class MessageAdapter extends FirestoreRecyclerAdapter<Message, MessageAdapter.ViewHolder> {
+public class MessageAdapterFirebase extends FirestoreRecyclerAdapter<Message, MessageAdapterFirebase.ViewHolder> {
+    private final UtilsUI utilsUI;
     private Context context;
     private UserDatabaseProvider mUserProvider;
     private AuthenticationProvider mAuth;
 
-    public MessageAdapter(@NonNull FirestoreRecyclerOptions<Message> options, Context c) {
+    public MessageAdapterFirebase(@NonNull FirestoreRecyclerOptions<Message> options, Context c) {
         super(options);
+
         context = c;
+        utilsUI=new UtilsUI(context);
         mUserProvider = new UserDatabaseProvider();
         mAuth = new AuthenticationProvider();
     }
@@ -45,9 +50,11 @@ public class MessageAdapter extends FirestoreRecyclerAdapter<Message, MessageAda
             holder.binding.layoutMessageFromMe.setVisibility(View.VISIBLE);
             holder.binding.layoutMessageToMe.setVisibility(View.GONE);
             if (message.isViewed()) {
-                holder.binding.doubleCheck.setImageResource(R.drawable.ic_double_check);
+                holder.binding.doubleCheck.setColorFilter(ContextCompat.getColor(context,R.color.checkMessage));
+               // holder.binding.doubleCheck.setImageResource(R.drawable.ic_double_check);
             } else {
-                holder.binding.doubleCheck.setImageResource(R.drawable.ic_add_photo);
+                holder.binding.doubleCheck.setColorFilter(ContextCompat.getColor(context,R.color.unCheckMessage));
+              //  holder.binding.doubleCheck.setImageResource(R.drawable.ic_add_photo);
             }
         } else {
             holder.binding.messageToMe.setText(message.getMessage());

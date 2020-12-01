@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -28,6 +29,7 @@ import com.optic.projectofinal.providers.AuthenticationProvider;
 import com.optic.projectofinal.providers.ChatsProvider;
 import com.optic.projectofinal.providers.MessageProvider;
 import com.optic.projectofinal.providers.UserDatabaseProvider;
+import com.optic.projectofinal.utils.RelativeTime;
 import com.optic.projectofinal.utils.Utils;
 
 
@@ -94,22 +96,22 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
                             if(ultimoMensajeDocument!=null && ultimoMensajeDocument.exists()){
                                 String ultimoMensaje=ultimoMensajeDocument.getString("message");
                                 holder.binding.lastMessage.setText(ultimoMensaje);
-
                                 if(ultimoMensajeDocument.get("idsUserFrom").equals(mAuth.getIdCurrentUser())){
                                     Toast.makeText(context, "es iguall", Toast.LENGTH_SHORT).show();
                                     ///comprobar si esta visto o no el mensaje
                                     if (ultimoMensajeDocument.getBoolean("viewed")){
-                                        holder.binding.viewed.setImageResource(R.drawable.ic_double_check);
+                                        holder.binding.viewed.setColorFilter(ContextCompat.getColor(context,R.color.checkMessage));
                                     }else{
-                                        holder.binding.viewed.setImageResource(R.drawable.ic_add_photo);
+                                        holder.binding.viewed.setColorFilter(ContextCompat.getColor(context,R.color.unCheckMessage));
                                     }
-
                                     holder.binding.viewed.setVisibility(View.VISIBLE);
                                 }else{
                                     Toast.makeText(context, "eNOOOO ES iguall", Toast.LENGTH_SHORT).show();
                                     setCountMessagesNoSee(model, holder);
                                     holder.binding.viewed.setVisibility(View.GONE);
                                 }
+
+                                holder.binding.timestampLastMessage.setText(RelativeTime.timeFormatAMPM(ultimoMensajeDocument.getLong("timestamp")));
                             }
 
                         }
@@ -118,7 +120,6 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
                 }
             }
         });
-
     }
 
     private void setCountMessagesNoSee(@NonNull final Chat model, @NonNull final ViewHolder holder) {

@@ -26,7 +26,7 @@ public class ChatsProvider {
     }
 
     public Query getAllChatsFromUser(String idCurrentUser) {
-        return mCollection.whereArrayContains("idsChats",idCurrentUser);
+        return mCollection.whereArrayContains("idsChats",idCurrentUser).orderBy("timestamp", Query.Direction.DESCENDING);
     }
     public Query getChatFromUserToAndUserFrom(String userTo, String userFrom){
         //comprobar si existen las dos combinaciones

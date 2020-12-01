@@ -4,46 +4,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.activities.CreateJobActivity"
-    android:fitsSystemWindows="true">
-    <include layout="@layout/own_toolbar" android:id="@+id/toolbar"/>
+    android:fitsSystemWindows="true"
+    tools:context=".UI.activities.CreateJobActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/own_toolbar" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:background="@color/white"
+            android:orientation="vertical"
             app:contentPaddingBottom="25dp"
             app:contentPaddingTop="10dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/max_10_photos"
-                    android:textAlignment="center"/>
+                    android:textAlignment="center" />
 
                 <ImageView
-                    android:focusable="true"
-                    android:clickable="true"
                     android:id="@+id/addPhoto"
                     android:layout_width="match_parent"
                     android:layout_height="130dp"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:src="@drawable/ic_add_photo"
-                    app:tint="@color/teal_700"
-                    />
+                    app:tint="@color/teal_700" />
+
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvImagesSelected"
                     android:layout_width="match_parent"
                     android:layout_height="130dp"
-                    android:id="@+id/rvImagesSelected"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
@@ -111,28 +117,44 @@
                         android:lines="5" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-                <com.jaredrummler.materialspinner.MaterialSpinner
-                    android:id="@+id/category"
-                    android:hint="@string/spinner_category_hint"
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/categoryInput"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="20dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    app:boxBackgroundColor="@color/white">
 
-                    >
+                    <AutoCompleteTextView
+                        android:id="@+id/category"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/spinner_category_hint"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                </com.jaredrummler.materialspinner.MaterialSpinner>
-                <com.jaredrummler.materialspinner.MaterialSpinner
-                    android:id="@+id/subCategory"
-                    android:hint="@string/spinner_subcategories_hint"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/subCategoryInput"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="20dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginEnd="10dp">
+                    android:layout_marginRight="10dp"
+                    app:boxBackgroundColor="@color/white">
 
-                </com.jaredrummler.materialspinner.MaterialSpinner>
+                    <AutoCompleteTextView
+                        android:enabled="false"
+                        android:id="@+id/subCategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/spinner_subcategories_hint"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>

@@ -6,6 +6,16 @@ public class Valuation {
     private double speedEndJob;
     private double punctuality;
 
+    public Valuation() {
+    }
+
+    public Valuation(double speedContact, double amiability, double speedEndJob, double punctuality) {
+        this.speedContact = speedContact;
+        this.amiability = amiability;
+        this.speedEndJob = speedEndJob;
+        this.punctuality = punctuality;
+    }
+
     public double getSpeedContact() {
         return speedContact;
     }

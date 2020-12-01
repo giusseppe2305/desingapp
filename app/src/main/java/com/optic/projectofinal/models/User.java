@@ -244,4 +244,9 @@ public class User implements Serializable {
         timestamp=new Date().getTime();
         online =false;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

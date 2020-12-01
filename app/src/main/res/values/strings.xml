@@ -86,4 +86,10 @@
     <string name="dialog_confirm_close_create_job_activity_ok">Salir</string>
 
 
+    <string-array name="job_states">
+        <item>Publicados</item>
+        <item>En progreso</item>
+        <item>Finalizados</item>
+    </string-array>
+
 </resources>

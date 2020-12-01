@@ -78,6 +78,18 @@ public class MainActivity extends AppCompatActivity {
 //            new UserDatabaseProvider().putOpinion(new AuthenticationProvider().getIdCurrentUser(),opinion).addOnFailureListener(v-> Log.e(TAG, "onCreate: "+v.getMessage() ));
 //        }
 
+//        FirebaseFirestore.getInstance().collection("Users").document("0cXIRZ8eYrIrjcLG4p9h").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//            @Override
+//            public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                documentSnapshot.getDocumentReference("ref").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                        System.out.println("nmbre "+documentSnapshot.getString("message"));
+//                    }
+//                });
+//            }
+//        });
+
 
     }
 

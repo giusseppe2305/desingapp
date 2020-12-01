@@ -19,6 +19,7 @@ import com.optic.projectofinal.R;
 import com.optic.projectofinal.databinding.CardViewWorkerApplyJobBinding;
 import com.optic.projectofinal.models.ApplyJob;
 import com.optic.projectofinal.providers.UserDatabaseProvider;
+import com.optic.projectofinal.utils.Utils;
 
 public class ApplyJobAdapterFirebase extends FirestoreRecyclerAdapter<ApplyJob, ApplyJobAdapterFirebase.ViewHolder> {
     Context context;
@@ -37,21 +38,19 @@ public class ApplyJobAdapterFirebase extends FirestoreRecyclerAdapter<ApplyJob, 
         ///load user data
         String idWorker=getSnapshots().getSnapshot(position).getId().trim();
 
-        loadApplyWorkerData(holder, idWorker);
+        loadApplyWorkerData(holder, model.getIdWorkerApply());
     }
 
-    private void loadApplyWorkerData(@NonNull ViewHolder holder, String idWorker) {
-        mUserProvider.getUser(idWorker).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-
+    private void loadApplyWorkerData(@NonNull ViewHolder holder, String worker) {
+        mUserProvider.getUser(worker).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
 
                 if(documentSnapshot!=null&& documentSnapshot.exists()){
                     String name=documentSnapshot.getString("name");
                     String profileImage=documentSnapshot.getString("profileImage");
-                    System.out.println("nombrere "+name);
                     holder.binding.nameUser.setText(name);
-                    Glide.with(context).load(profileImage).placeholder(R.drawable.loading_).thumbnail(Glide.with(context).load(R.drawable.loading_)).error(R.drawable.ic_error_404).centerInside().into(holder.binding.imageProfile);
+                    Glide.with(context).load(profileImage).apply(Utils.getOptionsGlide(false)).transform(Utils.getTransformSquareRound()).into(holder.binding.imageProfile);
                 }else{
                     Log.e("own", "onSuccess ApplyJobAdapterFirebase->onBindViewHolder : null" );
                 }

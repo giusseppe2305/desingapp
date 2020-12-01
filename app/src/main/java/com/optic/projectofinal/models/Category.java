@@ -5,6 +5,8 @@ import android.content.Context;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.utils.Utils;
 
+import java.util.Objects;
+
 public class Category {
     private int id;
     private String title;
@@ -23,7 +25,12 @@ public class Category {
 
     public Category() {
     }
-    public Category(String title,String image) {
+
+    public Category(int id) {
+        this.id = id;
+    }
+
+    public Category(String title, String image) {
         this.title = title;
         this.image =  image;
 
@@ -57,7 +64,6 @@ public class Category {
 
     public void setImage(String image) {
         this.image = image;
-
     }
 
     @Override
@@ -71,5 +77,18 @@ public class Category {
 
     public void setTitleString(Context context) {
         titleString=context.getString(getIdTitle());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Category category = (Category) o;
+        return id == category.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

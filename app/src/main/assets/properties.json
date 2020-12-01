@@ -1,59 +1,59 @@
 {
   "all_categories": [
     {
-      "id": 1,
+      "id": 0,
       "title": "homeCategory",
       "image": "ic_category_home"
     },
     {
-      "id": 2,
+      "id": 1,
       "title": "computingAndAudiovisualCategory",
       "image": "ic_category_computing_audiovisual"
     },
     {
-      "id": 3,
+      "id": 2,
       "title": "educationAndSportsCategory",
       "image": "ic_category_education_sports"
     },
     {
-      "id": 4,
+      "id": 3,
       "title": "estheticCategory",
       "image": "ic_category_esthetic"
     },
     {
-      "id": 5,
+      "id": 4,
       "title": "careAndHealhCategory",
       "image": "ic_category_care_health"
     },
     {
-      "id": 6,
+      "id": 5,
       "title": "othersCategory",
       "image": "ic_category_others"
     }
   ],
   "all_resources": [
     {
-      "id": 1,
+      "id": 0,
       "title": "resource_always_available",
       "image": "ic_resource_always_available"
     },
     {
-      "id": 2,
+      "id": 1,
       "title": "resource_has_car",
       "image": "ic_resource_has_car"
     },
     {
-      "id": 3,
+      "id": 2,
       "title": "resource_credit_card",
       "image": "ic_resource_credit_card"
     },
     {
-      "id": 4,
+      "id": 3,
       "title": "resource_home_service",
       "image": "ic_resource_home_service"
     },
     {
-      "id": 5,
+      "id": 4,
       "title": "resource_works_weekend_and_holidays",
       "image": "ic_resource_works_weekend_and_holidays"
     }

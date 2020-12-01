@@ -2,17 +2,10 @@ package com.optic.projectofinal.providers;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.optic.projectofinal.utils.IDo;
 import com.optic.projectofinal.utils.Utils;
 
 import java.util.Date;
@@ -42,19 +35,19 @@ public class StorageProvider {
         return mStorage;
     }
 
-    public Task<Uri> getUrlImage(String path, IDo funtion) {
-        return mStorage.child(path).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-               funtion.run(uri.toString());
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, "onFailure: StorageProvider->getUrlImage");
-            }
-        });
-    }
+//    public Task<Uri> getUrlImage(String path, IDo funtion) {
+//        return mStorage.child(path).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//            @Override
+//            public void onSuccess(Uri uri) {
+//               funtion.run(uri.toString());
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Log.e(TAG, "onFailure: StorageProvider->getUrlImage");
+//            }
+//        });
+//    }
 
     public UploadTask uploadImageUser(Uri uri, TYPE_IMAGE type) {
         StorageReference route = mStorage.child("imagesUsers").child(authenticationProvider.getIdCurrentUser() + "_" + type );

@@ -160,7 +160,6 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICKER_IMAGE_COVER_IMAGE) {
             if (resultCode == Activity.RESULT_OK) {
-
                 //Image Uri will not be null for RESULT_OK
                 Uri fileUri = data.getData();
                 uriCoverImage = fileUri;
@@ -237,10 +236,10 @@ public class EditProfileActivity extends AppCompatActivity {
                         Toast.makeText(this, "Algo salio mal", Toast.LENGTH_SHORT).show();
                     });
             if (uriCoverImage != null) {
-                storageProvider.uploadImageUser(uriCoverImage, StorageProvider.TYPE_IMAGE.COVER_IMAGE).addOnFailureListener(v -> Log.e(TAG, "fail update cover image prifle " + v.getMessage()));
+                storageProvider.uploadImageUser(uriCoverImage, StorageProvider.TYPE_IMAGE.COVER_IMAGE).addOnSuccessListener(v-> Log.e(TAG, "updateDataUser: cambio cover" )).addOnFailureListener(v -> Log.e(TAG, "fail update cover image prifle " + v.getMessage()));
             }
             if (uriImageProfile != null) {
-                storageProvider.uploadImageUser(uriImageProfile, StorageProvider.TYPE_IMAGE.PROFILE_IMAGE).addOnFailureListener(v -> Log.e(TAG, "fail update  image prifle " + v.getMessage()));
+                storageProvider.uploadImageUser(uriImageProfile, StorageProvider.TYPE_IMAGE.PROFILE_IMAGE).addOnSuccessListener(v-> Log.e(TAG, "updateDataUser: cambio profile" )).addOnFailureListener(v -> Log.e(TAG, "fail update  image prifle " + v.getMessage()));
             }
             //check all right
             finish();

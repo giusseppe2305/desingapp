@@ -6,5 +6,6 @@
     <include layout="@layout/swipe_item_background" />
     <include layout="@layout/swipe_item_resource_foreground" android:id="@+id/resource" android:visibility="gone"/>
     <include layout="@layout/swipe_item_skill_foreground" android:id="@+id/skill" android:visibility="gone"/>
+    <include layout="@layout/cardview_job_offered" android:id="@+id/jobOffered" android:visibility="gone"/>
 
 </FrameLayout>

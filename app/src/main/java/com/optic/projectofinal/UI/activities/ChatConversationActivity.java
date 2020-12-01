@@ -5,19 +5,24 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.optic.projectofinal.adapters.MessageAdapter;
+import com.optic.projectofinal.adapters.MessageAdapterFirebase;
 import com.optic.projectofinal.databinding.ActivityChatConversationBinding;
 import com.optic.projectofinal.models.Chat;
 import com.optic.projectofinal.models.Message;
@@ -25,6 +30,8 @@ import com.optic.projectofinal.providers.AuthenticationProvider;
 import com.optic.projectofinal.providers.ChatsProvider;
 import com.optic.projectofinal.providers.MessageProvider;
 import com.optic.projectofinal.providers.UserDatabaseProvider;
+import com.optic.projectofinal.utils.RelativeTime;
+import com.optic.projectofinal.utils.Utils;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -37,8 +44,9 @@ public class ChatConversationActivity extends AppCompatActivity {
     private ChatsProvider mChatsProvider;
     private UserDatabaseProvider mUserProvider;
     private MessageProvider mMessageProvider;
-    private MessageAdapter mAdapterMessage;
+    private MessageAdapterFirebase mAdapterMessage;
     private LinearLayoutManager linearLayoutManager;
+    private ListenerRegistration listeningChangeDataToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +112,7 @@ public class ChatConversationActivity extends AppCompatActivity {
         if (idCurrentChat == null) {
             checkifChatExistAndCreate();
         }
-
+        loadDataToolbar();
 
     }
 
@@ -121,7 +129,7 @@ public class ChatConversationActivity extends AppCompatActivity {
                 new FirestoreRecyclerOptions.Builder<Message>()
                         .setQuery(query, Message.class)
                         .build();
-        mAdapterMessage = new MessageAdapter(options, ChatConversationActivity.this);
+        mAdapterMessage = new MessageAdapterFirebase(options, ChatConversationActivity.this);
         binding.listMessages.setAdapter(mAdapterMessage);
         mAdapterMessage.startListening();
         mAdapterMessage.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
@@ -148,11 +156,49 @@ public class ChatConversationActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        if (escuchaConstanteCambioStatusConnectionUser != null) {
-//            escuchaConstanteCambioStatusConnectionUser.remove();
-//        }
+      if (listeningChangeDataToolbar != null) {
+          listeningChangeDataToolbar.remove();
+       }
     }
+    private void loadDataToolbar() {
+        mUserProvider.getUser(idUserToChat).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(final DocumentSnapshot documentSnapshot) {
 
+                if (documentSnapshot.exists()) {
+                    if (documentSnapshot.contains("name")) {
+                        binding.toolbar.nameUserToToolbar.setText(documentSnapshot.getString("name"));
+                    }
+                    if (documentSnapshot.contains("online") && documentSnapshot.contains("lastConnection")) {
+                        listeningChangeDataToolbar =  mUserProvider.getIsOnlineUser(idUserToChat).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                if(value.getBoolean("online")){
+                                    binding.toolbar.statusUserToToolbar.setText("Conectado");
+                                }else{
+                                    binding.toolbar.statusUserToToolbar.setText(RelativeTime.getTimeAgo(value.getLong("lastConnection")));
+                                }
+                            }
+                        });
+                    }
+                    if (documentSnapshot.contains("profileImage")) {
+                        String urlImage = documentSnapshot.getString("profileImage");
+                        if (urlImage != null) {
+                            Glide.with(ChatConversationActivity.this).load(urlImage).apply(Utils.getOptionsGlide(false)).into(binding.toolbar.photoUserToToolbar);
+                        }
+                    }
+
+                } else {
+                    Toast.makeText(ChatConversationActivity.this, "fallo al conseguir user toolbar", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(ChatConversationActivity.this, "Ha fallado la busqieda del usiario", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     private void checkifChatExistAndCreate() {
         mChatsProvider.getChatFromUserToAndUserFrom(idUserToChat, mAuth.getIdCurrentUser()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override

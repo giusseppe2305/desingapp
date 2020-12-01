@@ -1,6 +1,6 @@
 package com.optic.projectofinal.utils;
 
-import android.app.Activity;
+import android.content.Context;
 import android.util.Patterns;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -9,9 +9,9 @@ import com.optic.projectofinal.R;
 import java.util.regex.Pattern;
 
 public class UtilsUI {
-    private Activity context;
+    private Context context;
 
-    public UtilsUI(Activity context) {
+    public UtilsUI(Context context) {
         this.context = context;
     }
 
@@ -67,5 +67,6 @@ public class UtilsUI {
         inputLayoutEmail.setError(context.getString(R.string.pattern_email_wrong_pattern));
         return false;
     }
+
 
 }

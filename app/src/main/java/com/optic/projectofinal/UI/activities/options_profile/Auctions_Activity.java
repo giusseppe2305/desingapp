@@ -1,38 +1,34 @@
 package com.optic.projectofinal.UI.activities.options_profile;
 
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager2.widget.ViewPager2;
-
-import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.optic.projectofinal.R;
 import com.optic.projectofinal.adapters.ViewPagerAuctions;
+import com.optic.projectofinal.databinding.ActivityAuctionsBinding;
 
 public class Auctions_Activity extends AppCompatActivity {
 
     private ViewPagerAuctions adapterPager;
-
+    private ActivityAuctionsBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_auctions);
+        binding=ActivityAuctionsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.ownToolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbar.ownToolbar);
         getSupportActionBar().setTitle("Subastas");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        TabLayout tabLayout = findViewById(R.id.tab_layout_auctions);
-        ViewPager2 viewPager = findViewById(R.id.view_pager_auctions);
+
         adapterPager=  new ViewPagerAuctions(this);
-        viewPager.setAdapter(adapterPager);
+        binding.viewPagerAuctions.setAdapter(adapterPager);
 
-
-        new TabLayoutMediator(tabLayout, viewPager,
+        new TabLayoutMediator(binding.tabLayoutAuctions, binding.viewPagerAuctions,
                 new TabLayoutMediator.TabConfigurationStrategy() {
                     @Override
                     public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {

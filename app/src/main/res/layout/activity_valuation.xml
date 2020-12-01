@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UI.activities.ValuationActivity"
+    android:fitsSystemWindows="true">
+    <include layout="@layout/own_toolbar" android:id="@+id/toolbar"/>
+   <LinearLayout
+       app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:orientation="vertical"
+       android:gravity="center|top"
+       >
+       <TextView
+           android:layout_marginTop="40dp"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Valora tu experiencia"
+           android:textSize="25dp"
+           />
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:textAlignment="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pulsa en las estrellas para dejar tu valoracion.A mas estrellas, mejor experiencia"
+            />
+
+       <androidx.appcompat.widget.AppCompatRatingBar
+           android:id="@+id/ratingTotal"
+           style="@style/Widget.AppCompat.RatingBar.Indicator"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginStart="80dp"
+           android:layout_marginTop="30dp"
+           android:layout_marginEnd="80dp"
+           android:indeterminate="false"
+           android:max="5"
+           android:numStars="5"
+           android:progress="3"
+           android:rating="1"
+           android:scaleX="2"
+           android:scaleY="2"
+           android:stepSize="0.01" />
+       <LinearLayout
+           android:layout_marginTop="45dp"
+           android:layout_width="match_parent"
+           android:layout_height="25dp"
+           android:orientation="horizontal"
+           android:layout_marginStart="20dp"
+           android:gravity="right"
+           >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="Rapidez de contacto"
+            android:gravity="left"/>
+           <me.zhanghai.android.materialratingbar.MaterialRatingBar
+               android:id="@+id/rating1"
+               style="@style/Widget.MaterialRatingBar.RatingBar"
+               android:layout_width="150dp"
+               android:layout_height="match_parent"
+               android:numStars="5"
+               android:rating="1"
+               android:layout_marginEnd="35dp"
+               android:scaleY="1.25"
+               android:scaleX="1.25"               />
+       </LinearLayout>
+       <LinearLayout
+           android:layout_marginTop="20dp"
+           android:layout_width="match_parent"
+           android:layout_height="25dp"
+           android:orientation="horizontal"
+           android:layout_marginStart="20dp"
+           android:gravity="right"
+           >
+           <TextView
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:layout_height="match_parent"
+               android:text="Amabilidad"
+               android:gravity="left"/>
+           <me.zhanghai.android.materialratingbar.MaterialRatingBar
+               android:id="@+id/rating2"
+
+               style="@style/Widget.MaterialRatingBar.RatingBar"
+               android:layout_width="150dp"
+               android:layout_height="match_parent"
+               android:numStars="5"
+               android:rating="1"
+
+               android:layout_marginEnd="35dp"
+               android:scaleY="1.25"
+               android:scaleX="1.25"               />
+       </LinearLayout>
+       <LinearLayout
+           android:layout_marginTop="20dp"
+           android:layout_width="match_parent"
+           android:layout_height="25dp"
+           android:orientation="horizontal"
+           android:layout_marginStart="20dp"
+           android:gravity="right"
+           >
+           <TextView
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:layout_height="match_parent"
+               android:text="Veloidad de trabajo"
+               android:gravity="left"/>
+           <me.zhanghai.android.materialratingbar.MaterialRatingBar
+               android:id="@+id/rating3"
+
+               style="@style/Widget.MaterialRatingBar.RatingBar"
+               android:layout_width="150dp"
+               android:layout_height="match_parent"
+               android:numStars="5"
+               android:rating="1"
+               android:layout_marginEnd="35dp"
+               android:scaleY="1.25"
+               android:scaleX="1.25"
+               />
+       </LinearLayout>
+       <LinearLayout
+           android:layout_marginTop="20dp"
+           android:layout_width="match_parent"
+           android:layout_height="25dp"
+           android:orientation="horizontal"
+           android:layout_marginStart="20dp"
+           android:gravity="right"
+           >
+           <TextView
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:layout_height="match_parent"
+               android:text="Puntialidad"
+               android:gravity="left"/>
+           <me.zhanghai.android.materialratingbar.MaterialRatingBar
+               android:id="@+id/rating4"
+
+               style="@style/Widget.MaterialRatingBar.RatingBar"
+               android:layout_width="150dp"
+               android:layout_height="match_parent"
+               android:numStars="5"
+               android:rating="1"
+               android:layout_marginEnd="35dp"
+               android:scaleY="1.25"
+               android:scaleX="1.25"
+               />
+       </LinearLayout>
+
+       <com.google.android.material.textfield.TextInputLayout
+           android:id="@+id/opinion"
+           android:layout_marginTop="10dp"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_marginStart="20dp"
+           android:layout_marginEnd="20dp"
+           >
+           <com.google.android.material.textfield.TextInputEditText
+               android:layout_width="match_parent"
+               android:minLines="5"
+               android:layout_height="wrap_content"
+               android:inputType="textMultiLine"
+               android:hint="deja un comentario"
+               android:background="@android:color/transparent"
+               android:gravity="bottom"
+/>
+       </com.google.android.material.textfield.TextInputLayout>
+   </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

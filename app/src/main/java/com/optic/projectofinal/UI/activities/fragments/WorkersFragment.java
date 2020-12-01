@@ -1,15 +1,12 @@
 package com.optic.projectofinal.UI.activities.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,7 +15,6 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.Query;
 import com.optic.projectofinal.R;
-import com.optic.projectofinal.UI.activities.ProfileDetailsActivity;
 import com.optic.projectofinal.adapters.CategoriesAdapter;
 import com.optic.projectofinal.adapters.WorkersAdapterFirebase;
 import com.optic.projectofinal.models.User;
@@ -88,19 +84,15 @@ public class WorkersFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_main_activity, menu);
+        menu.findItem(R.id.menuNotifications).getActionView().findViewById(R.id.containerNotifications).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menuSeeProfile: {
-                startActivity(new Intent(getContext(), ProfileDetailsActivity.class));
-                break;
             }
-        }
-        return false;
+        });
     }
+
+
     ///cycle life
 
     @Override

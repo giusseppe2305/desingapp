@@ -1,13 +1,16 @@
 package com.optic.projectofinal.UI.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -16,6 +19,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.optic.projectofinal.R;
@@ -23,10 +27,12 @@ import com.optic.projectofinal.adapters.ApplyJobAdapterFirebase;
 import com.optic.projectofinal.adapters.SliderAdapterExample;
 import com.optic.projectofinal.adapters.SliderItem;
 import com.optic.projectofinal.databinding.ActivityJobOfferedBinding;
+import com.optic.projectofinal.databinding.AlertDialogApplyJobBinding;
 import com.optic.projectofinal.models.ApplyJob;
 import com.optic.projectofinal.models.Category;
 import com.optic.projectofinal.models.Job;
 import com.optic.projectofinal.providers.ApplyJobWorkerDatabaseProvider;
+import com.optic.projectofinal.providers.AuthenticationProvider;
 import com.optic.projectofinal.providers.JobsDatabaseProvider;
 import com.optic.projectofinal.providers.StorageProvider;
 import com.optic.projectofinal.providers.SubcategoriesDatabaseProvider;
@@ -43,6 +49,7 @@ public class JobOfferedActivity extends AppCompatActivity {
     private ActivityJobOfferedBinding binding;
     private ApplyJobAdapterFirebase adapter;
     private ApplyJobWorkerDatabaseProvider mApplyJobWorker;
+    private AuthenticationProvider authenticationProvider;
     private UserDatabaseProvider mUserProvider;
     private JobsDatabaseProvider jobsDatabaseProvider;
     private SubcategoriesDatabaseProvider subcategoriesDatabaseProvider;
@@ -51,25 +58,30 @@ public class JobOfferedActivity extends AppCompatActivity {
     private ArrayList<SliderItem> imagesSlider;
     private StorageProvider storageProvider;
     private SliderAdapterExample adapterSlider;
+    private AlertDialog dialogApplyJob;
+    private AlertDialogApplyJobBinding bindingDialog;
+    private boolean isAppliedJob;
+    private AlertDialog dialogCancelApplyJob;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //set binding
-        binding=ActivityJobOfferedBinding.inflate(getLayoutInflater());
+        binding = ActivityJobOfferedBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         ///get intetn
-        idJobSelected=getIntent().getStringExtra("idJobSelected");
-        idUserCreateJobSelected=getIntent().getStringExtra("idUserCreateJobSelected");
+        idJobSelected = getIntent().getStringExtra("idJobSelected");
+        idUserCreateJobSelected = getIntent().getStringExtra("idUserCreateJobSelected");
         ///instance objects
-        storageProvider=new StorageProvider(this);
-        subcategoriesDatabaseProvider=new SubcategoriesDatabaseProvider();
-        jobsDatabaseProvider=new JobsDatabaseProvider();
-        mApplyJobWorker=new ApplyJobWorkerDatabaseProvider(idJobSelected);
-        mUserProvider=new UserDatabaseProvider();
+        authenticationProvider = new AuthenticationProvider();
+        storageProvider = new StorageProvider(this);
+        subcategoriesDatabaseProvider = new SubcategoriesDatabaseProvider();
+        jobsDatabaseProvider = new JobsDatabaseProvider();
+        mApplyJobWorker = new ApplyJobWorkerDatabaseProvider();
+        mUserProvider = new UserDatabaseProvider();
         ///pre config slider
-        imagesSlider=new ArrayList<>();
-        adapterSlider=new SliderAdapterExample(this,imagesSlider);
+        imagesSlider = new ArrayList<>();
+        adapterSlider = new SliderAdapterExample(this, imagesSlider);
         loadJobData();
         //set toolbar
         setSupportActionBar(binding.toolbar);
@@ -81,7 +93,7 @@ public class JobOfferedActivity extends AppCompatActivity {
         binding.applyWorkers.setLayoutManager(new LinearLayoutManager(this));
         /// set config slider
 
-        SliderView sliderView =binding.imageSlider;
+        SliderView sliderView = binding.imageSlider;
         sliderView.setSliderAdapter(adapterSlider);
         sliderView.setIndicatorAnimation(IndicatorAnimationType.WORM); //set indicator animation by using IndicatorAnimationType. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
@@ -121,55 +133,142 @@ public class JobOfferedActivity extends AppCompatActivity {
         });
         //load data profile
         loadUserData();
-        binding.btnSeeProfileDetail.setOnClickListener(v->{
-            Intent i=new Intent(JobOfferedActivity.this,ProfileDetailsActivity.class);
-            i.putExtra("idUserToSee",idUserCreateJobSelected);
+        binding.btnSeeProfileDetail.setOnClickListener(v -> {
+            Intent i = new Intent(JobOfferedActivity.this, ProfileDetailsActivity.class);
+            i.putExtra("idUserToSee", idUserCreateJobSelected);
             startActivity(i);
         });
-
-
-
+        //alert dialog apply
+        bindingDialog = AlertDialogApplyJobBinding.inflate(getLayoutInflater());
+        dialogApplyJob = new MaterialAlertDialogBuilder(JobOfferedActivity.this)
+                .setTitle("Aplicar al trabajo")
+                .setMessage("Rellene los datos")
+                .setPositiveButton("Aplicar", null)
+                .setNegativeButton("Cancelar", null)
+                .setCancelable(false)
+                .setView(bindingDialog.getRoot())
+                .create();
+        dialogApplyJob.setOnShowListener(v -> {
+            dialogApplyJob.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(m -> {
+                if (checAreValidFields()) {
+                    applyJobFirebase();
+                    loadBtnApplyJobInside(true);
+                    dialogApplyJob.dismiss();
+                }
+            });
+        });
+        //alerDialog un apply
+        dialogCancelApplyJob = new MaterialAlertDialogBuilder(JobOfferedActivity.this)
+                .setTitle("Confirmacion")
+                .setMessage("¿Esta seguro que quiera dejar de aplicar a este trabajo?")
+                .setPositiveButton("Si,estoy seguro", (dialogInterface, i) -> removeApplyJob())
+                .setNegativeButton("Cancelar", null)
+                .create();
+        ///
+        loadBtnApplyJob();
     }
+
+    private void removeApplyJob() {
+        mApplyJobWorker.removeApplyJob(idJobSelected, authenticationProvider.getIdCurrentUser()).addOnFailureListener(v -> Log.e(TAG, "JobOfferedActivity removeApplyJob: "));
+        loadBtnApplyJobInside(false);
+    }
+
+    private void loadBtnApplyJob() {
+        mApplyJobWorker.checkIfExist(idJobSelected + authenticationProvider.getIdCurrentUser()).addOnSuccessListener(v -> {
+            loadBtnApplyJobInside(v.exists());
+        }).addOnFailureListener(v -> Log.e(TAG, "JobOfferedActivity loadBtnApplyJob: " + v.getMessage()));
+    }
+
+    private void loadBtnApplyJobInside(boolean v) {
+        if (v) {
+            binding.applyJob.setText("Cancelar aplicacion");
+            isAppliedJob = true;
+        } else {
+            binding.applyJob.setText("Aplicar trabajo");
+            isAppliedJob = false;
+        }
+        binding.applyJob.setVisibility(View.VISIBLE);
+        binding.applyJob.setOnClickListener(vv -> {
+            if (isAppliedJob) {
+                dialogCancelApplyJob.show();
+            } else {
+                dialogApplyJob.show();
+            }
+        });
+    }
+
+    private void applyJobFirebase() {
+        ApplyJob it = new ApplyJob();
+        it.setMessage(bindingDialog.message.getEditText().getText().toString());
+        it.setPrice(Double.parseDouble(bindingDialog.price.getEditText().getText().toString()));
+        it.setIdJob(idJobSelected);
+        it.setIdWorkerApply(authenticationProvider.getIdCurrentUser());
+        isAppliedJob = true;
+        new ApplyJobWorkerDatabaseProvider().addApply(it, idJobSelected).addOnFailureListener(v -> Log.e(TAG, "JobOfferedActivity applyJobFirebase: " + v.getMessage()));
+    }
+
+    private boolean checAreValidFields() {
+        boolean ret = false;
+        boolean ret2 = false;
+
+        if (bindingDialog.message.getEditText().getText().toString().length() == 0) {
+            bindingDialog.message.setError("Introduzca algun mensaje");
+        } else if (bindingDialog.message.getEditText().getText().toString().length() > 240) {
+            bindingDialog.message.setError("Mensaje demasiado largo");
+        } else {
+            bindingDialog.message.setError(null);
+            ret = true;
+        }
+
+        if (bindingDialog.price.getEditText().getText().toString().length() == 0) {
+            bindingDialog.price.setError("Introduzca algun presupuesto");
+        } else {
+            bindingDialog.price.setError(null);
+            ret2 = true;
+        }
+
+        return ret && ret2;
+    }
+
 
     private void loadJobData() {
         jobsDatabaseProvider.getJobById(idJobSelected).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()){
-                    Job myJob=documentSnapshot.toObject(Job.class);
+                if (documentSnapshot.exists()) {
+                    Job myJob = documentSnapshot.toObject(Job.class);
                     binding.description.setText(myJob.getDescription());
                     binding.title.setText(myJob.getTitle());
                     //
 
-                    for(String i:myJob.getImages()){
+                    for (String i : myJob.getImages()) {
 
-                            storageProvider.getUrlImage(i,s -> {
-                                adapterSlider.addItem(new SliderItem(s));
-                            });
+
+                        adapterSlider.addItem(new SliderItem(i));
 
                     }
                     ///
-                    Category category=Utils.getCategoryByIdJson(JobOfferedActivity.this,myJob.getCategory());
+                    Category category = Utils.getCategoryByIdJson(JobOfferedActivity.this, myJob.getCategory());
                     category.setTitleString(JobOfferedActivity.this);
                     binding.chipCategory.setText(category.getTitleString());
                     subcategoriesDatabaseProvider.getSubCategoryById(myJob.getSubcategory()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if(documentSnapshot.exists()){
+                            if (documentSnapshot.exists()) {
                                 binding.chipSubCategory.setText(documentSnapshot.getString("name"));
-                            }else{
-                                Log.e(TAG, "onSuccess: JobOfferedActivity->loadJobData" );
+                            } else {
+                                Log.e(TAG, "onSuccess: JobOfferedActivity->loadJobData");
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.e(TAG, "onFailure: JobOfferedActivity->loadJobData" );
+                            Log.e(TAG, "onFailure: JobOfferedActivity->loadJobData");
                         }
                     });
 
 
-                }else{
+                } else {
                     Log.e(TAG, "onSuccess:else JobOfferedActivity->getJobById");
                 }
             }
@@ -181,42 +280,44 @@ public class JobOfferedActivity extends AppCompatActivity {
         });
 
 
-        
     }
 
 
-    private void loadUserData(){
+    private void loadUserData() {
         mUserProvider.getUser(idUserCreateJobSelected).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot!=null&&documentSnapshot.exists()){
-                    String name=documentSnapshot.getString("name");
-                    String lastName=documentSnapshot.getString("lastName");
-                    String profileImage=documentSnapshot.getString("profileImage");
-                    System.out.println("nombrere "+name);
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    String name = documentSnapshot.getString("name");
+                    String lastName = documentSnapshot.getString("lastName");
+                    String profileImage = documentSnapshot.getString("profileImage");
+                    System.out.println("nombrere " + name);
                     binding.nameUser.setText(name);
                     binding.lastNameUser.setText(lastName);
                     Glide.with(JobOfferedActivity.this).load(profileImage).placeholder(R.drawable.loading_).thumbnail(Glide.with(JobOfferedActivity.this).load(R.drawable.loading_)).error(R.drawable.ic_error_404).centerInside().into(binding.ivPhotoProfile);
-                }else{
-                    Log.e("own", "onSuccess: JobOfferedActivity->loadUserData" );
+                } else {
+                    Log.e("own", "onSuccess: JobOfferedActivity->loadUserData");
                 }
+
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.e("own", "onFailure: JobOfferedActivity->loadUserData" );
+                Log.e("own", "onFailure: JobOfferedActivity->loadUserData");
             }
         });
 
     }
+
     @Override
     protected void onStart() {
         super.onStart();
-        Query query=mApplyJobWorker.getAll();
+        Query query = mApplyJobWorker.getAllById(idJobSelected);
         ///comprobar no sea nulo
-        if(query!=null){
-            FirestoreRecyclerOptions<ApplyJob> options= new FirestoreRecyclerOptions.Builder<ApplyJob>().setQuery(query, ApplyJob.class).build();
-            adapter = new ApplyJobAdapterFirebase(JobOfferedActivity.this,options);
+        if (query != null) {
+            FirestoreRecyclerOptions<ApplyJob> options = new FirestoreRecyclerOptions.Builder<ApplyJob>().setQuery(query, ApplyJob.class).build();
+            adapter = new ApplyJobAdapterFirebase(JobOfferedActivity.this, options);
             binding.applyWorkers.setAdapter(adapter);
             adapter.startListening();
         }
@@ -225,7 +326,7 @@ public class JobOfferedActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if(adapter !=null){
+        if (adapter != null) {
             adapter.stopListening();
         }
     }

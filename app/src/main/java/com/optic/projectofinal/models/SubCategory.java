@@ -1,5 +1,7 @@
 package com.optic.projectofinal.models;
 
+import java.util.Objects;
+
 public class SubCategory {
     private int idCategory;
     private String name;
@@ -7,6 +9,14 @@ public class SubCategory {
 
     public SubCategory() {
 
+    }
+
+    public SubCategory(String id) {
+        this.id = id;
+    }
+
+    public SubCategory(int idCategory) {
+        this.idCategory = idCategory;
     }
 
     public int getIdCategory() {
@@ -36,5 +46,18 @@ public class SubCategory {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SubCategory that = (SubCategory) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

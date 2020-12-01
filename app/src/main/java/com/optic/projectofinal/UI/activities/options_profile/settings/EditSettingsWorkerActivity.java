@@ -8,8 +8,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
@@ -73,7 +71,7 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
         subcategoriesDatabaseProvider = new SubcategoriesDatabaseProvider();
         ////
         binding.container.setAlpha(0.3f);
-        setEnabledAllViews(binding.container,false);
+        Utils.setEnabledAllViews(binding.container,false);
         //
         loadData();
 
@@ -83,13 +81,6 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
             temp.removeAll(listResources);
             new MaterialAlertDialogBuilder(this)
                     .setTitle("Elije un recurso")
-                    .setAdapter(new ArrayAdapter<Resource>(EditSettingsWorkerActivity.this, R.layout.support_simple_spinner_dropdown_item, temp), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Toast.makeText(EditSettingsWorkerActivity.this, "le dio", Toast.LENGTH_SHORT).show();
-                            adapterResources.addSwipeItem(listResources.size(), temp.get(i));
-                        }
-                    })
                     .setNegativeButton("cancelar", null)
                     .show();
         });
@@ -299,13 +290,13 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
                 if(b){
                 //checked
                     binding.container.setAlpha(1);
-                    setEnabledAllViews(binding.container,true);
+                    Utils.setEnabledAllViews(binding.container,true);
 
                     menu.findItem(R.id.btnSave).setVisible(true);
                 }else{
                     //unchecked
                     binding.container.setAlpha(0.3f);
-                    setEnabledAllViews(binding.container,false);
+                    Utils.setEnabledAllViews(binding.container,false);
                     menu.findItem(R.id.btnSave).setVisible(false);
 
                 }
@@ -352,19 +343,7 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
     }
 
 
-    private static void setEnabledAllViews(ViewGroup layout, boolean option) {
-        layout.setEnabled(option);
-        for (int i = 0; i < layout.getChildCount(); i++) {
-            View child = layout.getChildAt(i);
-            if (child instanceof ViewGroup) {
-                setEnabledAllViews((ViewGroup) child,option);
-            } else {
-                child.setEnabled(option);
-                child.setFocusable(option);
-                child.setClickable(option);
-            }
-        }
-    }
+
     private void setupRecyclerView(RecyclerView rv, SwipeRVAdapter adapter, ArrayList list, boolean onlyLeft, SwipeRVTouchHelper.SwipeRVTouchHelperListener listener) {
         rv.setNestedScrollingEnabled(false);
         rv.setLayoutManager(new LinearLayoutManager(this));

@@ -7,6 +7,7 @@
     tools:context=".UI.activities.fragments.tabsFragments.auctions.MyAuctionsFragment">
 
     <LinearLayout
+        android:id="@+id/containerExample"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -16,7 +17,6 @@
             android:layout_height="150dp"
             android:src="@drawable/ic_my_auctions"
             app:tint="@color/teal_700"/>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,6 +28,32 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:text="Aqui encontraras a todas tus subastas de trabajos."/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <Spinner
+            android:id="@+id/spinnerState"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:entries="@array/job_states"
+            android:layout_gravity="left"
+            android:layout_margin="10dp"
+            />
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/listJobsPublished"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/listJobsInProgress"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/listJobsFinished"/>
+
     </LinearLayout>
 
 </FrameLayout>
