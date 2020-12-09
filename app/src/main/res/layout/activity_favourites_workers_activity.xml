@@ -6,8 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".UI.activities.options_profile.Favourites_Workers_Activity"
     android:fitsSystemWindows="true">
-    <include layout="@layout/own_toolbar"/>
+    <include layout="@layout/own_toolbar" android:id="@+id/toolbar"/>
     <LinearLayout
+        android:visibility="gone"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        android:id="@+id/containerNotFavourites"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -29,4 +32,10 @@
             android:textAlignment="center"
             android:text="Aqui encontraras a todos los trabajadores que marques como favoritos"/>
     </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favouritesWorkers"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

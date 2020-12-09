@@ -6,6 +6,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -49,4 +50,7 @@ public class ChatsProvider {
         });
     }
 
+    public Task<Void> deleteChat(String id) {
+        return mCollection.document(id).delete();
+    }
 }

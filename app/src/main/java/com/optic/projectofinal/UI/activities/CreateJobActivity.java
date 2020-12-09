@@ -478,9 +478,9 @@ public class CreateJobActivity extends AppCompatActivity {
         outState.putString("description", binding.description.getEditText().getText().toString());
         outState.putString("title", binding.title.getEditText().getText().toString());
         outState.putParcelableArrayList("list_uris", listUris);
-        if (listCategories.size() > 0)
+        if (listCategories.size() > 0&&positionCategorySelected!=null)
             outState.putString("idCategory", listCategories.get(positionCategorySelected).getTitleString());
-        if (listSubcategories.size() > 0)
+        if (listSubcategories.size() > 0&&positionSubcategorySelected!=null)
             outState.putString("idSubcategory", listSubcategories.get(positionSubcategorySelected).getName());
     }
 

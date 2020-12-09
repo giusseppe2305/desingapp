@@ -53,6 +53,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private Uri uriCoverImage;
     private Uri uriImageProfile;
     private AlertDialog dialogUpdate;
+    private boolean hasProfileImage;
+    private boolean hasCoverImage;
 
     private enum TYPE_IMAGE {COVER_IMAGE, PROFILE_IMAGE}
 
@@ -69,6 +71,8 @@ public class EditProfileActivity extends AppCompatActivity {
         userDatabaseProvider = new UserDatabaseProvider();
         storageProvider = new StorageProvider(this);
         sexSelected = null;
+        hasCoverImage=false;
+        hasProfileImage=false;
         ///
         listSex = Utils.getListSexJson(this);
         binding.sex.setAdapter(new ArrayAdapter<Sex>(this, R.layout.textbox_gender, listSex));
@@ -133,6 +137,12 @@ public class EditProfileActivity extends AppCompatActivity {
                 binding.birthDate.getEditText().setText(Utils.getStringFromTimestamp(userIterated.getBirthdate()));
                 binding.location.getEditText().setText(userIterated.getLocation());
                 //images
+                if(userIterated.getCoverPageImage()!=null&&!userIterated.getCoverPageImage().isEmpty()){
+                    hasCoverImage=true;
+                }
+                if(userIterated.getProfileImage()!=null&&!userIterated.getProfileImage().isEmpty()){
+                    hasProfileImage=true;
+                }
                 Glide.with(EditProfileActivity.this).load(userIterated.getCoverPageImage()).apply(Utils.getOptionsGlide(false)).transform(Utils.getTransformSquareRound()).into(binding.coverPageImage);
                 Glide.with(EditProfileActivity.this).load(userIterated.getProfileImage()).apply(Utils.getOptionsGlide(false)).into(binding.imageProfile);
             }
@@ -220,6 +230,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private void updateDataUser() {
         if (checkFieldAreValid()) {
             User userUpdate = new User();
+            userUpdate.setId(authenticationProvider.getIdCurrentUser());
             userUpdate.setName(binding.name.getEditText().getText().toString());
             userUpdate.setLastName(binding.lastName.getEditText().getText().toString());
             userUpdate.setAbout(binding.about.getEditText().getText().toString());
@@ -229,18 +240,45 @@ public class EditProfileActivity extends AppCompatActivity {
             userUpdate.setBirthdate(Utils.getTimestampFromString(binding.birthDate.getEditText().getText().toString()));
             userUpdate.setLocation(binding.location.getEditText().getText().toString());
 
-            userDatabaseProvider.updateUser(authenticationProvider.getIdCurrentUser(), userUpdate)
+
+            if (uriCoverImage != null) {
+
+                storageProvider.uploadImageUser(uriCoverImage, StorageProvider.TYPE_IMAGE.COVER_IMAGE).addOnSuccessListener(v->{
+                    Log.e(TAG, "updateDataUser: cambio cover" );
+                    if(!hasCoverImage){
+                        v.getStorage().getDownloadUrl().addOnSuccessListener(c->{
+                            User mUser=new User();
+                            mUser.setId(authenticationProvider.getIdCurrentUser());
+                            mUser.setCoverPageImage(c.toString());
+                            userDatabaseProvider.updateUser(mUser);
+                        }).addOnFailureListener(cc-> Log.e(TAG, "updateDataUser: cover "+cc.getMessage() ));
+
+                    }
+                }).addOnFailureListener(v -> Log.e(TAG, "fail update cover image prifle " + v.getMessage()));
+            }
+            if (uriImageProfile != null) {
+                storageProvider.uploadImageUser(uriImageProfile, StorageProvider.TYPE_IMAGE.PROFILE_IMAGE)
+                        .addOnSuccessListener(v-> {
+                            Log.e(TAG, "updateDataUser: cambio profile image");
+                            if (!hasProfileImage) {
+                                v.getStorage().getDownloadUrl().addOnSuccessListener(c -> {
+                                    User mUser = new User();
+                                    mUser.setId(authenticationProvider.getIdCurrentUser());
+                                    mUser.setProfileImage(c.toString());
+                                    userDatabaseProvider.updateUser(mUser);
+                                }).addOnFailureListener(cc -> Log.e(TAG, "updateDataUser: profile " + cc.getMessage()));
+
+                            }
+                        })
+                        .addOnFailureListener(v -> Log.e(TAG, "fail update  image prifle " + v.getMessage()));
+            }
+
+            userDatabaseProvider.updateUser(userUpdate)
                     .addOnSuccessListener(n -> Toast.makeText(this, "Todo update ", Toast.LENGTH_SHORT).show())
                     .addOnFailureListener(v -> {
                         Log.e(TAG, "updateDataUser: " + v.getMessage());
                         Toast.makeText(this, "Algo salio mal", Toast.LENGTH_SHORT).show();
                     });
-            if (uriCoverImage != null) {
-                storageProvider.uploadImageUser(uriCoverImage, StorageProvider.TYPE_IMAGE.COVER_IMAGE).addOnSuccessListener(v-> Log.e(TAG, "updateDataUser: cambio cover" )).addOnFailureListener(v -> Log.e(TAG, "fail update cover image prifle " + v.getMessage()));
-            }
-            if (uriImageProfile != null) {
-                storageProvider.uploadImageUser(uriImageProfile, StorageProvider.TYPE_IMAGE.PROFILE_IMAGE).addOnSuccessListener(v-> Log.e(TAG, "updateDataUser: cambio profile" )).addOnFailureListener(v -> Log.e(TAG, "fail update  image prifle " + v.getMessage()));
-            }
             //check all right
             finish();
         } else {

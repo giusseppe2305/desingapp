@@ -1,6 +1,7 @@
 package com.optic.projectofinal.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.optic.projectofinal.R;
+import com.optic.projectofinal.UI.activities.JobDoneActivity;
 import com.optic.projectofinal.databinding.CardviewJobDoneBinding;
 import com.optic.projectofinal.models.Opinion;
 import com.optic.projectofinal.utils.Utils;
@@ -17,6 +19,7 @@ import com.optic.projectofinal.utils.Utils;
 import java.util.List;
 
 public class OpinionsAdapter extends RecyclerView.Adapter<OpinionsAdapter.ViewHolder> {
+    private static final String TAG = "own";
     Context context;
     List<Opinion> listOpinions;
     public OpinionsAdapter(Context c, List<Opinion> listOpinions) {
@@ -34,13 +37,20 @@ public class OpinionsAdapter extends RecyclerView.Adapter<OpinionsAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull OpinionsAdapter.ViewHolder holder, int position) {
         Opinion opinion=listOpinions.get(position);
-        holder.binding.average.setText(String.valueOf(opinion.getAverageValuation()));
+        holder.binding.average.setText(Utils.roundToHalf(opinion.getAverageValuation()));
         holder.binding.message.setText(opinion.getMessage());
         holder.binding.timestamp.setText(Utils.getStringFromTimestamp(opinion.getTimestamp()));
         holder.binding.title.setText(opinion.getTitleJob());
         Glide.with(context).load(opinion.getImageJob()).apply(Utils.getOptionsGlide(true)).transform(Utils.getTransformSquareRound()).into(holder.binding.image);
         if(opinion.isFromJob()){
         }
+
+        holder.binding.getRoot().setOnClickListener(view -> {
+            Intent intent=new Intent(context, JobDoneActivity.class);
+            intent.putExtra("idJob",opinion.getIdJob());
+            context.startActivity(intent);
+
+        });
     }
 
     @Override

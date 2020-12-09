@@ -1,5 +1,6 @@
 package com.optic.projectofinal.UI.activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -29,6 +30,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ///In order to have an previous activity,, we receive an id and from here we redirected to new activity,so when the user press back button dont close de app and come to the main activity
+        if(getIntent().getStringExtra("idUserToSee")!=null){
+            Intent intent=new Intent(this,ProfileDetailsActivity.class);
+            intent.putExtra("idUserToSee",getIntent().getStringExtra("idUserToSee"));
+            startActivity(intent);
+        }
+
         binding=ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 

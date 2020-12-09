@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -24,15 +26,20 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.adapters.ResourcesAdapter;
 import com.optic.projectofinal.adapters.ViewPagerProfileDetails;
 import com.optic.projectofinal.adapters.ViewPagerProfileDetailsWorker;
 import com.optic.projectofinal.databinding.ActivityProfileDetailBinding;
+import com.optic.projectofinal.models.Job;
 import com.optic.projectofinal.models.Resource;
 import com.optic.projectofinal.models.User;
 import com.optic.projectofinal.providers.AuthenticationProvider;
+import com.optic.projectofinal.providers.JobsDatabaseProvider;
+import com.optic.projectofinal.providers.LikeWorkersDatabaseProvider;
 import com.optic.projectofinal.providers.UserDatabaseProvider;
+import com.optic.projectofinal.utils.PermissionCall;
 import com.optic.projectofinal.utils.Utils;
 import com.stfalcon.imageviewer.StfalconImageViewer;
 import com.stfalcon.imageviewer.loader.ImageLoader;
@@ -41,15 +48,19 @@ import java.util.ArrayList;
 
 public class ProfileDetailsActivity extends AppCompatActivity {
 
-
+    private LikeWorkersDatabaseProvider likeProvider;
     private static final String TAG = "own";
     private FragmentStateAdapter adapterPager;
     private ActivityProfileDetailBinding binding;
     private UserDatabaseProvider userDatabaseProvider;
+    private JobsDatabaseProvider jobsDatabaseProvider;
     private AuthenticationProvider authenticationProvider;
     private String idUserToSee;
+    private PermissionCall permissionCall;
     private ArrayList<Resource> listResources;
     private ResourcesAdapter adapterResource;
+    private boolean likeWorker;
+    private String imageProfileUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,14 +68,14 @@ public class ProfileDetailsActivity extends AppCompatActivity {
         binding = ActivityProfileDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         ///
+
         Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout toolBarLayout = binding.toolbarLayout;
         getSupportActionBar().setTitle("pruena");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolBarLayout.setExpandedTitleColor(Color.TRANSPARENT);
-        //insntance
-        userDatabaseProvider = new UserDatabaseProvider();
+
         authenticationProvider = new AuthenticationProvider();
         //get intetn
         if (getIntent().getStringExtra("idUserToSee") != null) {
@@ -72,6 +83,11 @@ public class ProfileDetailsActivity extends AppCompatActivity {
         } else {
             idUserToSee = authenticationProvider.getIdCurrentUser();
         }
+        //insntance
+        jobsDatabaseProvider=new JobsDatabaseProvider();
+        userDatabaseProvider = new UserDatabaseProvider();
+        likeProvider = new LikeWorkersDatabaseProvider(authenticationProvider.getIdCurrentUser());
+        permissionCall=new PermissionCall(this);
 
 
         binding.appBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -105,8 +121,8 @@ public class ProfileDetailsActivity extends AppCompatActivity {
         binding.contentAppBar.openChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent  i=new Intent(ProfileDetailsActivity.this,ChatConversationActivity.class);
-                i.putExtra("idUserToChat",idUserToSee);
+                Intent i = new Intent(ProfileDetailsActivity.this, ChatConversationActivity.class);
+                i.putExtra("idUserToChat", idUserToSee);
                 startActivity(i);
             }
         });
@@ -136,6 +152,12 @@ public class ProfileDetailsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+         permissionCall.executeOnRequestPermission(requestCode,permissions,grantResults);
+    }
+
     private void loadUserData() {
         userDatabaseProvider.getUser(idUserToSee).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -144,17 +166,44 @@ public class ProfileDetailsActivity extends AppCompatActivity {
                     User mUser = documentSnapshot.toObject(User.class);
                     //ling viewpager to tabs
                     getIntermediaryViewPager(mUser.isProfessional());
+                    ///set rating value
+                    jobsDatabaseProvider.getValuationsFromUser(idUserToSee).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            float totalAmountValuation=0;
+                            for(DocumentSnapshot it:queryDocumentSnapshots.getDocuments()){
+                                totalAmountValuation+=it.toObject(Job.class).getValuation().getAverageTotal();
+                            }
+                            if(totalAmountValuation>0){
+                                binding.contentAppBar.numOpinions.setText("("+queryDocumentSnapshots.getDocuments().size()+")");
+                                binding.contentAppBar.valuated.setRating(totalAmountValuation/queryDocumentSnapshots.getDocuments().size());
+                            }
+                        }
+                    }).addOnFailureListener(v-> Log.e(TAG, "loadUserData onSuccess: addOnFailureListener" ));
 
 
                     binding.contentAppBar.nameUser.setText(mUser.getName());
                     binding.contentAppBar.lastNameUser.setText(mUser.getLastName());
-                    binding.contentAppBar.phoneNumber.setText(String.valueOf(mUser.getPhoneNumber()));
+
+                    if(mUser.getPhoneNumber()!=0&&String.valueOf(mUser.getPhoneNumber()).length()>0){
+                        binding.contentAppBar.btnCall.setOnClickListener(v->{
+                            permissionCall.call(String.valueOf(mUser.getPhoneNumber()));
+
+                        });
+                        binding.contentAppBar.phoneNumber.setText(String.valueOf(mUser.getPhoneNumber()));
+                    }else{
+                        binding.contentAppBar.btnCall.setVisibility(View.GONE);
+                        binding.contentAppBar.phoneNumber.setVisibility(View.GONE);
+                    }
+
+
                     binding.contentAppBar.about.setText(mUser.getAbout());
                     if (mUser.isVerified()) {
                         binding.contentAppBar.verified.setVisibility(View.VISIBLE);
                     }
                     binding.contentAppBar.imageProfileStatus.setImageResource(mUser.isOnline() ? R.color.teal_200 : R.color.black);
                     Glide.with(ProfileDetailsActivity.this).load(mUser.getProfileImage()).apply(Utils.getOptionsGlide(true)).into(binding.contentAppBar.imageProfile);
+                    imageProfileUser=mUser.getProfileImage();
                     Glide.with(ProfileDetailsActivity.this).load(mUser.getCoverPageImage()).apply(Utils.getOptionsGlide(true)).into(binding.contentAppBar.coverPageImage);
                     ///gallery
                     if (mUser.getProfileImage() != null) {
@@ -209,7 +258,7 @@ public class ProfileDetailsActivity extends AppCompatActivity {
             adapterPager = new ViewPagerProfileDetailsWorker(this, idUserToSee);
             binding.contentProfileDetail.viewPager.setAdapter(adapterPager);
 
-            new TabLayoutMediator(binding.tabs,binding.contentProfileDetail.viewPager,
+            new TabLayoutMediator(binding.tabs, binding.contentProfileDetail.viewPager,
                     new TabLayoutMediator.TabConfigurationStrategy() {
                         @Override
                         public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
@@ -244,4 +293,65 @@ public class ProfileDetailsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_profile_detail, menu);
+        if(idUserToSee==authenticationProvider.getIdCurrentUser()){
+            menu.findItem(R.id.btnMenuFavourite).setVisible(false);
+            binding.contentAppBar.containerCallChat.setVisibility(View.GONE);
+        }else{
+            likeProvider.chekIfExistLikeToWorker(idUserToSee).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    if(queryDocumentSnapshots.getDocuments().size()>0){
+                        //exist like
+                        Utils.changeTintIconToolbar(menu.findItem(R.id.btnMenuFavourite),getResources().getColor(R.color.checkMessage));
+                        likeWorker=true;
+                    }else
+                    {
+                        Utils.changeTintIconToolbar(menu.findItem(R.id.btnMenuFavourite),getResources().getColor(R.color.grey_200));
+                        //not exist like
+                        likeWorker=false;
+                    }
+
+                    menu.findItem(R.id.btnMenuFavourite).setEnabled(true);
+                }
+            }).addOnFailureListener(v-> Log.e(TAG, "onCreateOptionsMenu: "+v.getMessage() ));
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.btnMenuShare:
+                    share();
+                    return true;
+
+            case R.id.btnMenuFavourite:
+                likeWorker(item);
+                return true;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void likeWorker(MenuItem item) {
+        likeWorker=likeWorker;
+        if(likeWorker){
+            Utils.changeTintIconToolbar(item,getResources().getColor(R.color.checkMessage));
+
+        }else{
+            Utils.changeTintIconToolbar(item,getResources().getColor(R.color.grey_200));
+
+        }
+        likeProvider.doLike(idUserToSee);
+    }
+
+    private void share() {
+        Utils.generateDynamicLink(this,idUserToSee,"Conoces a: "+binding.contentAppBar.nameUser.getText().toString(),"description ",
+               imageProfileUser!=null?imageProfileUser:"https://static.thenounproject.com/png/17241-200.png","Comparte a este trabajador");
+    }
 }

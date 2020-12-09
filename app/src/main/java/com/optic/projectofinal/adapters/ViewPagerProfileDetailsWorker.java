@@ -11,7 +11,6 @@ import com.optic.projectofinal.UI.activities.fragments.tabsFragments.profileDeta
 import com.optic.projectofinal.UI.activities.fragments.tabsFragments.profileDetails.SkillsFragmentTab;
 
 public class ViewPagerProfileDetailsWorker extends FragmentStateAdapter {
-    private static final int CARD_ITEM_SIZE = 3;
     private AuctionFragment tercero;
     private String idUser;
 

@@ -23,7 +23,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.optic.projectofinal.Swipe.SwipeRVAdapter;
 import com.optic.projectofinal.Swipe.SwipeRVTouchHelper;
 import com.optic.projectofinal.UI.activities.CreateJobActivity;
-import com.optic.projectofinal.adapters.JobsAdapter;
+import com.optic.projectofinal.adapters.JobsAdapterSettings;
 import com.optic.projectofinal.databinding.FragmentMyAuctionsBinding;
 import com.optic.projectofinal.models.Job;
 import com.optic.projectofinal.providers.AuthenticationProvider;
@@ -127,10 +127,10 @@ public class MyAuctionsFragment extends Fragment implements SwipeRVTouchHelper.S
                     binding.containerExample.setVisibility(View.GONE);
 
                     binding.listJobsInProgress.setLayoutManager(new LinearLayoutManager(getContext()));
-                    binding.listJobsInProgress.setAdapter(new JobsAdapter(MyAuctionsFragment.this, listJobsInProgress, Job.State.IN_PROGRESS));
+                    binding.listJobsInProgress.setAdapter(new JobsAdapterSettings(MyAuctionsFragment.this, listJobsInProgress, Job.State.IN_PROGRESS));
 
                     binding.listJobsFinished.setLayoutManager(new LinearLayoutManager(getContext()));
-                    binding.listJobsFinished.setAdapter(new JobsAdapter(MyAuctionsFragment.this, listJobsFinished, Job.State.FINISHED));
+                    binding.listJobsFinished.setAdapter(new JobsAdapterSettings(MyAuctionsFragment.this, listJobsFinished, Job.State.FINISHED));
 
                 } else {
                     binding.listJobsPublished.setVisibility(View.GONE);

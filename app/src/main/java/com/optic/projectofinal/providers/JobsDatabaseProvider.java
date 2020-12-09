@@ -21,8 +21,8 @@ public class JobsDatabaseProvider {
         database = FirebaseFirestore.getInstance().collection("Jobs");
     }
 
-    public Query getAllJobs(){
-        return database.orderBy("title");
+    public Query getAll(){
+        return database.orderBy("timestamp", Query.Direction.DESCENDING);
     }
     public String getIdDocument(){
         String dev=null;
@@ -53,4 +53,7 @@ public class JobsDatabaseProvider {
         return database.document(myJob.getId()).update(update);
     }
 
+    public Task<QuerySnapshot> getValuationsFromUser(String idUser) {
+        return database.whereEqualTo("idUserApply",idUser).whereEqualTo("state",Job.State.FINISHED).get();
+    }
 }

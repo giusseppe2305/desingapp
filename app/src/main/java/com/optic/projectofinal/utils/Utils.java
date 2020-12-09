@@ -2,13 +2,19 @@ package com.optic.projectofinal.utils;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.OpenableColumns;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.Toast;
 
 import androidx.annotation.AnyRes;
 import androidx.annotation.NonNull;
@@ -20,6 +26,11 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.BaseRequestOptions;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.google.gson.Gson;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.models.Category;
@@ -33,14 +44,17 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Utils {
+    private static final String TAG = "own";
     public  static int MAX_IMAGE_CAN_BE_SELECTED=10;
 
     public static int getResId(String resName, Class<?> c) {
@@ -266,6 +280,65 @@ public class Utils {
                 child.setClickable(option);
             }
         }
+    }
+    public static String roundToHalf(double d) {
+        double result = Math.round(d * 2) / 2.0;
+        DecimalFormat formato = new DecimalFormat("####0.00");
+        return formato.format(result);
+    }
+
+    public static void changeTintIconToolbar(MenuItem item, int color) {
+        Drawable icon = item.getIcon();
+        icon.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        item.setIcon(icon);
+
+    }
+
+    public static void generateDynamicLink(Context context,String id,String title,String description,String img,String titlePopUp) {
+        String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+
+        Task<ShortDynamicLink> dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(Uri.parse("https://projectofinal.page.link?id=" + id))
+                .setDomainUriPrefix("https://projectofinal.page.link")
+                .setAndroidParameters(
+                        new DynamicLink.AndroidParameters.Builder("com.optic.projectofinal")
+                                .setMinimumVersion(1)
+                                .build())
+                .setIosParameters(
+                        new DynamicLink.IosParameters.Builder("com.optic.projectofinal")
+                                .setAppStoreId("whatever")
+                                .setMinimumVersion("1.0.1")
+                                .build())
+                .setSocialMetaTagParameters(
+                        new DynamicLink.SocialMetaTagParameters.Builder()
+                                .setTitle(title)
+                                .setDescription(description)
+                                .setImageUrl(Uri.parse(img))
+                                .build())
+                .buildShortDynamicLink()
+                .addOnCompleteListener(new OnCompleteListener<ShortDynamicLink>() {
+                    @Override
+                    public void onComplete(@NonNull Task<ShortDynamicLink> task) {
+                        if (task.isSuccessful()) {
+                            // Short link created
+                            Uri shortLink = task.getResult().getShortLink();
+                            Uri flowchartLink = task.getResult().getPreviewLink();
+                            Intent sendIntent = new Intent();
+                            sendIntent.setAction(Intent.ACTION_SEND);
+                            sendIntent.putExtra(Intent.EXTRA_TEXT, titlePopUp + ": " + shortLink.toString());
+                            sendIntent.setType("text/plain");
+
+                            Intent shareIntent = Intent.createChooser(sendIntent, null);
+                            context.startActivity(shareIntent);
+                        } else {
+                            // Error
+                            // ...
+                            Toast.makeText(context, "ERROR", Toast.LENGTH_LONG).show();
+                            Log.e(TAG, "generateDynamicLink erroer onComplete: " );
+                        }
+                    }
+                });
+
     }
 }
 

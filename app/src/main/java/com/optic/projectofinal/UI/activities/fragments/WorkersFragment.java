@@ -1,6 +1,7 @@
 package com.optic.projectofinal.UI.activities.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -9,18 +10,21 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.firestore.Query;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.adapters.CategoriesAdapter;
-import com.optic.projectofinal.adapters.WorkersAdapterFirebase;
+import com.optic.projectofinal.adapters.WorkersAdapter;
+import com.optic.projectofinal.databinding.FragmentWorkersBinding;
 import com.optic.projectofinal.models.User;
 import com.optic.projectofinal.providers.AuthenticationProvider;
 import com.optic.projectofinal.providers.UserDatabaseProvider;
 import com.optic.projectofinal.utils.Utils;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,16 +33,17 @@ import com.optic.projectofinal.utils.Utils;
  */
 public class WorkersFragment extends Fragment {
 
+    private static final String TAG = "own";
     private UserDatabaseProvider mUserProvider;
-    private WorkersAdapterFirebase workersAdapterFirebase;
-   // private FragmentWorkersBinding binding;
-    private CategoriesAdapter adapterCategories;
     private AuthenticationProvider mAuth;
-    private RecyclerView mRecyclerView;
+    private WorkersAdapter workersAdapter;
+    private FragmentWorkersBinding binding;
+    private CategoriesAdapter adapterCategories;
+
 
     public WorkersFragment() {
         // Required empty public constructor
-        setHasOptionsMenu(true);
+       // setHasOptionsMenu(true);
     }
 
 
@@ -56,28 +61,18 @@ public class WorkersFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-//        binding = FragmentWorkersBinding.inflate(inflater, container, false);
-//        View vista = binding.getRoot();
-        View mView=inflater.inflate(R.layout.fragment_workers,container,false);
-        mRecyclerView=mView.findViewById(R.id.rvWorkers);
+        binding = FragmentWorkersBinding.inflate(inflater, container, false);
 
 
 
         mAuth = new AuthenticationProvider();
         mUserProvider = new UserDatabaseProvider();
-
-        RecyclerView rvCategories=mView.findViewById(R.id.rvCategories);
-        rvCategories.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-
-        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-
-
-
         adapterCategories = new CategoriesAdapter(getContext(), Utils.getListCategoriesJson(getContext()));
-        rvCategories.setAdapter(adapterCategories);
+        binding.rvCategories.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        binding.rvCategories.setAdapter(adapterCategories);
 
 
-        return mView;
+        return binding.getRoot();
     }
 
     @Override
@@ -98,22 +93,25 @@ public class WorkersFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Query query = mUserProvider.getAllWorkers();///comprobar no sea nulo
+         mUserProvider.getAllWorkers().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+             @Override
+             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                 ArrayList<User> lisWorkers=new ArrayList<>();
+                 for(DocumentSnapshot i:queryDocumentSnapshots.getDocuments()){
+                     if(!i.getString("id").equals(mAuth.getIdCurrentUser())){
+                        lisWorkers.add(i.toObject(User.class));
+                     }
+                 }
+                 workersAdapter = new WorkersAdapter(getContext(), lisWorkers);
+                 binding.rvWorkers.setAdapter(workersAdapter);
+                 binding.rvWorkers.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+             }
+         }).addOnFailureListener(runnable -> Log.e(TAG, "onStart: "+runnable.getMessage() ));
 
-            FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>().setQuery(query, User.class).build();
-            workersAdapterFirebase = new WorkersAdapterFirebase(getContext(), options);
-            mRecyclerView.setAdapter(workersAdapterFirebase);
-            workersAdapterFirebase.startListening();
 
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (workersAdapterFirebase != null) {
-            workersAdapterFirebase.stopListening();
-        }
-    }
+
 
 
 }

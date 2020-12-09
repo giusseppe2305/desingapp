@@ -1,6 +1,8 @@
 package com.optic.projectofinal.providers;
 
 
+import android.util.Log;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.tasks.Task;
@@ -11,7 +13,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.optic.projectofinal.models.Opinion;
-import com.optic.projectofinal.models.SubCategory;
 import com.optic.projectofinal.models.User;
 
 import java.util.Date;
@@ -33,21 +34,17 @@ public class UserDatabaseProvider {
     public Task<Void> createUser(User miUser) {
         return database.document(miUser.getId()).set(miUser);
     }
-//    public Task<Void> createUser2(User miUser) {
-//        DocumentReference inter = database.document();
-//        miUser.setId(inter.getId());
-//        return inter.set(miUser);
-//    }
+
     public Task<DocumentSnapshot> getUser(String idUser){
         return database.document(idUser).get();
     }
     public Task<QuerySnapshot> getOpinions(String idUser){
         return database.document(idUser).collection("Opinions").get();
     }
-    public Task<Void> updateUser(String idUser, User user){
+    public Task<Void> updateUser( User user){
         //delete null fields
         Map<String, Object> update = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL).convertValue(user, Map.class);
-        return database.document(idUser).update(update);
+        return database.document(user.getId()).update(update);
     }
 
     public Task<Void> updateUserOnline(String idUser, boolean status){
@@ -70,22 +67,28 @@ public class UserDatabaseProvider {
         return database.whereArrayContains("idsSubCategories",sub).get();
     }
 
-    public Query filterWorkers(int category,SubCategory subCategory, String priceSince, String priceUntil, Order order){
-        Query query = database.whereEqualTo("professional", true).whereArrayContains("idsCategories",category);
-        if(subCategory!=null){
-            query.whereArrayContains("idsSubCategories",subCategory.getId());
-        }
+    public Query filterWorkers(int category, String priceSince, String priceUntil, Order order){
+        Query query = database.whereEqualTo("professional", true);///miss category
+
         if(priceSince!=null&&priceUntil!=null){
-            query.whereGreaterThanOrEqualTo("pricePerHour",priceSince).whereLessThanOrEqualTo("pricePerHour",priceUntil);
+            Log.e(TAG, "filterWorkers: query 2" );
+
+            query= query.whereGreaterThanOrEqualTo("pricePerHour",priceSince).whereLessThanOrEqualTo("pricePerHour",priceUntil);
         }
         if(order!=null){
             switch (order){
-                case HIGHER_TO_LOWER:query.orderBy("pricePerHour", Query.Direction.DESCENDING);
-                    break;
+                case HIGHER_TO_LOWER:
+                    Log.e(TAG, "filterWorkers: query 3" );
+
+                    query= query.orderBy("pricePerHour", Query.Direction.DESCENDING);
+
                 case DISTANCE:
                     break;
-                case LOWER_TO_HIGHER:query.orderBy("pricePerHour", Query.Direction.ASCENDING);
-                    break;
+                case LOWER_TO_HIGHER:
+                    Log.e(TAG, "filterWorkers: query 4" );
+
+                    query= query.orderBy("pricePerHour", Query.Direction.ASCENDING);
+
             }
         }
         return query;
@@ -95,7 +98,10 @@ public class UserDatabaseProvider {
         return database.document(idUser).collection("Opinions").document().set(opinion);
     }
 
-
+    public Task<QuerySnapshot> getAllSaveWorkersById(String id)
+    {
+        return database.document(id).collection("WorkersSaved").get();
+    }
 
     public enum Order{
         LOWER_TO_HIGHER,

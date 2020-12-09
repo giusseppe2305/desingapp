@@ -7,37 +7,32 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.optic.projectofinal.R;
-import com.optic.projectofinal.adapters.SubCategoriesAdapterFirebase;
-import com.optic.projectofinal.adapters.WorkersAdapterFirebase;
+import com.optic.projectofinal.adapters.WorkersAdapter;
 import com.optic.projectofinal.databinding.ActivityCategorySelectedBinding;
 import com.optic.projectofinal.databinding.BottomSheetLastConexionBinding;
 import com.optic.projectofinal.databinding.BottomSheetOrderBinding;
 import com.optic.projectofinal.databinding.BottomSheetPriceBinding;
-import com.optic.projectofinal.databinding.BottomSheetSubcategoryBinding;
 import com.optic.projectofinal.models.Category;
 import com.optic.projectofinal.models.SubCategory;
 import com.optic.projectofinal.models.User;
 import com.optic.projectofinal.providers.AuthenticationProvider;
-import com.optic.projectofinal.providers.SubcategoriesDatabaseProvider;
 import com.optic.projectofinal.providers.UserDatabaseProvider;
 import com.optic.projectofinal.utils.Utils;
 
 import java.util.ArrayList;
 
 public class CategorySelectedActivity extends AppCompatActivity {
+    private static final String TAG = "own";
     private Category categorySelected;
     private ActivityCategorySelectedBinding binding;
     private String priceSince,priceUntil;
@@ -45,18 +40,17 @@ public class CategorySelectedActivity extends AppCompatActivity {
     private BottomSheetPriceBinding fragmentBindingPrice;
     private BottomSheetDialog bottomSheetDialogOrder;
     private com.optic.projectofinal.databinding.BottomSheetOrderBinding fragmentBindingOrder;
-    private BottomSheetDialog bottomSheetDialogCategory;
-    private BottomSheetSubcategoryBinding fragmentBindingCategory;
+
     private BottomSheetDialog bottomSheetDialogLastConexion;
     private BottomSheetLastConexionBinding fragmentBindingLastConexion;
     private UserDatabaseProvider.Order optionOrder;
-    private int optionLastConexion;
     private UserDatabaseProvider mUserDatabase;
-    private SubcategoriesDatabaseProvider mSubCategoriesDatabase;
-    private SubCategory optionSubCategory;
+
     private AuthenticationProvider mAuth;
     private UserDatabaseProvider mUserProvider;
-    private WorkersAdapterFirebase workersAdapterFirebase;
+    private WorkersAdapter workersAdapterFirebase;
+    private int optionLastConexion;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,17 +62,15 @@ public class CategorySelectedActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getString(categorySelected.getIdTitle()));
         ///set init values
         optionOrder= UserDatabaseProvider.Order.LOWER_TO_HIGHER;
-        optionLastConexion=-1;
-        optionSubCategory=null;
+         optionLastConexion = -1;
+
         priceUntil=null;
         priceSince=null;
         //instance
         mAuth=new AuthenticationProvider();
         mUserProvider=new UserDatabaseProvider();
-        mSubCategoriesDatabase=new SubcategoriesDatabaseProvider();
         mUserDatabase=new UserDatabaseProvider();
         //recyclerview
-        binding.rvCategorySelected.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
 
         ///price
          bottomSheetDialogPrice = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
@@ -93,12 +85,7 @@ public class CategorySelectedActivity extends AppCompatActivity {
         View viewOrder = fragmentBindingOrder.getRoot();
         bottomSheetDialogOrder.setContentView(viewOrder);
         createViewOrder();
-        ///Category
-         bottomSheetDialogCategory = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
-         fragmentBindingCategory = BottomSheetSubcategoryBinding.inflate(getLayoutInflater());
-        View viewCategory = fragmentBindingCategory.getRoot();
-        bottomSheetDialogCategory.setContentView(viewCategory);
-        createViewCategory();
+
         ///Last conexion
          bottomSheetDialogLastConexion = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
          fragmentBindingLastConexion = BottomSheetLastConexionBinding.inflate(getLayoutInflater());
@@ -110,7 +97,6 @@ public class CategorySelectedActivity extends AppCompatActivity {
         binding.chipPrice.setOnClickListener(view ->bottomSheetDialogPrice.show());
         binding.chipLastConexion.setOnClickListener(view -> bottomSheetDialogLastConexion.show());
         binding.chipOrder.setOnClickListener(view -> bottomSheetDialogOrder.show());
-        binding.chipSubCategory.setOnClickListener(view -> bottomSheetDialogCategory.show());
     }
 
     private void createViewLastConexion() {
@@ -129,13 +115,7 @@ public class CategorySelectedActivity extends AppCompatActivity {
 
     }
 
-    private void createViewCategory() {
-        fragmentBindingCategory.rvSubCategoriesList.setLayoutManager(new LinearLayoutManager(CategorySelectedActivity.this, RecyclerView.VERTICAL,false));
-        SubCategoriesAdapterFirebase adapter = new SubCategoriesAdapterFirebase(CategorySelectedActivity.this, new ArrayList<SubCategory>());
-        fragmentBindingCategory.rvSubCategoriesList.setAdapter(adapter);
-        loadCategories(adapter);
-        fragmentBindingCategory.closeFragment.setOnClickListener(v->bottomSheetDialogCategory.dismiss());
-    }
+
 
     private void createViewOrder() {
         fragmentBindingOrder.priceLowerToHigher.setTag(UserDatabaseProvider.Order.LOWER_TO_HIGHER);
@@ -180,90 +160,44 @@ public class CategorySelectedActivity extends AppCompatActivity {
     }
 
 
-    private void loadCategories(SubCategoriesAdapterFirebase adapter){
-        mSubCategoriesDatabase.getAllByCategory(categorySelected.getId()).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if(queryDocumentSnapshots!=null){
-                    for(DocumentSnapshot i:queryDocumentSnapshots.getDocuments()){
-                        final SubCategory own=new SubCategory();
-                        own.setId(i.getId());
-                        own.setName(i.getString("name"));
-                        mUserDatabase.getUsersBySubcategory(i.getId()).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                            @Override
-                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                if(queryDocumentSnapshots!=null){
-                                    int size=queryDocumentSnapshots.getDocuments().size();
-                                    if(size>0){
 
-                                        adapter.getList().add(own);
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                }else{
-                                    Log.e("own", "getUsersBySubcategory -> onSuccess->else: ");
-                                }
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.e("own", "getUsersBySubcategory -> onFailure: ");
-                            }
-                        });
-
-                    }
-                }else{
-                    Log.e("own", "getAllSubcategories -> onSuccess->else: ");
-                }
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e("own", "getAllSubcategories -> onFailure: ");
-
-            }
-        });
-    }
 
     public void selectionCategoryDone(SubCategory iterated) {
-        bottomSheetDialogCategory.dismiss();
         doQueryAndUpdateResults();
-        optionSubCategory=iterated;
-        binding.chipSubCategory.setText("Subcategoria: "+iterated.getName());
+
+
     }
     private void doQueryAndUpdateResults() {
-        Query query = createQuery();///comprobar no sea nulo
-        if(workersAdapterFirebase!=null){
-            workersAdapterFirebase.startListening();
-        }else{
-            if (query != null) {
-                Toast.makeText(CategorySelectedActivity.this, "Entra on start", Toast.LENGTH_SHORT).show();
-                FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>().setQuery(query, User.class).build();
-                workersAdapterFirebase = new WorkersAdapterFirebase(CategorySelectedActivity.this, options);
+        createQuery().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                ArrayList<User> listWorkers=new ArrayList<>();
+                for(DocumentSnapshot i:queryDocumentSnapshots.getDocuments()){
+                    if(!i.getString("id").equals(mAuth.getIdCurrentUser())){
+                        listWorkers.add(i.toObject(User.class));
+                    }
+                }
+                Log.e(TAG, "onSuccess: "+listWorkers.size());
+                workersAdapterFirebase = new WorkersAdapter(CategorySelectedActivity.this, listWorkers);
                 binding.rvCategorySelected.setAdapter(workersAdapterFirebase);
-                workersAdapterFirebase.startListening();
+                binding.rvCategorySelected.setLayoutManager(new LinearLayoutManager(CategorySelectedActivity.this,RecyclerView.VERTICAL,false));
             }
-        }
+        }).addOnFailureListener(v-> Log.e(TAG, "doQueryAndUpdateResults: "+v.getMessage() ));
+
+
     }
 
     private Query createQuery() {
-       return mUserDatabase.filterWorkers(categorySelected.getId(),optionSubCategory,priceSince,priceUntil, optionOrder);
+       return mUserDatabase.filterWorkers(categorySelected.getId(),priceSince,priceUntil, optionOrder);
     }
 
     ///cycle life
     @Override
     public void onStart() {
         super.onStart();
-        doQueryAndUpdateResults();
+//        doQueryAndUpdateResults();
 
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (workersAdapterFirebase != null) {
-            workersAdapterFirebase.stopListening();
-        }
-    }
 
 }

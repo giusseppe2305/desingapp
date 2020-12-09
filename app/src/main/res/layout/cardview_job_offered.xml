@@ -9,6 +9,7 @@
     app:contentPaddingLeft="5dp"
     app:contentPaddingRight="5dp"
     android:layout_marginBottom="0.5dp"
+    android:id="@+id/container"
     >
 
     <LinearLayout

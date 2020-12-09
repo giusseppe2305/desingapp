@@ -31,10 +31,10 @@ import com.optic.projectofinal.databinding.AlertDialogApplyJobBinding;
 import com.optic.projectofinal.models.ApplyJob;
 import com.optic.projectofinal.models.Category;
 import com.optic.projectofinal.models.Job;
+import com.optic.projectofinal.models.User;
 import com.optic.projectofinal.providers.ApplyJobWorkerDatabaseProvider;
 import com.optic.projectofinal.providers.AuthenticationProvider;
 import com.optic.projectofinal.providers.JobsDatabaseProvider;
-import com.optic.projectofinal.providers.StorageProvider;
 import com.optic.projectofinal.providers.SubcategoriesDatabaseProvider;
 import com.optic.projectofinal.providers.UserDatabaseProvider;
 import com.optic.projectofinal.utils.Utils;
@@ -56,7 +56,6 @@ public class JobOfferedActivity extends AppCompatActivity {
     private String idJobSelected;
     private String idUserCreateJobSelected;
     private ArrayList<SliderItem> imagesSlider;
-    private StorageProvider storageProvider;
     private SliderAdapterExample adapterSlider;
     private AlertDialog dialogApplyJob;
     private AlertDialogApplyJobBinding bindingDialog;
@@ -74,7 +73,6 @@ public class JobOfferedActivity extends AppCompatActivity {
         idUserCreateJobSelected = getIntent().getStringExtra("idUserCreateJobSelected");
         ///instance objects
         authenticationProvider = new AuthenticationProvider();
-        storageProvider = new StorageProvider(this);
         subcategoriesDatabaseProvider = new SubcategoriesDatabaseProvider();
         jobsDatabaseProvider = new JobsDatabaseProvider();
         mApplyJobWorker = new ApplyJobWorkerDatabaseProvider();
@@ -192,12 +190,30 @@ public class JobOfferedActivity extends AppCompatActivity {
             if (isAppliedJob) {
                 dialogCancelApplyJob.show();
             } else {
-                dialogApplyJob.show();
+                new UserDatabaseProvider().getUser(authenticationProvider.getIdCurrentUser()).addOnSuccessListener(runnable -> {
+                    if(runnable.exists()){
+                        if(runnable.getBoolean("professional")){
+                            dialogApplyJob.show();
+                        }else{
+                            new MaterialAlertDialogBuilder(this).setTitle("Confirmation")
+                                    .setMessage("If you apply to any job, your status of worker wil be seated enabled ¿Are you sure that you want apply to this job?")
+                                    .setPositiveButton("Yes, apply",(dialogInterface, i) -> {
+                                        dialogInterface.dismiss();
+                                        dialogApplyJob.show();
+                                    }).setNegativeButton("No thanks",null)
+                                    .show();
+                        }
+                    }
+                }).addOnFailureListener(error-> Log.e(TAG, "loadBtnApplyJobInside:"+error.getMessage() ));
+
+
             }
         });
     }
 
     private void applyJobFirebase() {
+
+
         ApplyJob it = new ApplyJob();
         it.setMessage(bindingDialog.message.getEditText().getText().toString());
         it.setPrice(Double.parseDouble(bindingDialog.price.getEditText().getText().toString()));
@@ -205,6 +221,10 @@ public class JobOfferedActivity extends AppCompatActivity {
         it.setIdWorkerApply(authenticationProvider.getIdCurrentUser());
         isAppliedJob = true;
         new ApplyJobWorkerDatabaseProvider().addApply(it, idJobSelected).addOnFailureListener(v -> Log.e(TAG, "JobOfferedActivity applyJobFirebase: " + v.getMessage()));
+        User userUpdate=new User();
+        userUpdate.setId(authenticationProvider.getIdCurrentUser());
+        userUpdate.setProfessional(true);
+        new UserDatabaseProvider().updateUser(userUpdate).addOnFailureListener(v-> Log.e(TAG, "applyJobFirebase: failure "+v.getMessage() ));
     }
 
     private boolean checAreValidFields() {

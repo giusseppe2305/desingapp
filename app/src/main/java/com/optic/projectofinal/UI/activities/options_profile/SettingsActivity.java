@@ -5,9 +5,11 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.optic.projectofinal.UI.activities.login.LoginActivity;
 import com.optic.projectofinal.UI.activities.options_profile.settings.EditProfileActivity;
 import com.optic.projectofinal.UI.activities.options_profile.settings.EditSettingsWorkerActivity;
 import com.optic.projectofinal.databinding.ActivitySettingsBinding;
+import com.optic.projectofinal.providers.AuthenticationProvider;
 
 public class SettingsActivity extends AppCompatActivity {
     private ActivitySettingsBinding binding;
@@ -25,5 +27,11 @@ public class SettingsActivity extends AppCompatActivity {
         binding.optionEditProfile.setOnClickListener(v -> startActivity(new Intent(SettingsActivity.this, EditProfileActivity.class)));
         binding.optionEditSettingsWorker.setOnClickListener(v -> startActivity(new Intent(SettingsActivity.this, EditSettingsWorkerActivity.class)));
 
+        binding.signOut.setOnClickListener(v->{
+
+            new AuthenticationProvider().logOut(SettingsActivity.this);
+            finishAffinity();
+            startActivity(new Intent(SettingsActivity.this,LoginActivity.class));
+        });
     }
 }

@@ -16,8 +16,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.adapters.OpinionsAdapter;
 import com.optic.projectofinal.databinding.FragmentTabOpinionsBinding;
+import com.optic.projectofinal.models.Job;
 import com.optic.projectofinal.models.Opinion;
-import com.optic.projectofinal.providers.UserDatabaseProvider;
+import com.optic.projectofinal.providers.JobsDatabaseProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,23 +60,49 @@ public class OpinionsFragment extends Fragment {
         binding=FragmentTabOpinionsBinding.inflate(inflater,container,false);
         binding.spinner.setAdapter(new ArrayAdapter<String>(getContext(),R.layout.support_simple_spinner_dropdown_item,new String[]{"Todos ","Cerrajero","Fontanero","Jardinero"}));
         loadOpinions();
-        
+
         return binding.getRoot();
     }
 
     private void loadOpinions() {
-        new UserDatabaseProvider().getOpinions(idUser).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        new JobsDatabaseProvider().getValuationsFromUser(idUser).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
                 ArrayList<Opinion> listOpinions=new ArrayList<>();
                 for(DocumentSnapshot i:list){
-                    Opinion it=i.toObject(Opinion.class);
-                    listOpinions.add(it);
+                    Job it=i.toObject(Job.class);
+
+                    Opinion opinion=new Opinion();
+                    opinion.setIdJob(it.getId());
+                    opinion.setValuationWorker(it.getValuation());
+                    opinion.setTitleJob(it.getTitle());
+                    opinion.setTimestamp(it.getTimestamp());
+                    opinion.setImageJob(it.getImages().get(0));
+                    if(it.getOpinionUserOffer()!=null)
+                    opinion.setMessage(it.getOpinionUserOffer());
+
+                    listOpinions.add(opinion);
+
                 }
+
                 binding.listOpinions.setLayoutManager(new LinearLayoutManager(getContext()));
                 binding.listOpinions.setAdapter(new OpinionsAdapter(getContext(),listOpinions));
             }
         }).addOnFailureListener(v-> Log.e(TAG, "loadOpinions: "+v.getMessage() ));
+
+//        new UserDatabaseProvider().getOpinions(idUser).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//            @Override
+//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+//                ArrayList<Opinion> listOpinions=new ArrayList<>();
+//                for(DocumentSnapshot i:list){
+//                    Opinion it=i.toObject(Opinion.class);
+//                    listOpinions.add(it);
+//                }
+//                binding.listOpinions.setLayoutManager(new LinearLayoutManager(getContext()));
+//                binding.listOpinions.setAdapter(new OpinionsAdapter(getContext(),listOpinions));
+//            }
+//        }).addOnFailureListener(v-> Log.e(TAG, "loadOpinions: "+v.getMessage() ));
     }
 }

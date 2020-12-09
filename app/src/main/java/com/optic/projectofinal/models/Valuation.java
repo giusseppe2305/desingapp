@@ -15,7 +15,9 @@ public class Valuation {
         this.speedEndJob = speedEndJob;
         this.punctuality = punctuality;
     }
-
+    public double getAverageTotal(){
+        return (speedContact+amiability+speedEndJob+punctuality)/4;
+    }
     public double getSpeedContact() {
         return speedContact;
     }

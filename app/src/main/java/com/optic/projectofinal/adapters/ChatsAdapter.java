@@ -92,26 +92,23 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
                 if(value!=null && !value.isEmpty()){
                     messageProvider.getMessage(value.getDocuments().get(0).getString("idLastMessage")).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                         @Override
-                        public void onEvent(@Nullable DocumentSnapshot ultimoMensajeDocument, @Nullable FirebaseFirestoreException error) {
-                            if(ultimoMensajeDocument!=null && ultimoMensajeDocument.exists()){
-                                String ultimoMensaje=ultimoMensajeDocument.getString("message");
+                        public void onEvent(@Nullable DocumentSnapshot lastMessage, @Nullable FirebaseFirestoreException error) {
+                            if(lastMessage!=null && lastMessage.exists()){
+                                String ultimoMensaje=lastMessage.getString("message");
                                 holder.binding.lastMessage.setText(ultimoMensaje);
-                                if(ultimoMensajeDocument.get("idsUserFrom").equals(mAuth.getIdCurrentUser())){
-                                    Toast.makeText(context, "es iguall", Toast.LENGTH_SHORT).show();
+                                if(lastMessage.get("idsUserFrom").equals(mAuth.getIdCurrentUser())){
                                     ///comprobar si esta visto o no el mensaje
-                                    if (ultimoMensajeDocument.getBoolean("viewed")){
+                                    if (lastMessage.getBoolean("viewed")){
                                         holder.binding.viewed.setColorFilter(ContextCompat.getColor(context,R.color.checkMessage));
                                     }else{
                                         holder.binding.viewed.setColorFilter(ContextCompat.getColor(context,R.color.unCheckMessage));
                                     }
                                     holder.binding.viewed.setVisibility(View.VISIBLE);
                                 }else{
-                                    Toast.makeText(context, "eNOOOO ES iguall", Toast.LENGTH_SHORT).show();
                                     setCountMessagesNoSee(model, holder);
                                     holder.binding.viewed.setVisibility(View.GONE);
                                 }
-
-                                holder.binding.timestampLastMessage.setText(RelativeTime.timeFormatAMPM(ultimoMensajeDocument.getLong("timestamp")));
+                                holder.binding.timestampLastMessage.setText(RelativeTime.timeFormatAMPM(lastMessage.getLong("timestamp")));
                             }
 
                         }
@@ -132,8 +129,6 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
         messageProvider.getMessageByChatAndSender(model.getIdChat(),idOpuesto).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                System.out.println("total >>>"+queryDocumentSnapshots.size()+"--"+queryDocumentSnapshots.getDocuments().size());
-                System.out.println("total >>>"+model.getIdChat()+"--"+mAuth.getIdCurrentUser());
 
                 if(queryDocumentSnapshots!=null && !queryDocumentSnapshots.isEmpty() && queryDocumentSnapshots.size()>0){
                     holder.binding.countNoSeeMessages.setVisibility(View.VISIBLE);

@@ -24,6 +24,7 @@ public class JobsAdapterFirebase extends FirestoreRecyclerAdapter<Job, JobsAdapt
     UserDatabaseProvider mUserProvider;
 
     public JobsAdapterFirebase(Context c, @NonNull FirestoreRecyclerOptions<Job> options) {
+
         super(options);
         context = c;
         mUserProvider = new UserDatabaseProvider();
@@ -31,21 +32,26 @@ public class JobsAdapterFirebase extends FirestoreRecyclerAdapter<Job, JobsAdapt
 
     @Override
     protected void onBindViewHolder(@NonNull final ViewHolder holder, int position, @NonNull Job model) {
-        String idIterated=getSnapshots().getSnapshot(position).getId();
-        holder.binding.title.setText(model.getTitle());
-        holder.binding.description.setText(model.getDescription());
-        holder.binding.timestamp.setText(Utils.getDateFormatted(model.getTimestamp()));
-        Glide.with(context).load(model.getImages().get(0)).apply(Utils.getOptionsGlide(true)).transform(Utils.getTransformSquareRound()).into(holder.binding.imageJob);
 
-        //load image
-        holder.binding.getRoot().setOnClickListener(v->{
-            Intent i=new Intent(context, JobOfferedActivity.class);
-            i.putExtra("idJobSelected",idIterated);
-            i.putExtra("idUserCreateJobSelected",model.getIdUserOffer());
-            context.startActivity(i);
-        });
-        ////ocultar mis propios tranajos
+            String idIterated=getSnapshots().getSnapshot(position).getId();
+            holder.binding.title.setText(model.getTitle());
+            holder.binding.description.setText(model.getDescription());
+            holder.binding.timestamp.setText(Utils.getDateFormatted(model.getTimestamp()));
+            Glide.with(context).load(model.getImages().get(0)).apply(Utils.getOptionsGlide(true)).transform(Utils.getTransformSquareRound()).into(holder.binding.imageJob);
+
+            //load image
+            holder.binding.getRoot().setOnClickListener(v->{
+                Intent i=new Intent(context, JobOfferedActivity.class);
+                i.putExtra("idJobSelected",idIterated);
+                i.putExtra("idUserCreateJobSelected",model.getIdUserOffer());
+                context.startActivity(i);
+            });
+
+
+
+
     }
+
 
     @NonNull
     @Override

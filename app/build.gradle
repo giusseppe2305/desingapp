@@ -32,9 +32,9 @@ android {
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 dependencies {
-
+    implementation 'com.github.aqoong:ExpandableTextView:1.0.1'
     implementation 'com.github.dhaval2404:imagepicker:1.7.5'//image picker
-
+    implementation 'com.google.firebase:firebase-dynamic-links:19.1.1'
     implementation 'com.shawnlin:number-picker:2.4.2'// num picker
     implementation 'com.airbnb.android:lottie:3.4.1'//lottien airbnb
     implementation 'com.facebook.android:facebook-android-sdk:7.1.0'///api facebook

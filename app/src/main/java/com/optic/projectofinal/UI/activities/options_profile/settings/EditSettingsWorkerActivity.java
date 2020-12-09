@@ -331,10 +331,11 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
 
     private void updateDataFirebase() {
         User userUpdate=new User();
+        userUpdate.setId(authenticationProvider.getIdCurrentUser());
         userUpdate.setProfessional(listSkills.size()==0?false:true);
         userUpdate.setResources(Utils.createListIntResourcesByList(listResources));
         userUpdate.setSkills(listSkills);
-        userDatabaseProvider.updateUser(authenticationProvider.getIdCurrentUser(),userUpdate).addOnSuccessListener(new OnSuccessListener<Void>() {
+        userDatabaseProvider.updateUser(userUpdate).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(EditSettingsWorkerActivity.this, "todo ok", Toast.LENGTH_SHORT).show();

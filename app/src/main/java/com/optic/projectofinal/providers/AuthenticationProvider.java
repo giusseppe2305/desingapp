@@ -2,6 +2,7 @@ package com.optic.projectofinal.providers;
 
 import android.content.Context;
 
+import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.Task;
@@ -50,6 +51,7 @@ public class AuthenticationProvider {
                 new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
         ).signOut();
         ///cerrar en facebbok
+        LoginManager.getInstance().logOut();
     }
    
     public Task logInGoogle(String idToken) {

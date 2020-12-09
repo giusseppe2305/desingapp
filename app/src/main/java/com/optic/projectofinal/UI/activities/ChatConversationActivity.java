@@ -1,6 +1,7 @@
 package com.optic.projectofinal.UI.activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 public class ChatConversationActivity extends AppCompatActivity {
+    private static final String TAG = "own";
     private ActivityChatConversationBinding binding;
     private String idCurrentChat;
     private String idUserToChat;
@@ -47,6 +49,7 @@ public class ChatConversationActivity extends AppCompatActivity {
     private MessageAdapterFirebase mAdapterMessage;
     private LinearLayoutManager linearLayoutManager;
     private ListenerRegistration listeningChangeDataToolbar;
+    private Boolean nonExistChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,10 @@ public class ChatConversationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (idCurrentChat != null && !binding.editTextMessageChat.getText().toString().isEmpty()) {
+                    if(nonExistChat!=null&&nonExistChat){
+                        nonExistChat=false;
+                    }
+
                     final Message msg = new Message();
                     msg.setIdChat(idCurrentChat);
                     msg.setIdsUserFrom(mAuth.getIdCurrentUser());
@@ -116,6 +123,16 @@ public class ChatConversationActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        if(nonExistChat!=null&&nonExistChat){
+            Toast.makeText(this, "salio", Toast.LENGTH_SHORT).show();
+            ///delete chat because dont wrote any message
+            mChatsProvider.deleteChat(idCurrentChat).addOnFailureListener(v-> Log.e(TAG, "onBackPressed: "+v.getMessage() ));
+        }
+    }
 
     @Override
     public void onStart() {
@@ -206,16 +223,13 @@ public class ChatConversationActivity extends AppCompatActivity {
                 if (queryDocumentSnapshots.size() == 0) {
                     ///no existe un chat con las comibanciones de los id entonces la creamos
                     createChat();
-                    onPause();
-                    onStart();
-
+                    nonExistChat=true;
                 } else {
                     //existe el chat
-                    System.out.println("este el id del chat que existe:::" + queryDocumentSnapshots.getDocuments().get(0).getString("idChat"));
                     idCurrentChat = queryDocumentSnapshots.getDocuments().get(0).getString("idChat");
-                    onPause();
-                    onStart();
                 }
+                onPause();
+                onStart();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

@@ -1,12 +1,14 @@
 package com.optic.projectofinal.models;
 
 public class Opinion {
+    private static final String TAG = "own";
     private String idUserPutOpinion;
     private Valuation valuationWorker;
     private long timestamp;
     private String message;
     private double averageValuation;
     private boolean isFromJob;
+    private String idJob;
     private String imageJob;
     private String titleJob;
     public Opinion() {
@@ -26,7 +28,23 @@ public class Opinion {
     }
 
     public void setValuationWorker(Valuation valuationWorker) {
-        this.valuationWorker = valuationWorker;
+        if(valuationWorker!=null){
+            this.valuationWorker = valuationWorker;
+            double total=valuationWorker.getAmiability()+valuationWorker.getPunctuality()+valuationWorker.getSpeedContact()+valuationWorker.getSpeedEndJob();
+            this.averageValuation=total/4;
+
+        }else{
+            averageValuation=0;
+        }
+
+    }
+
+    public String getIdJob() {
+        return idJob;
+    }
+
+    public void setIdJob(String idJob) {
+        this.idJob = idJob;
     }
 
     public long getTimestamp() {

@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:allowBackup="true"
@@ -12,16 +13,30 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ProjectoFinal">
-        <activity android:name=".UI.activities.ValuationActivity">
+        android:theme="@style/Theme.ProjectoFinal"
+
+        >
+        <activity android:name=".UI.activities.ValuationActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
 
 
         </activity>
-        <activity android:name=".UI.activities.EditJobActivity" />
-        <activity android:name=".UI.activities.options_profile.settings.EditSettingsWorkerActivity" />
-        <activity android:name=".UI.activities.CreateJobActivity" />
-        <activity android:name=".UI.activities.JobOfferedActivity" />
-        <activity android:name=".UI.activities.SplashScreenActivity">
+        <activity android:name=".UI.activities.EditJobActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".UI.activities.options_profile.settings.EditSettingsWorkerActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".UI.activities.CreateJobActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".UI.activities.JobOfferedActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".UI.activities.SplashScreenActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,30 +44,59 @@
             </intent-filter>
         </activity>
         <activity
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:name=".UI.activities.login.SignInActivity"
             android:parentActivityName=".UI.activities.login.LoginActivity" />
         <activity
             android:name=".UI.activities.login.RegisterActivity"
-            android:parentActivityName=".UI.activities.login.LoginActivity" />
-        <activity android:name=".UI.activities.login.LoginActivity" />
-        <activity android:name=".UI.activities.NotificationActivity" />
+            android:parentActivityName=".UI.activities.login.LoginActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".UI.activities.login.LoginActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".UI.activities.NotificationActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".UI.activities.ChatConversationActivity"
             android:label="@string/title_activity_chat_conversation"
-            android:theme="@style/Theme.ProjectoFinal.NoActionBar" />
-        <activity android:name=".UI.activities.options_profile.settings.EditProfileActivity" />
-        <activity android:name=".UI.activities.options_profile.SettingsActivity" />
-        <activity android:name=".UI.activities.options_profile.JobsActivity" />
-        <activity android:name=".UI.activities.options_profile.Auctions_Activity" />
-        <activity android:name=".UI.activities.options_profile.Favourites_Workers_Activity" />
-        <activity android:name=".UI.activities.JobDoneActivity" />
+            android:theme="@style/Theme.ProjectoFinal.NoActionBar"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".UI.activities.options_profile.settings.EditProfileActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".UI.activities.options_profile.SettingsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".UI.activities.options_profile.JobsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".UI.activities.options_profile.Auctions_Activity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".UI.activities.options_profile.Favourites_Workers_Activity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".UI.activities.JobDoneActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".UI.activities.ProfileDetailsActivity"
-            android:theme="@style/Theme.ProjectoFinal.NoActionBar" />
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".UI.activities.CategorySelectedActivity"
-            android:parentActivityName=".UI.activities.MainActivity" />
-        <activity android:name=".UI.activities.MainActivity" /> <!-- meta data login facebook -->
+            android:parentActivityName=".UI.activities.MainActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".UI.activities.MainActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+
+        <!-- meta data login facebook -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/btnMenuFavourite" android:icon="@drawable/ic_heart_liked" android:title="Guardar favoritos" app:showAsAction="always" android:enabled="false"  app:iconTint="@color/grey_200"/>
+    <item android:id="@+id/btnMenuShare" android:icon="@drawable/share" android:title="Compartir" app:showAsAction="always" app:iconTint="@color/teal_200"/>
+</menu>

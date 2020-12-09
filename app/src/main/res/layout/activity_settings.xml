@@ -369,6 +369,7 @@
 
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/signOut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/Base.CardView"

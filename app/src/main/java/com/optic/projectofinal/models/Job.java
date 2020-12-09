@@ -14,12 +14,21 @@ public class Job {
     private ArrayList<String> images;
     private Valuation valuation;
     private String title;
+    private double totalPrice;
     private State state;
     private int category;
     private String subcategory;
 
     public Job() {
 
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public int getCategory() {

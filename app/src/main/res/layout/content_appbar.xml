@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:background="@color/white"
-    android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
- >
+    android:orientation="vertical"
+    android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,6 +18,7 @@
             android:layout_height="240dp"
             android:scaleType="center"
             android:src="@color/grey_200" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,11 +26,11 @@
             android:padding="10dp"
 
             >
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/nameUser"
@@ -40,20 +39,22 @@
                     android:fontFamily="@font/cream_cake"
                     android:text="Titulo del post"
                     android:textSize="35sp" />
+
                 <TextView
-                    android:layout_marginStart="5dp"
                     android:id="@+id/lastNameUser"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
                     android:fontFamily="@font/cream_cake"
                     android:text="Titulo del post"
                     android:textSize="20sp" />
+
                 <ImageView
-                    android:visibility="gone"
                     android:id="@+id/verified"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:src="@drawable/ic_verified" />
+                    android:src="@drawable/ic_verified"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
@@ -64,24 +65,26 @@
                 <me.zhanghai.android.materialratingbar.MaterialRatingBar
                     android:id="@+id/valuated"
                     style="@style/Widget.MaterialRatingBar.RatingBar.Indicator.Small"
-                    app:mrb_progressBackgroundTint="@color/purple_200"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:isIndicator="true"
                     android:max="5"
+                    android:stepSize="0.01"
                     android:numStars="5"
-                    android:progressTint="#E81919"
-                    android:rating="3.5" />
+                    android:progressTint="@color/startRating"
+                    android:rating="0"
+                    app:mrb_progressBackgroundTint="@color/startRatingBackground" />
 
                 <TextView
-                    android:id="@+id/numOpnions"
+                    android:id="@+id/numOpinions"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="(48)"
+                    android:text="(0)"
                     android:textSize="11sp" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/containerCallChat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -89,83 +92,42 @@
                 <Button
                     android:id="@+id/btnCall"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-                    app:icon="@android:drawable/stat_sys_phone_call"
-                    app:rippleColor="@color/teal_200"
-                    app:strokeColor="@color/purple_500"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:text="llamar" />
+                    android:text="llamar"
+                    app:icon="@android:drawable/stat_sys_phone_call"
+                    app:rippleColor="@color/teal_200"
+                    app:strokeColor="@color/purple_500" />
 
                 <Button
                     android:id="@+id/openChat"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-                    app:icon="@android:drawable/stat_notify_chat"
-                    app:rippleColor="@color/teal_200"
-                    app:strokeColor="@color/purple_500"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
                     android:layout_weight="2"
-                    android:text="Chat" />
+                    android:text="Chat"
+                    app:icon="@android:drawable/stat_notify_chat"
+                    app:rippleColor="@color/teal_200"
+                    app:strokeColor="@color/purple_500" />
             </LinearLayout>
 
 
-
-            <com.ms.square.android.expandabletextview.ExpandableTextView
-                android:id="@+id/expand_text_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                expandableTextView:animDuration="200"
-                expandableTextView:maxCollapsedLines="4">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:id="@id/expandable_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="25dp"
-                        android:text="Descripcion:"
-                        android:textStyle="bold|italic" />
-                  <LinearLayout
-                      android:layout_width="match_parent"
-                      android:layout_height="match_parent"
-                      android:gravity="right|bottom">
-                      <ImageButton
-                          android:id="@id/expand_collapse"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:background="@android:color/transparent"
-                          />
-                  </LinearLayout>
-                </LinearLayout>
-                <TextView
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:textColor="#666666"
-                    android:textSize="16sp" />
-
-
-            </com.ms.square.android.expandabletextview.ExpandableTextView>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Descripcion:"
                 android:textStyle="bold|italic" />
+
             <TextView
 
                 android:id="@+id/about"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
-                android:text="198 Trabajoaasds realizados"
-                />
+                android:text="198 Trabajoaasds realizados" />
 
             <TextView
                 android:id="@+id/phoneNumber"
@@ -184,12 +146,13 @@
                 android:text="Localizacion Ver Ubicaion" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listResources"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/listResources"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
     </LinearLayout>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/imageProfileContainer"
         android:layout_width="100dp"
