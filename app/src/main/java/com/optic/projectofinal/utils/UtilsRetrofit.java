@@ -1,6 +1,7 @@
 package com.optic.projectofinal.utils;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UtilsRetrofit {
+    private static final String TAG ="own" ;
+    public static int stringToInt(String path) {
+        String dev = "";
+        for (int i = 0; i < path.length(); i++) {
+            dev += (int) path.charAt(i);
+        }
+
+        return Integer.parseInt(dev);
+
+    }
     public static void sendNotificationMessage(final Context contexto, final String idUserToSendNotification, final Message model, final String idNotification) {
         TokenProvider mTokenProvier = new TokenProvider();
 
@@ -35,7 +46,7 @@ public class UtilsRetrofit {
                 if (documentSnapshot.exists()) {
                     final String tokenUserOwnPost = documentSnapshot.getString("token");
                     if (tokenUserOwnPost != null) {
-                        getLastThreeMessages(contexto,idUserToSendNotification,model,tokenUserOwnPost,idNotification);
+                        getLastThreeMessages(contexto,model,tokenUserOwnPost,idNotification);
 
                     } else {
                         Toast.makeText(contexto, "El token del usuario no existe", Toast.LENGTH_SHORT).show();
@@ -50,9 +61,9 @@ public class UtilsRetrofit {
         });
 
     }
-    private static void getLastThreeMessages(final Context context, String idUserFrom, final Message model, final String tokenUserOwnPost, final String idNotification) {
+    private static void getLastThreeMessages(final Context context, final Message model, final String tokenUserOwnPost, final String idNotification) {
         MessageProvider mMessageProvider=new MessageProvider();
-        mMessageProvider.getLastThreeMessagesByChatAndSender(model.getIdChat(),idUserFrom).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        mMessageProvider.getLastThreeMessagesByChat(model.getIdChat()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if(queryDocumentSnapshots!=null && !queryDocumentSnapshots.isEmpty()){
@@ -61,11 +72,13 @@ public class UtilsRetrofit {
                         Message miMensaje=i.toObject(Message.class);
                         messagesArrayList.add(miMensaje);
                     }
+
                     //verificacion si es 0 EL ARRAY NO LA PONGO
 
                     messagesArrayList.add(model);
                     Gson gson = new Gson();
                     String devMessages=gson.toJson(messagesArrayList);
+                    Log.d("own", "sendNotificationInside: "+devMessages);
 
                     sendNotificationInside(context,tokenUserOwnPost,"Nuevo Mensaje",model.getMessage(),idNotification,devMessages);
                 }
@@ -82,17 +95,14 @@ public class UtilsRetrofit {
         Map<String, String> data = new HashMap<>();
         data.put("title", title);
         data.put("body", mBody);
+
         if(idNotifiacion!=null){
             data.put("idNotification",idNotifiacion);
         }
         if(messages!=null){
             data.put("messages",messages);
         }
-//        if (values.length > 0) {
-//            for (int i = 0; i < values.length; i += 2) {
-//                data.put(values[i], values[i + 1]);
-//            }
-//        }
+
         FCMBody body = new FCMBody(tokenUserOwnPost, "high", "4500s", data);
         mNotificationProvider.sendNotification(body).enqueue(new Callback<FCMResponse>() {
             @Override

@@ -17,11 +17,10 @@ import androidx.core.graphics.drawable.IconCompat;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.models.Message;
 
-import java.util.Date;
-
 public class NotificationHelper extends ContextWrapper {
     private static final String CHANNEL_ID="com.optic.projectofinal";
     private static final String CHANNEL_NAME="SocialMedia";
+    private  int idNotification;
 
     private NotificationManager manager;
 
@@ -32,6 +31,11 @@ public class NotificationHelper extends ContextWrapper {
             //solo es obiligatorio crea el canal en versiones superiorres o iguales a android 8
             createChannerls();
         }
+    }
+
+    public NotificationHelper(Context baseContext, int idNotification) {
+        super(baseContext);
+        this.idNotification = idNotification;
     }
 
     //obligario en versines superiores a android 8
@@ -69,24 +73,23 @@ public class NotificationHelper extends ContextWrapper {
     }
     
     public NotificationCompat.Builder getNotificaionMessage(Message[] messages){
-        Person person1= new Person.Builder()
-                .setName("Andres")
-                .setIcon(IconCompat.createWithResource(getApplicationContext(),R.mipmap.ic_launcher))
-                .build();
+//        Person person1= new Person.Builder()
+//                .setName("Andres")
+//                .setIcon(IconCompat.createWithResource(getApplicationContext(),R.mipmap.ic_launcher))
+//                .build();
         Person person2= new Person.Builder()
                 .setName("Carlos")
                 .setIcon(IconCompat.createWithResource(getApplicationContext(),R.mipmap.ic_launcher))
                 .build();
-        NotificationCompat.MessagingStyle.extractMessagingStyleFromNotification(getActiveNotification(1));
-        NotificationCompat.MessagingStyle messagingStyle= new NotificationCompat.MessagingStyle(person1);
-        NotificationCompat.MessagingStyle.Message message1= new NotificationCompat.MessagingStyle.Message(
-                "Ultimo mensaje",
-                new Date().getTime(),
-                person1
-        );
-        messagingStyle.addMessage(message1);
+
+        NotificationCompat.MessagingStyle messagingStyle= new NotificationCompat.MessagingStyle(person2);
+//        NotificationCompat.MessagingStyle.Message message1= new NotificationCompat.MessagingStyle.Message(
+//                "Ultimo mensaje",
+//                new Date().getTime(),
+//                person1
+//        );
+//        messagingStyle.addMessage(message1);
         for(Message m:messages){
-            NotificationCompat.MessagingStyle messagingStyleI= new NotificationCompat.MessagingStyle(person1);
             NotificationCompat.MessagingStyle.Message messageI= new NotificationCompat.MessagingStyle.Message(
                     m.getMessage(),
                     m.getTimestamp(),
@@ -95,7 +98,7 @@ public class NotificationHelper extends ContextWrapper {
             messagingStyle.addMessage(messageI);
         }
         return new NotificationCompat.Builder(getApplicationContext(),CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_about)
                 .setStyle(messagingStyle);
     }
 

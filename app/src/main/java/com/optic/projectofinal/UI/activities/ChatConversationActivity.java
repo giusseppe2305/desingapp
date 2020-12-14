@@ -94,7 +94,8 @@ public class ChatConversationActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isComplete()) {
-                               // sendNotification(msg);
+                                //enviar notifiacion
+                                sendNotification(msg);
                             } else {
                                 Toast.makeText(ChatConversationActivity.this, "Fallo al subir mensaje", Toast.LENGTH_SHORT).show();
                             }
@@ -106,7 +107,6 @@ public class ChatConversationActivity extends AppCompatActivity {
                     Toast.makeText(ChatConversationActivity.this, "Se envio el mensaje", Toast.LENGTH_SHORT).show();
                     binding.editTextMessageChat.setText("");
                     mAdapterMessage.notifyDataSetChanged();
-                    //enviar notifiacion
 
 
                 } else {

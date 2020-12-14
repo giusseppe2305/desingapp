@@ -18,7 +18,7 @@ public class TokenProvider {
     public void create(final String token)
     {
         Token token_ = new Token(token)  ;
-        mCollection.document(mAuth.getIdCurrentUser()).set(token);
+        mCollection.document(mAuth.getIdCurrentUser()).set(token_);
     }
     public Task<DocumentSnapshot> getToken(String idUser){
         return mCollection.document(idUser).get();
