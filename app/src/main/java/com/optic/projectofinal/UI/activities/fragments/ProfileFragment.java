@@ -54,12 +54,12 @@ public class ProfileFragment extends Fragment {
         mToolbar=vista.findViewById(R.id.ownToolbar);
 
 
-       vista.findViewById(R.id.option_auctions).setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
+        vista.findViewById(R.id.option_auctions).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 startActivity(new Intent(getContext(), Auctions_Activity.class));
-           }
-       });
+            }
+        });
         vista.findViewById(R.id.option_favourites_workers).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

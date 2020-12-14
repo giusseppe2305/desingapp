@@ -3,6 +3,7 @@ package com.optic.projectofinal.UI.activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -12,12 +13,16 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.UI.activities.fragments.ChatsFragment;
 import com.optic.projectofinal.UI.activities.fragments.JobsFragment;
 import com.optic.projectofinal.UI.activities.fragments.ProfileFragment;
 import com.optic.projectofinal.UI.activities.fragments.WorkersFragment;
 import com.optic.projectofinal.databinding.ActivityMainBinding;
+import com.optic.projectofinal.providers.TokenProvider;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "own";
@@ -53,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         openFragment((workersFragment ==null)? workersFragment =new WorkersFragment(): workersFragment);
         getSupportActionBar().setTitle(getString(R.string.menuNameWorkers));
 
-
+        createToken();
 //        mToolbar=findViewById(R.id.TOOLBAR);
 //        setSupportActionBar(mToolbar);
 //        getSupportActionBar().setTitle("Main Principal");
@@ -101,6 +106,22 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void createToken() {
+        FirebaseMessaging.getInstance ().getToken ()
+                .addOnCompleteListener ( task -> {
+                    if (!task.isSuccessful ()) {
+                        //Could not get FirebaseMessagingToken
+                        return;
+                    }
+                    if (null != task.getResult ()) {
+                        //Got FirebaseMessagingToken
+                        String firebaseMessagingToken = Objects.requireNonNull ( task.getResult () );
+                        Log.d(TAG, "onCreate: "+firebaseMessagingToken);
+                        new TokenProvider().create(firebaseMessagingToken);
+                        //Use firebaseMessagingToken further
+                    }
+                } );
+    }
 
 
     BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =

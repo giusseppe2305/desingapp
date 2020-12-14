@@ -13,6 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.optic.projectofinal.models.Opinion;
+import com.optic.projectofinal.models.Token;
 import com.optic.projectofinal.models.User;
 
 import java.util.Date;
@@ -101,6 +102,9 @@ public class UserDatabaseProvider {
     public Task<QuerySnapshot> getAllSaveWorkersById(String id)
     {
         return database.document(id).collection("WorkersSaved").get();
+    }
+
+    public void saveToken(Token token) {
     }
 
     public enum Order{

@@ -45,6 +45,9 @@ public class SplashScreenActivity extends AppCompatActivity {
         tryToGetDynamicLink();
     }
     public void tryToGetDynamicLink() {
+
+
+
         FirebaseDynamicLinks.getInstance()
                 .getDynamicLink(getIntent())
                 .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {

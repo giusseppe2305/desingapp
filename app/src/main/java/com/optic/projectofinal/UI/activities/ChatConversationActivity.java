@@ -33,6 +33,7 @@ import com.optic.projectofinal.providers.MessageProvider;
 import com.optic.projectofinal.providers.UserDatabaseProvider;
 import com.optic.projectofinal.utils.RelativeTime;
 import com.optic.projectofinal.utils.Utils;
+import com.optic.projectofinal.utils.UtilsRetrofit;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -274,5 +275,11 @@ public class ChatConversationActivity extends AppCompatActivity {
         chat.setIdsChats(Arrays.asList(idChats));
 
         mChatsProvider.create(chat);
+    }
+    public void sendNotification(Message model){
+        if(idUserToChat==null){
+            return;
+        }
+        UtilsRetrofit.sendNotificationMessage(this,idUserToChat,model,model.getIdsUserFrom().substring(model.getIdsUserFrom().length()-3));
     }
 }
