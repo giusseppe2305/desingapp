@@ -26,7 +26,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         binding.optionEditProfile.setOnClickListener(v -> startActivity(new Intent(SettingsActivity.this, EditProfileActivity.class)));
         binding.optionEditSettingsWorker.setOnClickListener(v -> startActivity(new Intent(SettingsActivity.this, EditSettingsWorkerActivity.class)));
-
+        binding.optionVerify.setOnClickListener(v->startActivity(new Intent(SettingsActivity.this,VerifyAccountActivity.class)));
         binding.signOut.setOnClickListener(v->{
 
             new AuthenticationProvider().logOut(SettingsActivity.this);
