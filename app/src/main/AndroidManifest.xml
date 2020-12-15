@@ -129,12 +129,16 @@
 
 <!--        service firebase notification push-->
         <service
-            android:name=".utils.MyFirebaseMessagingService"
+            android:name=".services.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+<!--        receiver to send messages from bar notification-->
+        <receiver android:name=".receivers.MessageReceiver"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>

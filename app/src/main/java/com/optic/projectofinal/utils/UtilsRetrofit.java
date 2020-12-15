@@ -16,6 +16,7 @@ import com.optic.projectofinal.models.FCMResponse;
 import com.optic.projectofinal.models.Message;
 import com.optic.projectofinal.modelsNotification.NotificationMessageDTO;
 import com.optic.projectofinal.modelsNotification.WrapperNotification;
+import com.optic.projectofinal.providers.AuthenticationProvider;
 import com.optic.projectofinal.providers.MessageProvider;
 import com.optic.projectofinal.providers.NotificationProvider;
 import com.optic.projectofinal.providers.TokenProvider;
@@ -39,7 +40,7 @@ public class UtilsRetrofit {
         return Integer.parseInt(dev);
 
     }
-    public static void sendNotificationMessage(final Context context, WrapperNotification<NotificationMessageDTO> wrapperNotification) {
+    public static void sendNotificationMessage(final Context context, WrapperNotification<NotificationMessageDTO> wrapperNotification,boolean isFromNotficationBar) {
 
         new TokenProvider().getToken(wrapperNotification.getData().getIdUserToChat()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -48,6 +49,13 @@ public class UtilsRetrofit {
                     final String tokenUserOwnPost = documentSnapshot.getString("token");
                     if (tokenUserOwnPost != null) {
                         wrapperNotification.setTo(tokenUserOwnPost);
+                        if(isFromNotficationBar){
+
+
+                            ///we change idusertochat in order to
+                            wrapperNotification.getData().setIdUserToChat(new AuthenticationProvider().getIdCurrentUser());
+                            sendNotificationInside(context,wrapperNotification);
+                        }else
                         getLastThreeMessages(context,wrapperNotification);
 
                     } else {
@@ -81,7 +89,11 @@ public class UtilsRetrofit {
 
 //                    messagesArrayList.add(model);
                     wrapper.getData().setMessages(messagesArrayList.toArray(new Message[]{}));
+                    ///we change idusertochat in order to
+                    wrapper.getData().setIdUserToChat(new AuthenticationProvider().getIdCurrentUser());
                     sendNotificationInside(context,wrapper);
+                }else{
+                    Log.e(TAG, "onSuccess: fail" );
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -93,6 +105,8 @@ public class UtilsRetrofit {
         });
     }
     private static void sendNotificationInside(final Context context,WrapperNotification wrapper ) {
+
+
         final NotificationProvider mNotificationProvider = new NotificationProvider();
         Map<String, String> data = new HashMap<>();
         String dataJSON=new Gson().toJson(wrapper.getData());

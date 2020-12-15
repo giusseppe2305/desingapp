@@ -15,50 +15,48 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.gson.Gson;
+import com.optic.projectofinal.models.Message;
+import com.optic.projectofinal.modelsNotification.NotificationMessageDTO;
+import com.optic.projectofinal.modelsNotification.WrapperNotification;
+import com.optic.projectofinal.providers.AuthenticationProvider;
+import com.optic.projectofinal.providers.MessageProvider;
 import com.optic.projectofinal.providers.NotificationProvider;
 import com.optic.projectofinal.providers.TokenProvider;
+import com.optic.projectofinal.providers.UserDatabaseProvider;
+import com.optic.projectofinal.utils.UtilsRetrofit;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import static com.optic.projectofinal.channel.NotificationHelper.TYPE_NOTIFICATION.MESSAGE_CHAT;
+import static com.optic.projectofinal.services.MyFirebaseMessagingService.NOTIFICATION_REPLY;
 
 
 public class MessageReceiver extends BroadcastReceiver {
 
-    String mExtraIdSender;
-    String mExtraIdReceiver;
-    String mExtraIdChat;
-    String mExtraUsernameSender;
-    String mExtraUsernameReceiver;
-    String mExtraImageSender;
-    String mExtraImageReceiver;
-    int mExtraIdNotification;
+    private static final String TAG = "own";
+    private NotificationMessageDTO dto;
 
-    TokenProvider mTokenProvider;
-    NotificationProvider mNotificationProvider;
+    private TokenProvider mTokenProvider;
+    private NotificationProvider mNotificationProvider;
+    private AuthenticationProvider mAuth;
+    private Context context;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        mExtraIdSender = intent.getExtras().getString("idSender");
-        mExtraIdReceiver = intent.getExtras().getString("idReceiver");
-        mExtraIdChat = intent.getExtras().getString("idChat");
-        mExtraUsernameSender = intent.getExtras().getString("usernameSender");
-        mExtraUsernameReceiver = intent.getExtras().getString("usernameReceiver");
-        mExtraImageSender = intent.getExtras().getString("imageSender");
-        mExtraImageReceiver = intent.getExtras().getString("imageReceiver");
+        this.context = context;
+        String dataJSON = intent.getStringExtra("data");
+        Log.d(TAG, "onReceive: entra");
+        if (dataJSON != null) {
+            Log.d(TAG, "onReceive: "+dataJSON);
+            dto = new Gson().fromJson(dataJSON, NotificationMessageDTO.class);
+        }
 
-        mExtraIdNotification = intent.getExtras().getInt("idNotification");
-
+        mAuth = new AuthenticationProvider();
         mTokenProvider = new TokenProvider();
         mNotificationProvider = new NotificationProvider();
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(mExtraIdNotification);
+        notificationManager.cancel(dto.getIdNotification());
 
         String message = getMessageText(intent).toString();
 
@@ -66,71 +64,51 @@ public class MessageReceiver extends BroadcastReceiver {
     }
 
     private void sendMessage(String messageText) {
-        final Message message = new Message();
-        message.setIdChat(mExtraIdChat);
-        message.setIdSender(mExtraIdReceiver);
-        message.setIdReceiver(mExtraIdSender);
-        message.setTimestamp(new Date().getTime());
-        message.setViewed(false);
-        message.setIdChat(mExtraIdChat);
-        message.setMessage(messageText);
-
-        MessagesProvider messagesProvider = new MessagesProvider();
-        messagesProvider.create(message).addOnCompleteListener(new OnCompleteListener<Void>() {
+        final Message model = new Message();
+        model.setIdChat(dto.getIdChat());
+        model.setIdsUserFrom(mAuth.getIdCurrentUser());
+        model.setIdUserTo(dto.getIdUserToChat());
+        model.setTimestamp(new Date().getTime());
+        model.setViewed(false);
+        model.setMessage(messageText);
+        new MessageProvider().create(model).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    getToken(message);
+                if (task.isComplete() && task.isSuccessful()) {
+
+                    new UserDatabaseProvider().getUser(mAuth.getIdCurrentUser()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot.exists()) {
+                                NotificationMessageDTO notificationMessageDTO = new NotificationMessageDTO("Nuevo Mensaje", MESSAGE_CHAT, model.getMessage());
+                                notificationMessageDTO.setIdChat(model.getIdChat());
+                                notificationMessageDTO.setNameUser(documentSnapshot.getString("name") + " " + documentSnapshot.getString("lastName"));
+                                notificationMessageDTO.setPhotoProfile(documentSnapshot.getString("profileImage"));
+                                notificationMessageDTO.setIdUserToChat(dto.getIdUserToChat());
+                                notificationMessageDTO.setMessages(new Message[]{model});
+
+
+                                String code = model.getIdsUserFrom().substring(model.getIdsUserFrom().length() - 3);
+                                notificationMessageDTO.setIdNotification(UtilsRetrofit.stringToInt(code));
+                                WrapperNotification<NotificationMessageDTO> wrapperNotification = new WrapperNotification<>(notificationMessageDTO);
+
+                                ///first we update seenmesages
+
+                                UtilsRetrofit.sendNotificationMessage(context, wrapperNotification, true);
+                                //
+                            }
+                        }
+                    });
+
+                } else {
+                    Log.e(TAG, "onComplete error messagereceiver not complete");
                 }
             }
         });
-    }
 
-    private void getToken(final Message message) {
-        mTokenProvider.getToken(mExtraIdSender).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    if (documentSnapshot.contains("token")) {
-                        String token = documentSnapshot.getString("token");
-                        Gson gson = new Gson();
-                        ArrayList<Message> messagesArray = new ArrayList<>();
-                        messagesArray.add(message);
-                        String messages = gson.toJson(messagesArray);
-                        sendNotification(token, messages, message);
-                    }
-                }
-            }
-        });
-    }
-
-    private void sendNotification(final String token, String messages, Message message) {
-        final Map<String, String> data = new HashMap<>();
-        data.put("title", "NUEVO MENSAJE");
-        data.put("body", message.getMessage());
-        data.put("idNotification", String.valueOf(mExtraIdNotification));
-        data.put("messages", messages);
-        data.put("usernameSender", mExtraUsernameReceiver.toUpperCase());
-        data.put("usernameReceiver", mExtraUsernameSender.toUpperCase());
-        data.put("idSender", message.getIdSender());
-        data.put("idReceiver", message.getIdReceiver());
-        data.put("idChat", message.getIdChat());
-        data.put("imageSender", mExtraImageReceiver);
-        data.put("imageReceiver", mExtraImageSender);
-        FCMBody body = new FCMBody(token, "high", "4500s", data);
-        mNotificationProvider.sendNotification(body).enqueue(new Callback<FCMResponse>() {
-            @Override
-            public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
-
-            }
-
-            @Override
-            public void onFailure(Call<FCMResponse> call, Throwable t) {
-                Log.d("ERROR", "El error fue: " + t.getMessage());
-            }
-        });
 
     }
+
 
     private CharSequence getMessageText(Intent intent) {
         Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);

@@ -78,10 +78,10 @@ public class NotificationHelper extends ContextWrapper {
     }
     
     public NotificationCompat.Builder getNotificaionMessage(NotificationMessageDTO messages){
-//        Person person1= new Person.Builder()
-//                .setName("Andres")
-//                .setIcon(IconCompat.createWithResource(getApplicationContext(),R.mipmap.ic_launcher))
-//                .build();
+        Person person1= new Person.Builder()
+                .setName("Andres")
+                .setIcon(IconCompat.createWithResource(getApplicationContext(),R.mipmap.ic_launcher))
+                .build();
         Log.d(TAG, "getNotificaionMessage: "+messages.getPhotoProfile());
         Uri uriPhoto= Uri.parse(messages.getPhotoProfile());
         Log.d(TAG, "getNotificaionMessage: "+uriPhoto);
@@ -91,7 +91,7 @@ public class NotificationHelper extends ContextWrapper {
                 .setIcon(IconCompat.createWithBitmap(Utils.getBitmapFromURL(messages.getPhotoProfile())))
                 .build();
 
-        NotificationCompat.MessagingStyle messagingStyle= new NotificationCompat.MessagingStyle(person2);
+        NotificationCompat.MessagingStyle messagingStyle= new NotificationCompat.MessagingStyle(person1);
 //        NotificationCompat.MessagingStyle.Message message1= new NotificationCompat.MessagingStyle.Message(
 //                "Ultimo mensaje",
 //                new Date().getTime(),

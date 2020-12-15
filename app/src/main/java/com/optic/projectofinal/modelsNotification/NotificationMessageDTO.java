@@ -5,7 +5,7 @@ import com.optic.projectofinal.models.Message;
 
 import java.util.Arrays;
 
-public class NotificationMessageDTO extends NotificationDTO{
+public class NotificationMessageDTO extends NotificationDTO {
     private Message[] messages;
     private String idUserToChat;
     private String nameUser;

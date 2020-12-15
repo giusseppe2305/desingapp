@@ -297,7 +297,7 @@ public class ChatConversationActivity extends AppCompatActivity {
                     String code = model.getIdsUserFrom().substring(model.getIdsUserFrom().length() - 3);
                     notificationMessageDTO.setIdNotification(UtilsRetrofit.stringToInt(code));
                     WrapperNotification<NotificationMessageDTO> wrapperNotification=new WrapperNotification<>(notificationMessageDTO);
-                    UtilsRetrofit.sendNotificationMessage(ChatConversationActivity.this,wrapperNotification);
+                    UtilsRetrofit.sendNotificationMessage(ChatConversationActivity.this,wrapperNotification,false);
                 }
 
             }
