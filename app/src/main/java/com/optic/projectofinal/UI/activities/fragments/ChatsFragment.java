@@ -82,5 +82,8 @@ public class ChatsFragment extends Fragment {
         if(chatAdapter!=null){
             chatAdapter.stopListening();
         }
+        if(chatAdapter.getListener()!=null){
+            chatAdapter.getListener().remove();
+        }
     }
 }

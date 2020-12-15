@@ -14,6 +14,8 @@ import com.google.gson.Gson;
 import com.optic.projectofinal.models.FCMBody;
 import com.optic.projectofinal.models.FCMResponse;
 import com.optic.projectofinal.models.Message;
+import com.optic.projectofinal.modelsNotification.NotificationMessageDTO;
+import com.optic.projectofinal.modelsNotification.WrapperNotification;
 import com.optic.projectofinal.providers.MessageProvider;
 import com.optic.projectofinal.providers.NotificationProvider;
 import com.optic.projectofinal.providers.TokenProvider;
@@ -37,86 +39,82 @@ public class UtilsRetrofit {
         return Integer.parseInt(dev);
 
     }
-    public static void sendNotificationMessage(final Context contexto, final String idUserToSendNotification, final Message model, final String idNotification) {
-        TokenProvider mTokenProvier = new TokenProvider();
+    public static void sendNotificationMessage(final Context context, WrapperNotification<NotificationMessageDTO> wrapperNotification) {
 
-        mTokenProvier.getToken(idUserToSendNotification).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        new TokenProvider().getToken(wrapperNotification.getData().getIdUserToChat()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
                     final String tokenUserOwnPost = documentSnapshot.getString("token");
                     if (tokenUserOwnPost != null) {
-                        getLastThreeMessages(contexto,model,tokenUserOwnPost,idNotification);
+                        wrapperNotification.setTo(tokenUserOwnPost);
+                        getLastThreeMessages(context,wrapperNotification);
 
                     } else {
-                        Toast.makeText(contexto, "El token del usuario no existe", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "El token del usuario no existe", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(contexto, "Fallo el gete token", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Fallo el gete token", Toast.LENGTH_SHORT).show();
             }
         });
 
     }
-    private static void getLastThreeMessages(final Context context, final Message model, final String tokenUserOwnPost, final String idNotification) {
+    private static void getLastThreeMessages(final Context context, final WrapperNotification<NotificationMessageDTO> wrapper) {
+        //NotificationDTO dto=new NotificationDTO("Nuevo Mensaje", NotificationHelper.TYPE_NOTIFICATION.MESSAGE_CHAT.toString(),model.getMessage()  );
+
         MessageProvider mMessageProvider=new MessageProvider();
-        mMessageProvider.getLastThreeMessagesByChat(model.getIdChat()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        Log.d(TAG, "getLastThreeMessages: "+wrapper.getData().getIdChat());
+        mMessageProvider.getLastThreeMessagesByChat(wrapper.getData().getIdChat()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if(queryDocumentSnapshots!=null && !queryDocumentSnapshots.isEmpty()){
                     ArrayList<Message> messagesArrayList=new ArrayList<>();
-                    for(DocumentSnapshot i:queryDocumentSnapshots.getDocuments()){
-                        Message miMensaje=i.toObject(Message.class);
-                        messagesArrayList.add(miMensaje);
+                    for(int i=queryDocumentSnapshots.getDocuments().size()-1;i>=0;i--){
+                        messagesArrayList.add(queryDocumentSnapshots.getDocuments().get(i).toObject(Message.class));
                     }
 
                     //verificacion si es 0 EL ARRAY NO LA PONGO
 
-                    messagesArrayList.add(model);
-                    Gson gson = new Gson();
-                    String devMessages=gson.toJson(messagesArrayList);
-                    Log.d("own", "sendNotificationInside: "+devMessages);
-
-                    sendNotificationInside(context,tokenUserOwnPost,"Nuevo Mensaje",model.getMessage(),idNotification,devMessages);
+//                    messagesArrayList.add(model);
+                    wrapper.getData().setMessages(messagesArrayList.toArray(new Message[]{}));
+                    sendNotificationInside(context,wrapper);
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                Log.e(TAG, "onFailure: "+e.getMessage() );
                 Toast.makeText(context, "Fallo al recoger ultimos tres mensajes y notifiaciones", Toast.LENGTH_SHORT).show();
             }
         });
     }
-    private static void sendNotificationInside(final Context contexto,final String tokenUserOwnPost, final String title, final String mBody, final String idNotifiacion,final String messages) {
+    private static void sendNotificationInside(final Context context,WrapperNotification wrapper ) {
         final NotificationProvider mNotificationProvider = new NotificationProvider();
         Map<String, String> data = new HashMap<>();
-        data.put("title", title);
-        data.put("body", mBody);
-
-        if(idNotifiacion!=null){
-            data.put("idNotification",idNotifiacion);
-        }
-        if(messages!=null){
-            data.put("messages",messages);
-        }
-
-        FCMBody body = new FCMBody(tokenUserOwnPost, "high", "4500s", data);
+        String dataJSON=new Gson().toJson(wrapper.getData());
+        data.put("data",dataJSON);
+        Log.d(TAG, "sendNotificationInside: "+dataJSON);
+        FCMBody body = new FCMBody(wrapper.getTo(), wrapper.getPriority(), "4500s", data);
         mNotificationProvider.sendNotification(body).enqueue(new Callback<FCMResponse>() {
             @Override
             public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
                 if (response.body() != null) {
                     System.out.println(response.body().getSuccess());
                     if (response.body().getSuccess() == 1) {
-                        Toast.makeText(contexto, "La Notificacion se envio correctamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "La Notificacion se envio correctamente", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(contexto, "1 Fallo al enviar notificaciones " + response.message() + " - " + call.request().method(), Toast.LENGTH_SHORT).show();
+
+                        Log.d(TAG, "onResponse: "+"1 Fallo al enviar notificaciones " + response.message() + " - " +response.toString()+" "+response.errorBody().toString());
+                        Log.d(TAG, "onResponse: "+body.toString());
+                        Toast.makeText(context, "1 Fallo al enviar notificaciones " + response.message() + " - " + call.request().method(), Toast.LENGTH_SHORT).show();
 
                     }
                 } else {
-                    Toast.makeText(contexto, " 2 Fallo al enviar notificaciones " + response.message() + " - " + response.errorBody(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, " 2 Fallo al enviar notificaciones " + response.message() + " - " + response.errorBody(), Toast.LENGTH_SHORT).show();
                 }
             }
 

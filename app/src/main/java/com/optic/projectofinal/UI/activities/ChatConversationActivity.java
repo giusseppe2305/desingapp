@@ -27,6 +27,8 @@ import com.optic.projectofinal.adapters.MessageAdapterFirebase;
 import com.optic.projectofinal.databinding.ActivityChatConversationBinding;
 import com.optic.projectofinal.models.Chat;
 import com.optic.projectofinal.models.Message;
+import com.optic.projectofinal.modelsNotification.NotificationMessageDTO;
+import com.optic.projectofinal.modelsNotification.WrapperNotification;
 import com.optic.projectofinal.providers.AuthenticationProvider;
 import com.optic.projectofinal.providers.ChatsProvider;
 import com.optic.projectofinal.providers.MessageProvider;
@@ -37,6 +39,8 @@ import com.optic.projectofinal.utils.UtilsRetrofit;
 
 import java.util.Arrays;
 import java.util.Date;
+
+import static com.optic.projectofinal.channel.NotificationHelper.TYPE_NOTIFICATION.MESSAGE_CHAT;
 
 public class ChatConversationActivity extends AppCompatActivity {
     private static final String TAG = "own";
@@ -280,6 +284,24 @@ public class ChatConversationActivity extends AppCompatActivity {
         if(idUserToChat==null){
             return;
         }
-        UtilsRetrofit.sendNotificationMessage(this,idUserToChat,model,model.getIdsUserFrom().substring(model.getIdsUserFrom().length()-3));
+        new UserDatabaseProvider().getUser(mAuth.getIdCurrentUser()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    NotificationMessageDTO notificationMessageDTO=new NotificationMessageDTO("Nuevo Mensaje", MESSAGE_CHAT,model.getMessage());
+                    notificationMessageDTO.setIdChat(model.getIdChat());
+                    notificationMessageDTO.setNameUser(documentSnapshot.getString("name")+" "+documentSnapshot.getString("lastName"));
+                    notificationMessageDTO.setPhotoProfile(documentSnapshot.getString("profileImage"));
+                    notificationMessageDTO.setIdUserToChat(idUserToChat);
+
+                    String code = model.getIdsUserFrom().substring(model.getIdsUserFrom().length() - 3);
+                    notificationMessageDTO.setIdNotification(UtilsRetrofit.stringToInt(code));
+                    WrapperNotification<NotificationMessageDTO> wrapperNotification=new WrapperNotification<>(notificationMessageDTO);
+                    UtilsRetrofit.sendNotificationMessage(ChatConversationActivity.this,wrapperNotification);
+                }
+
+            }
+        });
+
     }
 }

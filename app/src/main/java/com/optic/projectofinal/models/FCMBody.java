@@ -48,4 +48,14 @@ public class FCMBody {
     public void setData(Map<String, String> data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "FCMBody{" +
+                "to='" + to + '\'' +
+                ", priority='" + priority + '\'' +
+                ", ttl='" + ttl + '\'' +
+                ", data=" + data +
+                '}';
+    }
 }

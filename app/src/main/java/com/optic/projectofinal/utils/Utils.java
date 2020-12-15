@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -44,6 +45,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -120,6 +123,16 @@ public class Utils {
         }
         return null;
 
+    }
+    public static String getOptionNotificationFromJSON(String chain){
+        JSONObject object = null;
+        try {
+            object = new JSONObject(chain);
+            return         object.getString("option");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
     private static String getArrayStringJsonByKey(Context context,String key){
         String jsonData=Utils.getJsonFromAssets(context,"properties.json");
@@ -340,7 +353,20 @@ public class Utils {
                 });
 
     }
-
+    public static Bitmap getBitmapFromURL(String src) {
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            // Log exception
+            return null;
+        }
+    }
 
 }
 

@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.UI.activities.ChatConversationActivity;
@@ -39,6 +40,7 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
     private ChatsProvider mChatProvider;
     private AuthenticationProvider mAuth;
     private MessageProvider messageProvider;
+    private ListenerRegistration listener;
 
     public ChatsAdapter(@NonNull FirestoreRecyclerOptions<Chat> options, Context c) {
         super(options);
@@ -86,34 +88,33 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
                 context.startActivity(i);
             }
         });
-        mChatProvider.getChatFromUserToAndUserFrom(model.getIdUserTo(),model.getIdUserFrom()).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        listener=mChatProvider.getChatFromUserToAndUserFrom(model.getIdUserTo(),model.getIdUserFrom()).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if(value!=null && !value.isEmpty()){
-                    messageProvider.getMessage(value.getDocuments().get(0).getString("idLastMessage")).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    messageProvider.getMessage(value.getDocuments().get(0).getString("idLastMessage")).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
-                        public void onEvent(@Nullable DocumentSnapshot lastMessage, @Nullable FirebaseFirestoreException error) {
-                            if(lastMessage!=null && lastMessage.exists()){
-                                String ultimoMensaje=lastMessage.getString("message");
-                                holder.binding.lastMessage.setText(ultimoMensaje);
-                                if(lastMessage.get("idsUserFrom").equals(mAuth.getIdCurrentUser())){
-                                    ///comprobar si esta visto o no el mensaje
-                                    if (lastMessage.getBoolean("viewed")){
-                                        holder.binding.viewed.setColorFilter(ContextCompat.getColor(context,R.color.checkMessage));
+                        public void onSuccess(DocumentSnapshot lastMessage) {
+                                if(lastMessage!=null && lastMessage.exists()){
+                                    String ultimoMensaje=lastMessage.getString("message");
+                                    holder.binding.lastMessage.setText(ultimoMensaje);
+                                    if(lastMessage.get("idsUserFrom").equals(mAuth.getIdCurrentUser())){
+                                        ///comprobar si esta visto o no el mensaje
+                                        if (lastMessage.getBoolean("viewed")){
+                                            holder.binding.viewed.setColorFilter(ContextCompat.getColor(context,R.color.checkMessage));
+                                        }else{
+                                            holder.binding.viewed.setColorFilter(ContextCompat.getColor(context,R.color.unCheckMessage));
+                                        }
+                                        holder.binding.viewed.setVisibility(View.VISIBLE);
                                     }else{
-                                        holder.binding.viewed.setColorFilter(ContextCompat.getColor(context,R.color.unCheckMessage));
+                                        setCountMessagesNoSee(model, holder);
+                                        holder.binding.viewed.setVisibility(View.GONE);
                                     }
-                                    holder.binding.viewed.setVisibility(View.VISIBLE);
-                                }else{
-                                    setCountMessagesNoSee(model, holder);
-                                    holder.binding.viewed.setVisibility(View.GONE);
+                                    holder.binding.timestampLastMessage.setText(RelativeTime.timeFormatAMPM(lastMessage.getLong("timestamp")));
                                 }
-                                holder.binding.timestampLastMessage.setText(RelativeTime.timeFormatAMPM(lastMessage.getLong("timestamp")));
-                            }
 
                         }
                     });
-
                 }
             }
         });
@@ -150,6 +151,10 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_chat_preview, parent, false);
         return new ViewHolder(v);
+    }
+
+    public ListenerRegistration getListener() {
+        return listener;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

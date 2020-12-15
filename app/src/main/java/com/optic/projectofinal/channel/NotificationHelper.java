@@ -6,8 +6,10 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.service.notification.StatusBarNotification;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
@@ -16,12 +18,15 @@ import androidx.core.graphics.drawable.IconCompat;
 
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.models.Message;
+import com.optic.projectofinal.modelsNotification.NotificationMessageDTO;
+import com.optic.projectofinal.utils.Utils;
 
 public class NotificationHelper extends ContextWrapper {
     private static final String CHANNEL_ID="com.optic.projectofinal";
     private static final String CHANNEL_NAME="SocialMedia";
+    private static final String TAG = "own";
     private  int idNotification;
-
+    public enum TYPE_NOTIFICATION {MESSAGE_CHAT};
     private NotificationManager manager;
 
     public NotificationHelper(Context context) {
@@ -72,14 +77,18 @@ public class NotificationHelper extends ContextWrapper {
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(body).setBigContentTitle(title));
     }
     
-    public NotificationCompat.Builder getNotificaionMessage(Message[] messages){
+    public NotificationCompat.Builder getNotificaionMessage(NotificationMessageDTO messages){
 //        Person person1= new Person.Builder()
 //                .setName("Andres")
 //                .setIcon(IconCompat.createWithResource(getApplicationContext(),R.mipmap.ic_launcher))
 //                .build();
+        Log.d(TAG, "getNotificaionMessage: "+messages.getPhotoProfile());
+        Uri uriPhoto= Uri.parse(messages.getPhotoProfile());
+        Log.d(TAG, "getNotificaionMessage: "+uriPhoto);
+
         Person person2= new Person.Builder()
-                .setName("Carlos")
-                .setIcon(IconCompat.createWithResource(getApplicationContext(),R.mipmap.ic_launcher))
+                .setName(messages.getNameUser())
+                .setIcon(IconCompat.createWithBitmap(Utils.getBitmapFromURL(messages.getPhotoProfile())))
                 .build();
 
         NotificationCompat.MessagingStyle messagingStyle= new NotificationCompat.MessagingStyle(person2);
@@ -89,7 +98,7 @@ public class NotificationHelper extends ContextWrapper {
 //                person1
 //        );
 //        messagingStyle.addMessage(message1);
-        for(Message m:messages){
+        for(Message m:messages.getMessages()){
             NotificationCompat.MessagingStyle.Message messageI= new NotificationCompat.MessagingStyle.Message(
                     m.getMessage(),
                     m.getTimestamp(),
@@ -100,6 +109,7 @@ public class NotificationHelper extends ContextWrapper {
         return new NotificationCompat.Builder(getApplicationContext(),CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_about)
                 .setStyle(messagingStyle);
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

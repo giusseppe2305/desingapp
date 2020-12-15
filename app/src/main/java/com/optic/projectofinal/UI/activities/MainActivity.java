@@ -59,6 +59,21 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getString(R.string.menuNameWorkers));
 
         createToken();
+
+//        NotificationMessageDTO notificationDTO=new NotificationMessageDTO("titulo", NotificationHelper.TYPE_NOTIFICATION.MESSAGE_CHAT.toString(),"cuerpo", idChat);
+//        PodamFactoryImpl podamFactory=new PodamFactoryImpl();
+//        Message[] messages=new Message[3];
+//        for(int i=0;i<3;i++){
+//            messages[i]=podamFactory.manufacturePojo(Message.class);
+//        }
+//
+//
+//        notificationDTO.setMessages(messages);
+//        notificationDTO.setNameUser("Frank");
+//        notificationDTO.setPhotoProfile("https://image.shutterstock.com/image-photo/bright-spring-view-cameo-island-260nw-1048185397.jpg");
+//        String result=new Gson().toJson(notificationDTO);
+//        Log.d(TAG, "onCreate:aaa "+result);
+//        Log.d(TAG, "onCreate:aaa "+ Utils.getOptionNotificationFromJSON(result));
 //        mToolbar=findViewById(R.id.TOOLBAR);
 //        setSupportActionBar(mToolbar);
 //        getSupportActionBar().setTitle("Main Principal");
