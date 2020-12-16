@@ -30,9 +30,11 @@ import com.optic.projectofinal.UI.activities.MainActivity;
 import com.optic.projectofinal.databinding.ActivityLoginBinding;
 import com.optic.projectofinal.databinding.LayoutLoginBottomSheetBinding;
 import com.optic.projectofinal.databinding.LayoutRegisterBottomSheetBinding;
+import com.optic.projectofinal.models.BasicInformationUser;
 import com.optic.projectofinal.models.User;
 import com.optic.projectofinal.providers.AuthenticationProvider;
 import com.optic.projectofinal.providers.UserDatabaseProvider;
+import com.optic.projectofinal.utils.Utils;
 
 public class LoginActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_GOOGLE = 1;
@@ -217,6 +219,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
+                    ///set share preference
+                    BasicInformationUser basicInformationUser=new BasicInformationUser();
+                    basicInformationUser.setPhotoUser(documentSnapshot.getString("profileImage"));
+                    basicInformationUser.setName(documentSnapshot.getString("name"));
+                    basicInformationUser.setLastName(documentSnapshot.getString("lastName"));
+
+                    Utils.setPersistantBasicUserInformation(basicInformationUser,LoginActivity.this);
+
                     Intent i = new Intent(LoginActivity.this, MainActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(i);
@@ -228,6 +238,13 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
+                                ///set share preference
+                                BasicInformationUser basicInformationUser=new BasicInformationUser();
+                                basicInformationUser.setPhotoUser(documentSnapshot.getString("profileImage"));
+                                basicInformationUser.setName(documentSnapshot.getString("name"));
+                                basicInformationUser.setLastName(documentSnapshot.getString("lastName"));
+                                Utils.setPersistantBasicUserInformation(basicInformationUser,LoginActivity.this);
+
                                 Intent i = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(i);
                                 Toast.makeText(LoginActivity.this, "Registrado database normal ", Toast.LENGTH_SHORT).show();

@@ -26,8 +26,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         binding = ActivitySplashScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.lottieSplashScreen.animate().translationX(-1600).setDuration(1000).setStartDelay(TIME_TO_LOAD_SPLASH);
-        binding.plane.animate().translationX(-1600).setDuration(1000).setStartDelay(TIME_TO_LOAD_SPLASH);
+        binding.lottieSplashScreen.animate().translationX(-1600).setStartDelay(TIME_TO_LOAD_SPLASH);
+        binding.plane.animate().translationX(-1600).setStartDelay(TIME_TO_LOAD_SPLASH);
 
 //        new Handler(Looper.myLooper()).postDelayed(new Runnable() {
 //            @Override

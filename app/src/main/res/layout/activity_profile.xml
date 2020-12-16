@@ -38,9 +38,10 @@
                 >
 
                 <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/photoProfile"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@color/teal_700" />
+                    android:src="@color/grey_200" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -50,9 +51,10 @@
                     android:paddingLeft="10dp">
 
                     <TextView
+                        android:id="@+id/fullNameUser"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="giusseppe2305" />
+                        android:text="" />
 
                     <TextView
                         android:layout_width="wrap_content"

@@ -9,12 +9,16 @@ import android.view.ViewGroup;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.UI.activities.ProfileDetailsActivity;
 import com.optic.projectofinal.UI.activities.options_profile.Auctions_Activity;
 import com.optic.projectofinal.UI.activities.options_profile.Favourites_Workers_Activity;
 import com.optic.projectofinal.UI.activities.options_profile.JobsActivity;
 import com.optic.projectofinal.UI.activities.options_profile.SettingsActivity;
+import com.optic.projectofinal.databinding.ActivityProfileBinding;
+import com.optic.projectofinal.models.BasicInformationUser;
+import com.optic.projectofinal.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,7 +27,7 @@ import com.optic.projectofinal.UI.activities.options_profile.SettingsActivity;
  */
 public class ProfileFragment extends Fragment {
     private Toolbar mToolbar;
-
+    private ActivityProfileBinding binding;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
@@ -50,46 +54,48 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View vista = inflater.inflate(R.layout.activity_profile, container, false);
-        mToolbar=vista.findViewById(R.id.ownToolbar);
+        binding=ActivityProfileBinding.inflate(inflater,container,false);
 
 
-        vista.findViewById(R.id.option_auctions).setOnClickListener(new View.OnClickListener() {
+        binding.optionAuctions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getContext(), Auctions_Activity.class));
             }
         });
-        vista.findViewById(R.id.option_favourites_workers).setOnClickListener(new View.OnClickListener() {
+        binding.optionFavouritesWorkers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getContext(), Favourites_Workers_Activity.class));
 
             }
         });
-        vista.findViewById(R.id.option_jobs).setOnClickListener(new View.OnClickListener() {
+        binding.optionJobs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getContext(), JobsActivity.class));
 
             }
         });
-        vista.findViewById(R.id.option_see_profile).setOnClickListener(new View.OnClickListener() {
+        binding.optionSeeProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getContext(), ProfileDetailsActivity.class));
 
             }
         });
-        vista.findViewById(R.id.option_settings).setOnClickListener(new View.OnClickListener() {
+        binding.optionSettings.findViewById(R.id.option_settings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getContext(), SettingsActivity.class));
 
             }
         });
+        BasicInformationUser basicInformationUser=Utils.getPersistantBasicUserInformation(getContext());
 
-        return vista;
+        Glide.with(getContext()).load(basicInformationUser.getPhotoUser()).apply(Utils.getOptionsGlide(false)).into(binding.photoProfile);
+        binding.fullNameUser.setText(basicInformationUser.getName()+" "+basicInformationUser.getLastName());
+        return binding.getRoot();
     }
 
 

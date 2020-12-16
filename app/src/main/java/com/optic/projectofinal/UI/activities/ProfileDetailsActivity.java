@@ -212,10 +212,10 @@ public class ProfileDetailsActivity extends AppCompatActivity {
                             public void onClick(View view) {
 
                                 ImageView iv = (ImageView) view;
-                                new StfalconImageViewer.Builder<String>(ProfileDetailsActivity.this, new String[]{iv.getTag().toString()}, new ImageLoader<String>() {
+                                new StfalconImageViewer.Builder<String>(ProfileDetailsActivity.this, new String[]{mUser.getProfileImage()}, new ImageLoader<String>() {
                                     @Override
                                     public void loadImage(ImageView imageView, String image) {
-                                        Glide.with(ProfileDetailsActivity.this).load(mUser.getProfileImage()).apply(Utils.getOptionsGlide(true)).into(imageView);
+                                        Glide.with(ProfileDetailsActivity.this).load(image).apply(Utils.getOptionsGlide(false)).into(imageView);
                                     }
                                 }).withHiddenStatusBar(false).show();
                             }
@@ -227,10 +227,10 @@ public class ProfileDetailsActivity extends AppCompatActivity {
                             public void onClick(View view) {
 
                                 ImageView iv = (ImageView) view;
-                                new StfalconImageViewer.Builder<String>(ProfileDetailsActivity.this, new String[]{iv.getTag().toString()}, new ImageLoader<String>() {
+                                new StfalconImageViewer.Builder<String>(ProfileDetailsActivity.this, new String[]{mUser.getCoverPageImage()}, new ImageLoader<String>() {
                                     @Override
                                     public void loadImage(ImageView imageView, String image) {
-                                        Glide.with(ProfileDetailsActivity.this).load(mUser.getCoverPageImage()).apply(Utils.getOptionsGlide(true)).into(imageView);
+                                        Glide.with(ProfileDetailsActivity.this).load(image).apply(Utils.getOptionsGlide(true)).into(imageView);
                                     }
                                 }).withHiddenStatusBar(false).show();
                             }

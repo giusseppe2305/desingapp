@@ -3,6 +3,7 @@ package com.optic.projectofinal.utils;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -34,6 +35,7 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.google.gson.Gson;
 import com.optic.projectofinal.R;
+import com.optic.projectofinal.models.BasicInformationUser;
 import com.optic.projectofinal.models.Category;
 import com.optic.projectofinal.models.Resource;
 import com.optic.projectofinal.models.Sex;
@@ -55,6 +57,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class Utils {
     private static final String TAG = "own";
@@ -367,6 +371,24 @@ public class Utils {
             return null;
         }
     }
+    public static void setPersistantBasicUserInformation(BasicInformationUser dto,Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences("basicUserInformation", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
 
+        editor.putString("lastName", dto.getLastName());
+        editor.putString("name", dto.getName());
+        editor.putString("photoUser", dto.getPhotoUser());
+        editor.commit();
+    }
+
+    public static BasicInformationUser getPersistantBasicUserInformation(Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences("basicUserInformation", MODE_PRIVATE);
+
+        BasicInformationUser dto=new BasicInformationUser();
+        dto.setName(sharedPref.getString("name", "name"));
+        dto.setLastName(sharedPref.getString("lastName", "lastName"));
+        dto.setPhotoUser(sharedPref.getString("photoUser", null));
+        return dto;
+    }
 }
 
