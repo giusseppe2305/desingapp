@@ -16,18 +16,15 @@ import com.optic.projectofinal.R;
 import com.optic.projectofinal.UI.activities.JobOfferedActivity;
 import com.optic.projectofinal.databinding.CardviewJobOfferedBinding;
 import com.optic.projectofinal.models.Job;
-import com.optic.projectofinal.providers.UserDatabaseProvider;
 import com.optic.projectofinal.utils.Utils;
 
 public class JobsAdapterFirebase extends FirestoreRecyclerAdapter<Job, JobsAdapterFirebase.ViewHolder> {
-    Context context;
-    UserDatabaseProvider mUserProvider;
+    private Context context;
 
     public JobsAdapterFirebase(Context c, @NonNull FirestoreRecyclerOptions<Job> options) {
 
         super(options);
         context = c;
-        mUserProvider = new UserDatabaseProvider();
     }
 
     @Override
@@ -36,7 +33,7 @@ public class JobsAdapterFirebase extends FirestoreRecyclerAdapter<Job, JobsAdapt
             String idIterated=getSnapshots().getSnapshot(position).getId();
             holder.binding.title.setText(model.getTitle());
             holder.binding.description.setText(model.getDescription());
-            holder.binding.timestamp.setText(Utils.getDateFormatted(model.getTimestamp()));
+            holder.binding.timestamp.setText(Utils.getDateFormatted(model.getTimestamp(),context));
             Glide.with(context).load(model.getImages().get(0)).apply(Utils.getOptionsGlide(true)).transform(Utils.getTransformSquareRound()).into(holder.binding.imageJob);
 
             //load image

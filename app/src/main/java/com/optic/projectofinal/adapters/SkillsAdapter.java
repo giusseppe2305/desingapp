@@ -17,8 +17,8 @@ import com.optic.projectofinal.utils.Utils;
 import java.util.List;
 
 public class SkillsAdapter extends RecyclerView.Adapter<SkillsAdapter.ViewHolder> {
-    Context context;
-    List<Skill> listSkills;
+    private Context context;
+    private List<Skill> listSkills;
     public SkillsAdapter(Context c, List<Skill> listSkills) {
         context=c;
         this.listSkills=listSkills;
@@ -41,7 +41,6 @@ public class SkillsAdapter extends RecyclerView.Adapter<SkillsAdapter.ViewHolder
         Category categ= Utils.getCategoryByIdJson(context,obj.getIdCategory());
         holder.binding.category.setText(categ.getTitleString());
         holder.binding.imgSkill.setImageResource(categ.getIdImage());
-        //Glide.with(context).load(categ.getIdImage()).into(swipeRVViewHolder.binding.skill.imgSkill);
         holder.binding.subCategory.setText(obj.getIdSubcategory());
 
     }

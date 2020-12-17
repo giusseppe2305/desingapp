@@ -21,6 +21,8 @@ import com.optic.projectofinal.providers.UserDatabaseProvider;
 
 import java.util.ArrayList;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link SkillsFragmentTab#newInstance} factory method to
@@ -28,7 +30,7 @@ import java.util.ArrayList;
  */
 public class SkillsFragmentTab extends Fragment {
 
-    private static final String TAG = "own";
+    
     private  String idUser;
     private FragmentTabSkillsBinding binding;
 
@@ -80,7 +82,7 @@ public class SkillsFragmentTab extends Fragment {
                     }
                 }
             }
-        }).addOnFailureListener(runnable -> Log.e(TAG, "laodSkills: "+runnable.getMessage() ));
+        }).addOnFailureListener(runnable -> Log.e(TAG_LOG, "laodSkills: "+runnable.getMessage() ));
 
     }
 }

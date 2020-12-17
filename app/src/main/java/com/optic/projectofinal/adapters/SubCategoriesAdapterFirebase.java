@@ -16,8 +16,8 @@ import com.optic.projectofinal.utils.Utils;
 import java.util.ArrayList;
 
 public class SubCategoriesAdapterFirebase extends RecyclerView.Adapter<SubCategoriesAdapterFirebase.ViewHolder> {
-    CategorySelectedActivity context;
-    ArrayList<SubCategory>listSubcatories;
+    private CategorySelectedActivity context;
+    private ArrayList<SubCategory>listSubcatories;
     public SubCategoriesAdapterFirebase(CategorySelectedActivity c, ArrayList<SubCategory> listSubcatories ) {
         context=c;
         this.listSubcatories=listSubcatories;

@@ -14,8 +14,10 @@ import com.optic.projectofinal.models.Job;
 import com.optic.projectofinal.models.Valuation;
 import com.optic.projectofinal.providers.JobsDatabaseProvider;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 public class ValuationActivity extends AppCompatActivity {
-    private static final String TAG = "own";
+
     private ActivityValuationBinding binding;
     private double rating1,rating2,rating3,rating4;
     private String idJob;
@@ -60,7 +62,7 @@ public class ValuationActivity extends AppCompatActivity {
             if(binding.opinion.getEditText().getText().toString().length()>0){
                 job.setOpinionUserOffer(binding.opinion.getEditText().getText().toString());
             }
-            new JobsDatabaseProvider().updateJob(job).addOnFailureListener(v-> Log.e(TAG, "update job onOptionsItemSelected: "+v.getMessage() ));
+            new JobsDatabaseProvider().updateJob(job).addOnFailureListener(v-> Log.e(TAG_LOG, "update job onOptionsItemSelected: "+v.getMessage() ));
             finish();
             return true;
         }

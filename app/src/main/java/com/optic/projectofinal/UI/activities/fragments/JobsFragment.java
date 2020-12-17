@@ -22,9 +22,11 @@ import com.optic.projectofinal.providers.JobsDatabaseProvider;
 
 import java.util.ArrayList;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 public class JobsFragment extends Fragment {
 
-    private static final String TAG = "own";
+    
     private FragmentJobsBinding binding;
     private JobsAdapter jobsAdapter;
     private JobsDatabaseProvider mJobsProvider;
@@ -70,6 +72,6 @@ public class JobsFragment extends Fragment {
                 jobsAdapter=new JobsAdapter(getContext(),listJobs );
                 binding.rvJobs.setAdapter(jobsAdapter);
             }
-        }).addOnFailureListener(v-> Log.e(TAG, "onStart: "+v.getMessage() ));
+        }).addOnFailureListener(v-> Log.e(TAG_LOG, "onStart: "+v.getMessage() ));
     }
 }

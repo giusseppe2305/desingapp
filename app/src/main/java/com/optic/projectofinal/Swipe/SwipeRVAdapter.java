@@ -35,10 +35,12 @@ import com.optic.projectofinal.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 public class SwipeRVAdapter<T> extends RecyclerView.Adapter<SwipeRVAdapter<T>.SwipeRVViewHolder> {
 
 
-    private static final String TAG = "own";
+
     private final Class<T> type;
     private ArrayList<T> list;
     private Context context;
@@ -115,7 +117,7 @@ public class SwipeRVAdapter<T> extends RecyclerView.Adapter<SwipeRVAdapter<T>.Sw
             Job obj = (Job) ibIterated;
             swipeRVViewHolder.binding.jobOffered.title.setText(obj.getTitle());
             swipeRVViewHolder.binding.jobOffered.description.setText(obj.getDescription());
-            swipeRVViewHolder.binding.jobOffered.timestamp.setText(Utils.getDateFormatted(obj.getTimestamp()));
+            swipeRVViewHolder.binding.jobOffered.timestamp.setText(Utils.getDateFormatted(obj.getTimestamp(),context));
 
 
             Glide.with(context).load(obj.getImages().get(0)).apply(Utils.getOptionsGlide(true)).transform(Utils.getTransformSquareRound()).into(swipeRVViewHolder.binding.jobOffered.imageJob);
@@ -127,45 +129,42 @@ public class SwipeRVAdapter<T> extends RecyclerView.Adapter<SwipeRVAdapter<T>.Sw
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<DocumentSnapshot> listApplyWorkers = queryDocumentSnapshots.getDocuments();
-                        Log.e(TAG, "onSuccess: tamaño "+listApplyWorkers.size() );
+                        Log.e(TAG_LOG, "onSuccess: tamaño "+listApplyWorkers.size() );
                          if(listApplyWorkers.size()>0){
-                             Log.e(TAG, "onSuccess: entro true" );
+                             Log.e(TAG_LOG, "onSuccess: entro true" );
                             List<Task<DocumentSnapshot>> listTasks=new ArrayList<>();
                              for(DocumentSnapshot it:listApplyWorkers){
                                 if(it.exists()){
-                                    Task<DocumentSnapshot> task = new UserDatabaseProvider().getUser(it.getString("idWorkerApply")).addOnFailureListener(v -> Log.e(TAG, "SwipeRVAdapter getuser onSuccess: " + v.getMessage()));
+                                    Task<DocumentSnapshot> task = new UserDatabaseProvider().getUser(it.getString("idWorkerApply")).addOnFailureListener(v -> Log.e(TAG_LOG, "SwipeRVAdapter getuser onSuccess: " + v.getMessage()));
                                     listTasks.add(task);
                                 }
                              }
-                             Tasks.whenAllComplete(listTasks).addOnSuccessListener(new OnSuccessListener<List<Task<?>>>() {
-                                 @Override
-                                 public void onSuccess(List<Task<?>> tasks) {
-                                     List<User> listUsersApplyThisJob=new ArrayList<>();
+                             Tasks.whenAllComplete(listTasks).addOnSuccessListener(tasks -> {
+                                 List<User> listUsersApplyThisJob=new ArrayList<>();
 
-                                     for( Task<?> itTask:tasks){
-                                         DocumentSnapshot itUser= (DocumentSnapshot) itTask.getResult();
-                                         listUsersApplyThisJob.add(itUser.toObject(User.class));
-                                     }
-                                     dialog.setSingleChoiceItems(new ArrayAdapter<User>(context, R.layout.textbox_gender, listUsersApplyThisJob), 0, new DialogInterface.OnClickListener() {
-                                         @Override
-                                         public void onClick(DialogInterface dialogInterface, int i) {
-                                            new MaterialAlertDialogBuilder(context).setTitle("estas seguro de elegir")
-                                                    .setMessage("has elegido a "+listUsersApplyThisJob.get(i))
-                                                    .setPositiveButton("elegir",(dialogInterface1, i1) -> {
-                                                        Job updateJob=new Job();
-                                                        updateJob.setId(obj.getId());
-                                                        updateJob.setIdUserApply(listUsersApplyThisJob.get(i).getId());
-                                                        updateJob.setState(Job.State.IN_PROGRESS);
-                                                        new JobsDatabaseProvider().updateJob(updateJob).addOnFailureListener(v-> Log.e(TAG, "updatejob select worker onClick: "+v.getMessage() ));
-                                                        myAuctionsFragment.loadData();
-                                                        dialogInterface.dismiss();
-                                                    })
-                                                    .setNegativeButton("cancelar",(dialogInterface1, i1) -> dialogInterface1.dismiss())
-                                                    .show();
-                                         }
-                                     }).show();
-
+                                 for( Task<?> itTask:tasks){
+                                     DocumentSnapshot itUser= (DocumentSnapshot) itTask.getResult();
+                                     listUsersApplyThisJob.add(itUser.toObject(User.class));
                                  }
+                                 dialog.setSingleChoiceItems(new ArrayAdapter<User>(context, R.layout.textbox_gender, listUsersApplyThisJob), 0, new DialogInterface.OnClickListener() {
+                                     @Override
+                                     public void onClick(DialogInterface dialogInterface, int i12) {
+                                        new MaterialAlertDialogBuilder(context).setTitle("estas seguro de elegir")
+                                                .setMessage("has elegido a "+listUsersApplyThisJob.get(i12))
+                                                .setPositiveButton("elegir",(dialogInterface1, i1) -> {
+                                                    Job updateJob=new Job();
+                                                    updateJob.setId(obj.getId());
+                                                    updateJob.setIdUserApply(listUsersApplyThisJob.get(i12).getId());
+                                                    updateJob.setState(Job.State.IN_PROGRESS);
+                                                    new JobsDatabaseProvider().updateJob(updateJob).addOnFailureListener(v1 -> Log.e(TAG_LOG, "updatejob select worker onClick: "+ v1.getMessage() ));
+                                                    myAuctionsFragment.loadData();
+                                                    dialogInterface.dismiss();
+                                                })
+                                                .setNegativeButton("cancelar",(dialogInterface1, i1) -> dialogInterface1.dismiss())
+                                                .show();
+                                     }
+                                 }).show();
+
                              });
 
 
@@ -174,7 +173,7 @@ public class SwipeRVAdapter<T> extends RecyclerView.Adapter<SwipeRVAdapter<T>.Sw
                              dialog.show();
                          }
                     }
-                }).addOnFailureListener(vv-> Log.e(TAG, "MyAuctionsFragment onBindViewHolder: "+vv.getMessage() ));
+                }).addOnFailureListener(vv-> Log.e(TAG_LOG, "MyAuctionsFragment onBindViewHolder: "+vv.getMessage() ));
 
 
             });

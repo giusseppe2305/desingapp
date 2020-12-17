@@ -41,9 +41,10 @@ import java.util.Arrays;
 import java.util.Date;
 
 import static com.optic.projectofinal.channel.NotificationHelper.TYPE_NOTIFICATION.MESSAGE_CHAT;
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
 
 public class ChatConversationActivity extends AppCompatActivity {
-    private static final String TAG = "own";
+
     private ActivityChatConversationBinding binding;
     private String idCurrentChat;
     private String idUserToChat;
@@ -135,7 +136,7 @@ public class ChatConversationActivity extends AppCompatActivity {
         if(nonExistChat!=null&&nonExistChat){
             Toast.makeText(this, "salio", Toast.LENGTH_SHORT).show();
             ///delete chat because dont wrote any message
-            mChatsProvider.deleteChat(idCurrentChat).addOnFailureListener(v-> Log.e(TAG, "onBackPressed: "+v.getMessage() ));
+            mChatsProvider.deleteChat(idCurrentChat).addOnFailureListener(v-> Log.e(TAG_LOG, "onBackPressed: "+v.getMessage() ));
         }
     }
 
@@ -297,7 +298,7 @@ public class ChatConversationActivity extends AppCompatActivity {
                     String code = model.getIdsUserFrom().substring(model.getIdsUserFrom().length() - 3);
                     notificationMessageDTO.setIdNotification(UtilsRetrofit.stringToInt(code));
                     WrapperNotification<NotificationMessageDTO> wrapperNotification=new WrapperNotification<>(notificationMessageDTO);
-                    UtilsRetrofit.sendNotificationMessage(ChatConversationActivity.this,wrapperNotification,false);
+                    UtilsRetrofit.sendNotificationMessage(wrapperNotification,false);
                 }
 
             }

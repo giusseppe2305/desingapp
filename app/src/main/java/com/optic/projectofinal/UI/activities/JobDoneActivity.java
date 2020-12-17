@@ -17,10 +17,10 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.adapters.SliderAdapterExample;
-import com.optic.projectofinal.adapters.SliderItem;
 import com.optic.projectofinal.databinding.ActivityJobDoneBinding;
 import com.optic.projectofinal.models.Category;
 import com.optic.projectofinal.models.Job;
+import com.optic.projectofinal.models.SliderItem;
 import com.optic.projectofinal.providers.JobsDatabaseProvider;
 import com.optic.projectofinal.providers.SubcategoriesDatabaseProvider;
 import com.optic.projectofinal.providers.UserDatabaseProvider;
@@ -31,12 +31,14 @@ import com.smarteist.autoimageslider.SliderView;
 
 import java.util.ArrayList;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 public class JobDoneActivity extends AppCompatActivity {
 
     private ActivityJobDoneBinding binding;
     private ArrayList<SliderItem> imagesSlider;
     private SliderAdapterExample adapterSlider;
-    private static final String TAG = "own";
+
     private UserDatabaseProvider mUserProvider;
     private JobsDatabaseProvider jobsDatabaseProvider;
     private SubcategoriesDatabaseProvider subcategoriesDatabaseProvider;
@@ -129,13 +131,13 @@ public class JobDoneActivity extends AppCompatActivity {
                             if (documentSnapshot.exists()) {
                                 binding.chipSubCategory.setText(documentSnapshot.getString("name"));
                             } else {
-                                Log.e(TAG, "onSuccess: JobOfferedActivity->loadJobData");
+                                Log.e(TAG_LOG, "onSuccess: JobOfferedActivity->loadJobData");
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.e(TAG, "onFailure: JobOfferedActivity->loadJobData");
+                            Log.e(TAG_LOG, "onFailure: JobOfferedActivity->loadJobData");
                         }
                     });
                     //valuation
@@ -145,13 +147,13 @@ public class JobDoneActivity extends AppCompatActivity {
                     binding.rating4.setRating((float) myJob.getValuation().getSpeedContact());
 
                 } else {
-                    Log.e(TAG, "onSuccess:else JobOfferedActivity->getJobById");
+                    Log.e(TAG_LOG, "onSuccess:else JobOfferedActivity->getJobById");
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, "onFailure: JobOfferedActivity->loadJobData");
+                Log.e(TAG_LOG, "onFailure: JobOfferedActivity->loadJobData");
             }
         });
 

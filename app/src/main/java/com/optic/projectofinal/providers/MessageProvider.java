@@ -12,11 +12,9 @@ import java.util.Map;
 
 public class MessageProvider {
     private CollectionReference mcollection;
-    private String idChat;
 
     public MessageProvider() {
         mcollection= FirebaseFirestore.getInstance().collection("Messages");
-        this.idChat=idChat;
     }
     public Task<Void> create(Message msg){
         DocumentReference document= mcollection.document();

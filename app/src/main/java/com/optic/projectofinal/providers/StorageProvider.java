@@ -11,7 +11,7 @@ import com.optic.projectofinal.utils.Utils;
 import java.util.Date;
 
 public class StorageProvider {
-    private static final String TAG = "own";
+
     private StorageReference mStorage;
     private Context context;
     private AuthenticationProvider authenticationProvider;
@@ -27,8 +27,7 @@ public class StorageProvider {
 
         StorageReference storage=mStorage.child("jobsPhotos").child(id).child(new Date()+Utils.getFileName(mPhoto,context));
 
-        UploadTask task=storage.putFile(mPhoto);
-        return task;
+        return storage.putFile(mPhoto);
     }
 
     public StorageReference getStorage(){
@@ -44,16 +43,15 @@ public class StorageProvider {
 //        }).addOnFailureListener(new OnFailureListener() {
 //            @Override
 //            public void onFailure(@NonNull Exception e) {
-//                Log.e(TAG, "onFailure: StorageProvider->getUrlImage");
+//                Log.e(TAG_LOG, "onFailure: StorageProvider->getUrlImage");
 //            }
 //        });
 //    }
 
     public UploadTask uploadImageUser(Uri uri, TYPE_IMAGE type) {
         StorageReference route = mStorage.child("imagesUsers").child(authenticationProvider.getIdCurrentUser() + "_" + type );
-        UploadTask dev = route.putFile(uri);
-        return dev;
+        return route.putFile(uri);
     }
 
-    public enum TYPE_IMAGE{PROFILE_IMAGE,COVER_IMAGE};
+    public enum TYPE_IMAGE{PROFILE_IMAGE,COVER_IMAGE}
 }

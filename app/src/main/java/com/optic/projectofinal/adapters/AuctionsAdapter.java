@@ -1,6 +1,7 @@
 package com.optic.projectofinal.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,16 +10,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.databinding.CardviewJobOfferedBinding;
 import com.optic.projectofinal.models.Job;
+import com.optic.projectofinal.providers.ApplyJobWorkerDatabaseProvider;
 import com.optic.projectofinal.utils.Utils;
 
 import java.util.List;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 public class AuctionsAdapter extends RecyclerView.Adapter<AuctionsAdapter.ViewHolder> {
-    Context context;
-    List<Job> listJobs;
+
+    private Context context;
+    private List<Job> listJobs;
 
     public AuctionsAdapter(Context c, List<Job> listJobs) {
         context = c;
@@ -40,10 +46,26 @@ public class AuctionsAdapter extends RecyclerView.Adapter<AuctionsAdapter.ViewHo
         holder.binding.timestamp.setText(Utils.getStringFromTimestamp(job.getTimestamp()));
 
 //do subquery
-        Glide.with(context).load("https://i.ytimg.com/vi/sB8n58FHBxw/hqdefault.jpg?sqp=-oaymwEYCKgBEF5IVfKriqkDCwgBFQAAiEIYAXAB&rs=AOn4CLCTm9lQUW36rZaFXadAoH1TH3sW0w").apply(Utils.getOptionsGlide(true))
-        .transform(Utils.getTransformSquareRound()).into(holder.binding.imageJob);
-        holder.binding.countApplyWorkers.setText("2 trabajadores en la puja");
-        holder.binding.averagePrice.setText("20.00");
+        Glide.with(context).load(job.getImages().get(0)).apply(Utils.getOptionsGlide(true))
+                .transform(Utils.getTransformSquareRound()).into(holder.binding.imageJob);
+
+        new ApplyJobWorkerDatabaseProvider().getAllById(job.getId()).get().addOnSuccessListener(queryDocumentSnapshots -> {
+                    holder.binding.countApplyWorkers.setText(String.format(Utils.getLocale(context),
+                            "%d %s", queryDocumentSnapshots.size(),
+                            context.getString(R.string.workers_on_auction)));
+                    double average=0;
+                    if(queryDocumentSnapshots.size()>0){
+                        for(QueryDocumentSnapshot it:queryDocumentSnapshots)
+                        {
+                            average+=it.getDouble("price");
+                        }
+                        average=average/queryDocumentSnapshots.size();
+                    }
+            holder.binding.averagePrice.setText(String.format(Utils.getLocale(context),
+                    "%f %s",average,Utils.getCurrency(context).getSymbol()));
+                }
+        ).addOnFailureListener(e -> Log.e(TAG_LOG, "onBindViewHolder: failure get num applyworkers " + e.getMessage()));
+
 
     }
 

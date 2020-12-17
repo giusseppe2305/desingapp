@@ -49,8 +49,10 @@ import java.util.List;
 
 import dmax.dialog.SpotsDialog;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 public class CreateJobActivity extends AppCompatActivity {
-    private static final String TAG = "own";
+
     private ActivityCreateJobBinding binding;
     private int PICKER_IMAGE_CAMERA = 1;
     private int PICKER_IMAGE_GALLERY = 2;
@@ -166,7 +168,7 @@ public class CreateJobActivity extends AppCompatActivity {
                             binding.subCategory.setText(documentSnapshot.getString("name"), false);
 
                         }
-                    }).addOnFailureListener(v -> Log.e(TAG, " SubcategoriesDatabaseProvider CreateJobActivity onSuccess: " + v.getMessage()));
+                    }).addOnFailureListener(v -> Log.e(TAG_LOG, " SubcategoriesDatabaseProvider CreateJobActivity onSuccess: " + v.getMessage()));
 
 
                     if (job.getImages().size() > 0) {
@@ -205,13 +207,13 @@ public class CreateJobActivity extends AppCompatActivity {
                     }
                     binding.subCategory.setAdapter(new ArrayAdapter<SubCategory>(CreateJobActivity.this, R.layout.textbox_gender, listSubcategories));
                 } else {
-                    Log.e("own", "onSuccess:CreateJobActivity->loadSubCategories ");
+                    Log.e(TAG_LOG, "onSuccess:CreateJobActivity->loadSubCategories ");
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.e("own", "onFailure: CreateJobActivity->loadSubCategories");
+                Log.e(TAG_LOG, "onFailure: CreateJobActivity->loadSubCategories");
             }
         });
     }
@@ -382,7 +384,7 @@ public class CreateJobActivity extends AppCompatActivity {
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Log.e("own", "onFailure: create CreateJobActivity->createJob");
+                                    Log.e(TAG_LOG, "onFailure: create CreateJobActivity->createJob");
                                     Toast.makeText(CreateJobActivity.this, "Fallo al crear ", Toast.LENGTH_SHORT).show();
                                     mDialogCreateJob.dismiss();
                                 }
@@ -400,7 +402,7 @@ public class CreateJobActivity extends AppCompatActivity {
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Log.e("own", "onFailure: update CreateJobActivity->createJob");
+                                    Log.e(TAG_LOG, "onFailure: update CreateJobActivity->createJob");
                                     Toast.makeText(CreateJobActivity.this, "Fallo al Actualizado ", Toast.LENGTH_SHORT).show();
                                     mDialogCreateJob.dismiss();
                                 }
@@ -429,13 +431,13 @@ public class CreateJobActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         if (taskSnapshot != null) {
-                            Log.i("own", "onSuccess:if CreateJobActivity-> getListTaskUploadPhotos");
+                            Log.i(TAG_LOG, "onSuccess:if CreateJobActivity-> getListTaskUploadPhotos");
                         } else {
-                            Log.e("own", "onSuccess:else CreateJobActivity-> getListTaskUploadPhotos");
+                            Log.e(TAG_LOG, "onSuccess:else CreateJobActivity-> getListTaskUploadPhotos");
                         }
                     }
                 }).addOnFailureListener(v -> {
-                    Log.e("own", "onFailure: CreateJobActivity-> getListTaskUploadPhotos: ");
+                    Log.e(TAG_LOG, "onFailure: CreateJobActivity-> getListTaskUploadPhotos: ");
                 });
                 list.add(task);
             }

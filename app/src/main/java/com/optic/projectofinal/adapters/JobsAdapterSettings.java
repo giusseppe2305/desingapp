@@ -22,8 +22,10 @@ import com.optic.projectofinal.utils.Utils;
 
 import java.util.ArrayList;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 public class JobsAdapterSettings extends RecyclerView.Adapter<JobsAdapterSettings.ViewHolder> {
-    private static final String TAG = "own";
+
     private MyAuctionsFragment  context;
     private ArrayList<Job> listJobs;
     private Job.State state;
@@ -46,41 +48,36 @@ public class JobsAdapterSettings extends RecyclerView.Adapter<JobsAdapterSetting
         Job job = listJobs.get(position);
         if (state == Job.State.IN_PROGRESS) {
             holder.binding.getRoot().setBackgroundColor(Color.BLUE);
-            holder.binding.getRoot().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    new MaterialAlertDialogBuilder(context.getContext())
-                            .setTitle("Confirmacio")
-                            .setMessage("Esta seguro de marcar como terminado el trabajo")
-                            .setPositiveButton("Terminado", (dialogInterface, i) -> {
-                                Job update = new Job();
-                                update.setId(job.getId());
-                                update.setState(Job.State.FINISHED);
-                                new JobsDatabaseProvider().updateJob(update).addOnFailureListener(v -> Log.e(TAG, "put finished job onClick: " + v.getMessage()));
-                                context.loadData();
-                                dialogInterface.dismiss();
+            holder.binding.getRoot().setOnClickListener(view -> new MaterialAlertDialogBuilder(context.getContext())
+                    .setTitle(context.getString(R.string.jobs_adapter_alert_confirm_title))
+                    .setMessage(context.getString(R.string.jobs_adapter_alert_confirm_message))
+                    .setPositiveButton(context.getString(R.string.jobs_adapter_alert_confirm_positive_button), (dialogInterface, i) -> {
+                        Job update = new Job();
+                        update.setId(job.getId());
+                        update.setState(Job.State.FINISHED);
+                        new JobsDatabaseProvider().updateJob(update).addOnFailureListener(v -> Log.e(TAG_LOG, "put finished job onClick: " + v.getMessage()));
+                        context.loadData();
+                        dialogInterface.dismiss();
 
-                                new MaterialAlertDialogBuilder(context.getContext())
-                                        .setTitle("Opinion")
-                                        .setMessage("¿Quieres poner la opinion ahora?")
-                                        .setPositiveButton("Opinar",(dialogInterface1, i1) -> {
-                                            Intent intent=new Intent(context.getContext(), ValuationActivity.class);
-                                            intent.putExtra("idJob",job.getId());
-                                            context.startActivity(intent);
+                        new MaterialAlertDialogBuilder(context.getContext())
+                                .setTitle(context.getString(R.string.jobs_adapter_alert_opinion_title))
+                                .setMessage(context.getString(R.string.jobs_adapter_alert_opinion_message))
+                                .setPositiveButton(context.getString(R.string.jobs_adapter_alert_opinion_positive_button),(dialogInterface1, i1) -> {
+                                    Intent intent=new Intent(context.getContext(), ValuationActivity.class);
+                                    intent.putExtra("idJob",job.getId());
+                                    context.startActivity(intent);
 
-                                        })
-                                        .setNegativeButton("Despues",null)
-                                        .show();
-                            }).setNegativeButton("Cancelar", null)
-                    .show();
-                }
-            });
+                                })
+                                .setNegativeButton(context.getString(R.string.jobs_adapter_alert_opinion_negative_button),null)
+                                .show();
+                    }).setNegativeButton(context.getString(R.string.jobs_adapter_alert_confirm_negative_button), null)
+            .show());
         } else if (state == Job.State.FINISHED) {
             holder.binding.getRoot().setBackgroundColor(Color.RED);
         }
         holder.binding.title.setText(job.getTitle());
         holder.binding.description.setText(job.getDescription());
-        holder.binding.timestamp.setText(Utils.getDateFormatted(job.getTimestamp()));
+        holder.binding.timestamp.setText(Utils.getDateFormatted(job.getTimestamp(),context.getContext()));
         Glide.with(context).load(job.getImages().get(0)).apply(Utils.getOptionsGlide(true)).transform(Utils.getTransformSquareRound()).into(holder.binding.imageJob);
     }
 

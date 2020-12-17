@@ -16,8 +16,10 @@ import com.optic.projectofinal.UI.activities.login.LoginActivity;
 import com.optic.projectofinal.databinding.ActivitySplashScreenBinding;
 import com.optic.projectofinal.providers.AuthenticationProvider;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 public class SplashScreenActivity extends AppCompatActivity {
-    private static final String TAG = "own";
+
     ActivitySplashScreenBinding binding;
     private int TIME_TO_LOAD_SPLASH=2000;
     @Override
@@ -58,7 +60,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                         if (pendingDynamicLinkData != null) {
                             deepLink = pendingDynamicLinkData.getLink();
                             if (deepLink.getQueryParameter("id") != null) {
-                                Log.e(TAG, "onSuccess: tiene link" );
+                                Log.e(TAG_LOG, "onSuccess: tiene link" );
                                 String id = deepLink.getQueryParameter("id");
                                 Intent intent=new Intent(SplashScreenActivity.this,MainActivity.class);
                                 intent.putExtra("idUserToSee",id);
@@ -72,7 +74,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                                 startActivity(new Intent(SplashScreenActivity.this,LoginActivity.class));
                             }
 
-                            Log.e(TAG, "onSuccess: ERROR WITH DYNAMIC LINK OR NO LINK AT ALL" );
+                            Log.e(TAG_LOG, "onSuccess: ERROR WITH DYNAMIC LINK OR NO LINK AT ALL" );
                         }
                         finishAffinity();///destroy all activities until this time
 
@@ -81,7 +83,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 .addOnFailureListener(this, new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "onSuccess: ERROR WITH DYNAMIC LINK" );
+                        Log.e(TAG_LOG, "onSuccess: ERROR WITH DYNAMIC LINK" );
                         AuthenticationProvider mAuth=new AuthenticationProvider();
                         if(mAuth.existSession()){
                             startActivity(new Intent(SplashScreenActivity.this,MainActivity.class));

@@ -19,7 +19,7 @@ import com.optic.projectofinal.utils.Utils;
 import java.util.ArrayList;
 
 public class JobsAdapter extends RecyclerView.Adapter<JobsAdapter.ViewHolder> {
-    private static final String TAG = "own";
+
     private Context  context;
     private ArrayList<Job> listJobs;
 
@@ -41,7 +41,7 @@ public class JobsAdapter extends RecyclerView.Adapter<JobsAdapter.ViewHolder> {
 
         holder.binding.title.setText(model.getTitle());
         holder.binding.description.setText(model.getDescription());
-        holder.binding.timestamp.setText(Utils.getDateFormatted(model.getTimestamp()));
+        holder.binding.timestamp.setText(Utils.getDateFormatted(model.getTimestamp(),context));
         Glide.with(context).load(model.getImages().get(0)).apply(Utils.getOptionsGlide(true)).transform(Utils.getTransformSquareRound()).into(holder.binding.imageJob);
 
         //load image

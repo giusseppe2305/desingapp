@@ -13,16 +13,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.optic.projectofinal.models.Opinion;
-import com.optic.projectofinal.models.Token;
 import com.optic.projectofinal.models.User;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 public class UserDatabaseProvider {
 
-    private static final String TAG = "own";
+    
     private CollectionReference database;
 
     public UserDatabaseProvider() {
@@ -72,21 +73,21 @@ public class UserDatabaseProvider {
         Query query = database.whereEqualTo("professional", true);///miss category
 
         if(priceSince!=null&&priceUntil!=null){
-            Log.e(TAG, "filterWorkers: query 2" );
+            Log.e(TAG_LOG, "filterWorkers: query 2" );
 
             query= query.whereGreaterThanOrEqualTo("pricePerHour",priceSince).whereLessThanOrEqualTo("pricePerHour",priceUntil);
         }
         if(order!=null){
             switch (order){
                 case HIGHER_TO_LOWER:
-                    Log.e(TAG, "filterWorkers: query 3" );
+                    Log.e(TAG_LOG, "filterWorkers: query 3" );
 
                     query= query.orderBy("pricePerHour", Query.Direction.DESCENDING);
 
                 case DISTANCE:
                     break;
                 case LOWER_TO_HIGHER:
-                    Log.e(TAG, "filterWorkers: query 4" );
+                    Log.e(TAG_LOG, "filterWorkers: query 4" );
 
                     query= query.orderBy("pricePerHour", Query.Direction.ASCENDING);
 
@@ -104,8 +105,7 @@ public class UserDatabaseProvider {
         return database.document(id).collection("WorkersSaved").get();
     }
 
-    public void saveToken(Token token) {
-    }
+
 
     public enum Order{
         LOWER_TO_HIGHER,

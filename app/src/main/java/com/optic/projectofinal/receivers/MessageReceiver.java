@@ -8,12 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.gson.Gson;
 import com.optic.projectofinal.models.Message;
 import com.optic.projectofinal.modelsNotification.NotificationMessageDTO;
@@ -29,11 +23,12 @@ import java.util.Date;
 
 import static com.optic.projectofinal.channel.NotificationHelper.TYPE_NOTIFICATION.MESSAGE_CHAT;
 import static com.optic.projectofinal.services.MyFirebaseMessagingService.NOTIFICATION_REPLY;
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
 
 
 public class MessageReceiver extends BroadcastReceiver {
 
-    private static final String TAG = "own";
+
     private NotificationMessageDTO dto;
 
     private TokenProvider mTokenProvider;
@@ -45,9 +40,9 @@ public class MessageReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         this.context = context;
         String dataJSON = intent.getStringExtra("data");
-        Log.d(TAG, "onReceive: entra");
+        Log.d(TAG_LOG, "onReceive: entra");
         if (dataJSON != null) {
-            Log.d(TAG, "onReceive: "+dataJSON);
+            Log.d(TAG_LOG, "onReceive: "+dataJSON);
             dto = new Gson().fromJson(dataJSON, NotificationMessageDTO.class);
         }
 
@@ -71,38 +66,32 @@ public class MessageReceiver extends BroadcastReceiver {
         model.setTimestamp(new Date().getTime());
         model.setViewed(false);
         model.setMessage(messageText);
-        new MessageProvider().create(model).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isComplete() && task.isSuccessful()) {
+        new MessageProvider().create(model).addOnCompleteListener(task -> {
+            if (task.isComplete() && task.isSuccessful()) {
 
-                    new UserDatabaseProvider().getUser(mAuth.getIdCurrentUser()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if (documentSnapshot.exists()) {
-                                NotificationMessageDTO notificationMessageDTO = new NotificationMessageDTO("Nuevo Mensaje", MESSAGE_CHAT, model.getMessage());
-                                notificationMessageDTO.setIdChat(model.getIdChat());
-                                notificationMessageDTO.setNameUser(documentSnapshot.getString("name") + " " + documentSnapshot.getString("lastName"));
-                                notificationMessageDTO.setPhotoProfile(documentSnapshot.getString("profileImage"));
-                                notificationMessageDTO.setIdUserToChat(dto.getIdUserToChat());
-                                notificationMessageDTO.setMessages(new Message[]{model});
+                new UserDatabaseProvider().getUser(mAuth.getIdCurrentUser()).addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        NotificationMessageDTO notificationMessageDTO = new NotificationMessageDTO("Nuevo Mensaje", MESSAGE_CHAT, model.getMessage());
+                        notificationMessageDTO.setIdChat(model.getIdChat());
+                        notificationMessageDTO.setNameUser(documentSnapshot.getString("name") + " " + documentSnapshot.getString("lastName"));
+                        notificationMessageDTO.setPhotoProfile(documentSnapshot.getString("profileImage"));
+                        notificationMessageDTO.setIdUserToChat(dto.getIdUserToChat());
+                        notificationMessageDTO.setMessages(new Message[]{model});
 
 
-                                String code = model.getIdsUserFrom().substring(model.getIdsUserFrom().length() - 3);
-                                notificationMessageDTO.setIdNotification(UtilsRetrofit.stringToInt(code));
-                                WrapperNotification<NotificationMessageDTO> wrapperNotification = new WrapperNotification<>(notificationMessageDTO);
+                        String code = model.getIdsUserFrom().substring(model.getIdsUserFrom().length() - 3);
+                        notificationMessageDTO.setIdNotification(UtilsRetrofit.stringToInt(code));
+                        WrapperNotification<NotificationMessageDTO> wrapperNotification = new WrapperNotification<>(notificationMessageDTO);
 
-                                ///first we update seenmesages
+                        ///first we update seenmesages
 
-                                UtilsRetrofit.sendNotificationMessage(context, wrapperNotification, true);
-                                //
-                            }
-                        }
-                    });
+                        UtilsRetrofit.sendNotificationMessage( wrapperNotification, true);
+                        //
+                    }
+                });
 
-                } else {
-                    Log.e(TAG, "onComplete error messagereceiver not complete");
-                }
+            } else {
+                Log.e(TAG_LOG, "onComplete error messagereceiver not complete "+task.getException().getMessage());
             }
         });
 

@@ -25,9 +25,8 @@ public class JobsDatabaseProvider {
         return database.orderBy("timestamp", Query.Direction.DESCENDING);
     }
     public String getIdDocument(){
-        String dev=null;
         DocumentReference inter= database.document();
-        dev=inter.getId();
+        String dev=inter.getId();
         inter.delete();
         return dev;
     }

@@ -22,23 +22,24 @@ import java.util.Map;
 import java.util.Random;
 
 import static com.optic.projectofinal.channel.NotificationHelper.TYPE_NOTIFICATION.MESSAGE_CHAT;
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
-    private static final String TAG = "own";
+
     public static final String NOTIFICATION_REPLY = "NotificationReply";
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        Log.d("own", "onMessageReceived: ");
+
         Map<String, String> data = remoteMessage.getData();
 
 //        String title= data.get("title");
 //        String body= data.get("body");
-        String dataJSON=data.get("data");
-        String option= Utils.getOptionNotificationFromJSON(dataJSON);
-        Log.d(TAG, "onMessageReceived: "+dataJSON);
-        Log.d(TAG, "onMessageReceived: "+option);
+        String dataJSON = data.get("data");
+        String option = Utils.getOptionNotificationFromJSON(dataJSON);
+
+        Log.d(TAG_LOG, "notification received  " + dataJSON);
         if (option.equals(MESSAGE_CHAT.toString())) {
             shownNotificationMessage(dataJSON);
         }
@@ -54,7 +55,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
-        Log.d("own", "onNewToken: " + s);
+        Log.d(TAG_LOG, "onNewToken: " + s);
 //        Token token = new Token(s)  ;
 //        new TokenProvider().create(s);
 
@@ -67,24 +68,23 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void shownNotificationMessage(String data) {
-        NotificationMessageDTO dto=new Gson().fromJson(data,NotificationMessageDTO.class);
-        Log.d(TAG, "shownNotificationMessage: "+dto.toString());
-
+        NotificationMessageDTO dto = new Gson().fromJson(data, NotificationMessageDTO.class);
+        Log.d(TAG_LOG, "shownNotificationMessage: " + dto.toString());
 
 
         NotificationHelper notificationHelper = new NotificationHelper(getBaseContext());
         NotificationCompat.Builder builder = notificationHelper.getNotificaionMessage(dto);
 
-            //when click on notification
-        Intent intentToChat=new Intent(this, ChatConversationActivity.class);
+        //when click on notification
+        Intent intentToChat = new Intent(this, ChatConversationActivity.class);
         intentToChat.putExtra("idUserToChat", dto.getIdUserToChat());
-        intentToChat.putExtra("idChat",dto.getIdChat());
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,intentToChat  , PendingIntent.FLAG_UPDATE_CURRENT);
+        intentToChat.putExtra("idChat", dto.getIdChat());
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intentToChat, PendingIntent.FLAG_UPDATE_CURRENT);
         //when reply from notification
 
-        Intent intentReceiver=new Intent(this, MessageReceiver.class);
+        Intent intentReceiver = new Intent(this, MessageReceiver.class);
         intentReceiver.putExtra("data", data);
-        Log.d(TAG, "shownNotificationMessage: "+data);
+        Log.d(TAG_LOG, "shownNotificationMessage: " + data);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intentReceiver, PendingIntent.FLAG_UPDATE_CURRENT);
         RemoteInput remoteInput = new RemoteInput.Builder(NOTIFICATION_REPLY).setLabel("Tu mensaje...").build();
 

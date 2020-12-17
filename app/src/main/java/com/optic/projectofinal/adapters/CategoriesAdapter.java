@@ -5,15 +5,13 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.UI.activities.CategorySelectedActivity;
+import com.optic.projectofinal.databinding.CardviewCategoriesMainBinding;
 import com.optic.projectofinal.models.Category;
 
 import java.util.List;
@@ -36,16 +34,13 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull CategoriesAdapter.ViewHolder holder, int position) {
         final Category iteratedCategory=myCategories.get(position);
-        holder.tvTitle.setText(context.getResources().getString(iteratedCategory.getIdTitle()));
+        holder.binding.tvTitle.setText(context.getResources().getString(iteratedCategory.getIdTitle()));
 
-        holder.ivImage.setImageResource(iteratedCategory.getIdImage());
-        holder.cardViewParent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i= new Intent(context, CategorySelectedActivity.class);
-                i.putExtra("category",iteratedCategory.getId());
-                context.startActivity(i);
-            }
+        holder.binding.ivImage.setImageResource(iteratedCategory.getIdImage());
+        holder.binding.getRoot().setOnClickListener(view -> {
+            Intent i= new Intent(context, CategorySelectedActivity.class);
+            i.putExtra("category",iteratedCategory.getId());
+            context.startActivity(i);
         });
     }
 
@@ -55,14 +50,11 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvTitle;
-        private ImageView ivImage;
-        private CardView cardViewParent;
+        private CardviewCategoriesMainBinding binding;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvTitle=itemView.findViewById(R.id.tvTitle);
-            ivImage=itemView.findViewById(R.id.ivImage);
-            cardViewParent=itemView.findViewById(R.id.carViewCategorie);
+            binding=CardviewCategoriesMainBinding.bind(itemView);
+
         }
     }
 }

@@ -8,13 +8,11 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.optic.projectofinal.UI.activities.fragments.tabsFragments.auctions.AuctionsParticipeFragment;
 import com.optic.projectofinal.UI.activities.fragments.tabsFragments.auctions.MyAuctionsFragment;
-import com.optic.projectofinal.UI.activities.fragments.tabsFragments.profileDetails.AuctionFragment;
 
 public class ViewPagerAuctions extends FragmentStateAdapter {
     private static final int CARD_ITEM_SIZE = 2;
     private final AuctionsParticipeFragment auctionsParticipe;
     private final MyAuctionsFragment myAuctions;
-    private AuctionFragment tercero;
 
     public ViewPagerAuctions(@NonNull FragmentActivity fragmentActivity) {
 

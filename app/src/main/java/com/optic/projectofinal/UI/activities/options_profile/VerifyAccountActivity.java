@@ -24,8 +24,10 @@ import com.optic.projectofinal.providers.UserDatabaseProvider;
 
 import java.util.concurrent.TimeUnit;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 public class VerifyAccountActivity extends AppCompatActivity {
-    private static final String TAG = "own";
+    
     private ActivityVerifyAccountBinding binding;
     private String mVerificationId;
     private FirebaseAuth mAuth= FirebaseAuth.getInstance();
@@ -59,12 +61,12 @@ public class VerifyAccountActivity extends AppCompatActivity {
                                 .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                                     @Override
                                     public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                                        Log.d(TAG, "onVerificationCompleted: verifico");
+                                        Log.d(TAG_LOG, "onVerificationCompleted: verifico");
                                     }
 
                                     @Override
                                     public void onVerificationFailed(@NonNull FirebaseException e) {
-                                        Log.d(TAG, "onVerificationCompleted: fallo verifico "+e.getMessage());
+                                        Log.d(TAG_LOG, "onVerificationCompleted: fallo verifico "+e.getMessage());
                                         Snackbar.make(binding.getRoot(),"Error al enviar el sms", BaseTransientBottomBar.LENGTH_LONG).show();
                                     }
 
@@ -72,7 +74,7 @@ public class VerifyAccountActivity extends AppCompatActivity {
                                     public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                                         super.onCodeSent(s, forceResendingToken);
                                         mVerificationId=s;
-                                        Log.d(TAG, "onCodeSent: "+s+" "+forceResendingToken.toString());
+                                        Log.d(TAG_LOG, "onCodeSent: "+s+" "+forceResendingToken.toString());
 
                                         updateUI(true);
 
@@ -99,15 +101,15 @@ public class VerifyAccountActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithCredential:success");
+                    Log.d(TAG_LOG, "signInWithCredential:success");
                     User update=new User();
                     update.setId(mAuth.getCurrentUser().getUid());
                     update.setVerified(true);
                     update.setPhoneNumber(Integer.parseInt(binding.numberPhone.getEditText().getText().toString()));
-                    mUser.updateUser(update).addOnFailureListener(error-> Log.e(TAG, "onComplete: "+error.getMessage()));
+                    mUser.updateUser(update).addOnFailureListener(error-> Log.e(TAG_LOG, "onComplete: "+error.getMessage()));
                 } else {
                     // Sign in failed, display a message and update the UI
-                    Log.w(TAG, "signInWithCredential:failure", task.getException());
+                    Log.w(TAG_LOG, "signInWithCredential:failure", task.getException());
                     if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                         // The verification code entered was invalid
 

@@ -57,26 +57,9 @@ public class ProfileFragment extends Fragment {
         binding=ActivityProfileBinding.inflate(inflater,container,false);
 
 
-        binding.optionAuctions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getContext(), Auctions_Activity.class));
-            }
-        });
-        binding.optionFavouritesWorkers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getContext(), Favourites_Workers_Activity.class));
-
-            }
-        });
-        binding.optionJobs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getContext(), JobsActivity.class));
-
-            }
-        });
+        binding.optionAuctions.setOnClickListener(view -> startActivity(new Intent(getContext(), Auctions_Activity.class)));
+        binding.optionFavouritesWorkers.setOnClickListener(view -> startActivity(new Intent(getContext(), Favourites_Workers_Activity.class)));
+        binding.optionJobs.setOnClickListener(view -> startActivity(new Intent(getContext(), JobsActivity.class)));
         binding.optionSeeProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,14 +67,8 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-        binding.optionSettings.findViewById(R.id.option_settings).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getContext(), SettingsActivity.class));
-
-            }
-        });
-        BasicInformationUser basicInformationUser=Utils.getPersistantBasicUserInformation(getContext());
+        binding.optionSettings.findViewById(R.id.option_settings).setOnClickListener(view -> startActivity(new Intent(getContext(), SettingsActivity.class)));
+        BasicInformationUser basicInformationUser=Utils.getPersistentBasicUserInformation(getContext());
 
         Glide.with(getContext()).load(basicInformationUser.getPhotoUser()).apply(Utils.getOptionsGlide(false)).into(binding.photoProfile);
         binding.fullNameUser.setText(basicInformationUser.getName()+" "+basicInformationUser.getLastName());

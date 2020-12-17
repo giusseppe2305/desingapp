@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -20,6 +19,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.optic.projectofinal.R;
 import com.optic.projectofinal.Swipe.SwipeRVAdapter;
 import com.optic.projectofinal.Swipe.SwipeRVTouchHelper;
 import com.optic.projectofinal.UI.activities.CreateJobActivity;
@@ -32,13 +32,15 @@ import com.optic.projectofinal.providers.JobsDatabaseProvider;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link MyAuctionsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class MyAuctionsFragment extends Fragment implements SwipeRVTouchHelper.SwipeRVTouchHelperListener {
-    private static final String TAG = "own";
+
     private static final int EDIT_JOB = 1;
     private SwipeRVAdapter adapterSwipe;
     private FragmentMyAuctionsBinding binding;
@@ -136,7 +138,7 @@ public class MyAuctionsFragment extends Fragment implements SwipeRVTouchHelper.S
                     binding.listJobsPublished.setVisibility(View.GONE);
                 }
             }
-        }).addOnFailureListener(v -> Log.e(TAG, "MyAuctionsFragment loadData: " + v.getMessage()));
+        }).addOnFailureListener(v -> Log.e(TAG_LOG, "MyAuctionsFragment loadData: " + v.getMessage()));
     }
 
     private void setupRecyclerView() {
@@ -157,11 +159,13 @@ public class MyAuctionsFragment extends Fragment implements SwipeRVTouchHelper.S
         //adapterSkills.removeSwipeItem(position);
         // If swipe left - delete the item
         if (direction == ItemTouchHelper.LEFT) {
+
+            String message =String.format(getString(R.string.my_auctions_fragment_alert_message)+": %d ?",job.getTitle());
             new MaterialAlertDialogBuilder(getContext())
-                    .setTitle("Confimracion")
-                    .setMessage("¿Estas seguro que desea eliminar la siguiente skill: " + job.getTitle() + "?")
-                    .setNegativeButton("Cancelar", null)
-                    .setPositiveButton("Eliminar", (dialogInterface, i) -> {
+                    .setTitle(R.string.my_auctions_fragment_alert_title)
+                    .setMessage(message)
+                    .setNegativeButton(R.string.my_auctions_fragment_alert_negative_button, null)
+                    .setPositiveButton(R.string.my_auctions_fragment_alert_positive_button, (dialogInterface, i) -> {
                         adapterSwipe.removeSwipeItem(position);
                         removeJob(job.getId());
                     })
@@ -179,13 +183,14 @@ public class MyAuctionsFragment extends Fragment implements SwipeRVTouchHelper.S
         if (requestCode == EDIT_JOB) {
             if (resultCode == Activity.RESULT_OK) {
                 //that means that we have to refresh data
-                Toast.makeText(getContext(), "Actualizado correctamente", Toast.LENGTH_SHORT).show();
+                Log.d(TAG_LOG, "we have to refresh data ");
                 loadData();
             }
         }
     }
 
     private void removeJob(String id) {
-        new JobsDatabaseProvider().deleteJob(id).addOnFailureListener(v -> Log.e(TAG, "MyAuctionsFragment removeJob: " + v.getMessage()));
+        new JobsDatabaseProvider().deleteJob(id).addOnFailureListener(v ->
+                Log.e(TAG_LOG, "MyAuctionsFragment removeJob: " + v.getMessage()));
     }
 }

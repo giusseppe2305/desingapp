@@ -10,9 +10,7 @@ import android.widget.ArrayAdapter;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.adapters.OpinionsAdapter;
 import com.optic.projectofinal.databinding.FragmentTabOpinionsBinding;
@@ -23,13 +21,15 @@ import com.optic.projectofinal.providers.JobsDatabaseProvider;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link OpinionsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class OpinionsFragment extends Fragment {
-    private static final String TAG = "own";
+    
     private String idUser;
     private FragmentTabOpinionsBinding binding;
     public OpinionsFragment(String idUser) {
@@ -65,31 +65,28 @@ public class OpinionsFragment extends Fragment {
     }
 
     private void loadOpinions() {
-        new JobsDatabaseProvider().getValuationsFromUser(idUser).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-                ArrayList<Opinion> listOpinions=new ArrayList<>();
-                for(DocumentSnapshot i:list){
-                    Job it=i.toObject(Job.class);
+        new JobsDatabaseProvider().getValuationsFromUser(idUser).addOnSuccessListener(queryDocumentSnapshots -> {
+            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+            ArrayList<Opinion> listOpinions=new ArrayList<>();
+            for(DocumentSnapshot i:list){
+                Job it=i.toObject(Job.class);
 
-                    Opinion opinion=new Opinion();
-                    opinion.setIdJob(it.getId());
-                    opinion.setValuationWorker(it.getValuation());
-                    opinion.setTitleJob(it.getTitle());
-                    opinion.setTimestamp(it.getTimestamp());
-                    opinion.setImageJob(it.getImages().get(0));
-                    if(it.getOpinionUserOffer()!=null)
-                    opinion.setMessage(it.getOpinionUserOffer());
+                Opinion opinion=new Opinion();
+                opinion.setIdJob(it.getId());
+                opinion.setValuationWorker(it.getValuation());
+                opinion.setTitleJob(it.getTitle());
+                opinion.setTimestamp(it.getTimestamp());
+                opinion.setImageJob(it.getImages().get(0));
+                if(it.getOpinionUserOffer()!=null)
+                opinion.setMessage(it.getOpinionUserOffer());
 
-                    listOpinions.add(opinion);
+                listOpinions.add(opinion);
 
-                }
-
-                binding.listOpinions.setLayoutManager(new LinearLayoutManager(getContext()));
-                binding.listOpinions.setAdapter(new OpinionsAdapter(getContext(),listOpinions));
             }
-        }).addOnFailureListener(v-> Log.e(TAG, "loadOpinions: "+v.getMessage() ));
+
+            binding.listOpinions.setLayoutManager(new LinearLayoutManager(getContext()));
+            binding.listOpinions.setAdapter(new OpinionsAdapter(getContext(),listOpinions));
+        }).addOnFailureListener(v-> Log.e(TAG_LOG, "loadOpinions: "+v.getMessage() ));
 
 //        new UserDatabaseProvider().getOpinions(idUser).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
 //            @Override
@@ -103,6 +100,6 @@ public class OpinionsFragment extends Fragment {
 //                binding.listOpinions.setLayoutManager(new LinearLayoutManager(getContext()));
 //                binding.listOpinions.setAdapter(new OpinionsAdapter(getContext(),listOpinions));
 //            }
-//        }).addOnFailureListener(v-> Log.e(TAG, "loadOpinions: "+v.getMessage() ));
+//        }).addOnFailureListener(v-> Log.e(TAG_LOG, "loadOpinions: "+v.getMessage() ));
     }
 }

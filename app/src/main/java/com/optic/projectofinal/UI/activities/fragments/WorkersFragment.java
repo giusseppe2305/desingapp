@@ -26,6 +26,8 @@ import com.optic.projectofinal.utils.Utils;
 
 import java.util.ArrayList;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link WorkersFragment#newInstance} factory method to
@@ -33,7 +35,7 @@ import java.util.ArrayList;
  */
 public class WorkersFragment extends Fragment {
 
-    private static final String TAG = "own";
+
     private UserDatabaseProvider mUserProvider;
     private AuthenticationProvider mAuth;
     private WorkersAdapter workersAdapter;
@@ -106,7 +108,7 @@ public class WorkersFragment extends Fragment {
                  binding.rvWorkers.setAdapter(workersAdapter);
                  binding.rvWorkers.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
              }
-         }).addOnFailureListener(runnable -> Log.e(TAG, "onStart: "+runnable.getMessage() ));
+         }).addOnFailureListener(runnable -> Log.e(TAG_LOG, "onStart: "+runnable.getMessage() ));
 
 
     }

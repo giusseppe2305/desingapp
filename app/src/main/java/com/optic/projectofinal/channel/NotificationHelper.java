@@ -21,10 +21,12 @@ import com.optic.projectofinal.models.Message;
 import com.optic.projectofinal.modelsNotification.NotificationMessageDTO;
 import com.optic.projectofinal.utils.Utils;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 public class NotificationHelper extends ContextWrapper {
     private static final String CHANNEL_ID="com.optic.projectofinal";
     private static final String CHANNEL_NAME="SocialMedia";
-    private static final String TAG = "own";
+
     private  int idNotification;
     public enum TYPE_NOTIFICATION {MESSAGE_CHAT};
     private NotificationManager manager;
@@ -82,9 +84,9 @@ public class NotificationHelper extends ContextWrapper {
                 .setName("Andres")
                 .setIcon(IconCompat.createWithResource(getApplicationContext(),R.mipmap.ic_launcher))
                 .build();
-        Log.d(TAG, "getNotificaionMessage: "+messages.getPhotoProfile());
+        Log.d(TAG_LOG, "getNotificaionMessage: "+messages.getPhotoProfile());
         Uri uriPhoto= Uri.parse(messages.getPhotoProfile());
-        Log.d(TAG, "getNotificaionMessage: "+uriPhoto);
+        Log.d(TAG_LOG, "getNotificaionMessage: "+uriPhoto);
 
         Person person2= new Person.Builder()
                 .setName(messages.getNameUser())

@@ -1,23 +1,21 @@
 package com.optic.projectofinal.providers;
 
 import android.content.Context;
-import android.widget.Toast;
+import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.optic.projectofinal.models.Chat;
+import com.optic.projectofinal.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ChatsProvider {
-    CollectionReference mCollection;
+    private CollectionReference mCollection;
     public ChatsProvider(){
         mCollection= FirebaseFirestore.getInstance().collection("Chats");
     }
@@ -30,7 +28,7 @@ public class ChatsProvider {
         return mCollection.whereArrayContains("idsChats",idCurrentUser).orderBy("timestamp", Query.Direction.DESCENDING);
     }
     public Query getChatFromUserToAndUserFrom(String userTo, String userFrom){
-        //comprobar si existen las dos combinaciones
+        //check if both combination are an id of chat
         ArrayList<String> ids= new ArrayList<>();
         ids.add(userFrom+userTo);
         ids.add(userTo+userFrom);
@@ -41,13 +39,8 @@ public class ChatsProvider {
     public void updateLastMessageOnChat(final String idCurrentChat, final String idMessage, final Context c) {
         Map<String, Object> update=new HashMap<>();
         update.put("idLastMessage",idMessage);
-        mCollection.document(idCurrentChat).update(update).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(c, "Fallo actualizar id last message on chat ", Toast.LENGTH_SHORT).show();
-                System.out.println("Fallo actualizar id last message on chat  --"+idCurrentChat+"---"+idMessage);
-            }
-        });
+        mCollection.document(idCurrentChat).update(update).addOnFailureListener(e ->
+                Log.e(Utils.TAG_LOG, "fail to update id last message on chat"+e.getMessage() ));
     }
 
     public Task<Void> deleteChat(String id) {

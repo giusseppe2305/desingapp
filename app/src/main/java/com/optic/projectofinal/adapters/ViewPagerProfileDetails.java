@@ -10,7 +10,6 @@ import com.optic.projectofinal.UI.activities.fragments.tabsFragments.profileDeta
 import com.optic.projectofinal.UI.activities.fragments.tabsFragments.profileDetails.OpinionsFragment;
 
 public class ViewPagerProfileDetails extends FragmentStateAdapter {
-    private static final int CARD_ITEM_SIZE = 3;
     private AuctionFragment segundo;
     private OpinionsFragment  primero;
 

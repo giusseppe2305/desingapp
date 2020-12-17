@@ -28,11 +28,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.BaseRequestOptions;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
-import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.google.gson.Gson;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.models.BasicInformationUser;
@@ -49,11 +46,13 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -61,9 +60,10 @@ import java.util.Locale;
 import static android.content.Context.MODE_PRIVATE;
 
 public class Utils {
-    private static final String TAG = "own";
-    public  static int MAX_IMAGE_CAN_BE_SELECTED=10;
 
+    private static final String NAME_FILE_JSON_PROPERTIES = "properties.json";
+    public  static int MAX_IMAGE_CAN_BE_SELECTED=10;
+    public static final String TAG_LOG="own";
     public static int getResId(String resName, Class<?> c) {
         try {
             Field idField = c.getDeclaredField(resName);
@@ -76,13 +76,10 @@ public class Utils {
     public static String getFileName(Uri uri,Context context) {
         String result = null;
         if (uri.getScheme().equals("content")) {
-            Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
-            try {
+            try (Cursor cursor = context.getContentResolver().query(uri, null, null, null, null)) {
                 if (cursor != null && cursor.moveToFirst()) {
                     result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
                 }
-            } finally {
-                cursor.close();
             }
         }
         if (result == null) {
@@ -104,7 +101,7 @@ public class Utils {
             is.read(buffer);
             is.close();
 
-            jsonString = new String(buffer, "UTF-8");
+            jsonString = new String(buffer, StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -113,7 +110,7 @@ public class Utils {
         return jsonString;
     }
     private static <T> T getObjectFromJsonByKeyAndId(Context context, String key, int id,Class<T> type){
-        String jsonData=Utils.getJsonFromAssets(context,"properties.json");
+        String jsonData=Utils.getJsonFromAssets(context,NAME_FILE_JSON_PROPERTIES);
         try {
             JSONArray object=new JSONObject(jsonData).getJSONArray(key);
             for(int i=0;i<object.length();i++){
@@ -129,7 +126,7 @@ public class Utils {
 
     }
     public static String getOptionNotificationFromJSON(String chain){
-        JSONObject object = null;
+        JSONObject object;
         try {
             object = new JSONObject(chain);
             return         object.getString("option");
@@ -139,7 +136,7 @@ public class Utils {
         return null;
     }
     private static String getArrayStringJsonByKey(Context context,String key){
-        String jsonData=Utils.getJsonFromAssets(context,"properties.json");
+        String jsonData=Utils.getJsonFromAssets(context,NAME_FILE_JSON_PROPERTIES);
         String cadenaJson="";
         try {
             JSONArray object=new JSONObject(jsonData).getJSONArray(key);
@@ -165,13 +162,12 @@ public class Utils {
         dev.loadData(context);
         return  dev;
     }
-    public static final Uri getUriToDrawable(@NonNull Context context,
+    public static  Uri getUriToDrawable(@NonNull Context context,
                                              @AnyRes int drawableId) {
-        Uri imageUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
+        return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
                 "://" + context.getResources().getResourcePackageName(drawableId)
                 + '/' + context.getResources().getResourceTypeName(drawableId)
                 + '/' + context.getResources().getResourceEntryName(drawableId) );
-        return imageUri;
     }
 
     public static String capitalizeString(String string) {
@@ -181,17 +177,16 @@ public class Utils {
             if (!found && Character.isLetter(chars[i])) {
                 chars[i] = Character.toUpperCase(chars[i]);
                 found = true;
-            } else if (Character.isWhitespace(chars[i]) || chars[i]=='.' || chars[i]=='\'') { // You can add other chars here
+            } else if (Character.isWhitespace(chars[i]) || chars[i]=='.' || chars[i]=='\'') {
                 found = false;
             }
         }
-        ;
+
         return String.valueOf(chars);
 
     }
     private static <T> List<T> getListItemsJson(Context context,String key, Class<T[]> type){
-//        Type typeOfObjectsList = new TypeToken<T>() {
-//        }.getType();
+
         return Arrays.asList(new Gson().fromJson(Utils.getArrayStringJsonByKey(context,key), type));
     }
     public static ArrayList<Category> getListCategoriesJson(Context context){
@@ -199,18 +194,15 @@ public class Utils {
         for(Category i:dev){
             i.setTitleString(context);
         }
-        ArrayList<Category> dev2 = new ArrayList<Category>();
-        dev2.addAll(dev);
-        return dev2;
+        return new ArrayList<>(dev);
     }
     public static ArrayList<Sex> getListSexJson(Context context){
         List<Sex> dev = getListItemsJson(context, "all_sex", Sex[].class);
         for(Sex i:dev){
             i.loadData(context);
         }
-        ArrayList<Sex> dev2 = new ArrayList<Sex>();
-        dev2.addAll(dev);
-        return dev2;
+
+        return new ArrayList<>(dev);
     }
     public static Sex getSexByIdJson(Context context,int id){
         Sex dev = getObjectFromJsonByKeyAndId(context, "all_sex", id, Sex.class);
@@ -222,20 +214,18 @@ public class Utils {
         for(Resource i:dev){
             i.loadData(context);
         }
-        ArrayList<Resource> dev2 = new ArrayList<Resource>();
-        dev2.addAll(dev);
-        return dev2;
+
+        return new ArrayList<>(dev);
     }
-    public static String getDateFormatted(Long timestamp){
+    public static String getDateFormatted(Long timestamp,Context context){
         Date date = new Date(timestamp);
-        SimpleDateFormat df2 = new SimpleDateFormat("HH:mm - dd MMMM yyyy");
-        String dateText = df2.format(date);
-        return dateText;
+        SimpleDateFormat df2 = new SimpleDateFormat("HH:mm - dd MMMM yyyy",Locale.forLanguageTag(Utils.getLanguage(context)));
+        return df2.format(date);
     }
     public static long getTimestampFromString(String date){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.getDefault());
         try {
-            Date parsedDate = dateFormat.parse("14/11/2020");
+            Date parsedDate = dateFormat.parse(date);
             return parsedDate.getTime();
         } catch (ParseException e) {
             e.printStackTrace();
@@ -275,13 +265,12 @@ public class Utils {
     public static String getMimeType(Uri uri,Context context) {
         ContentResolver cR = context.getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
-        String type = mime.getExtensionFromMimeType(cR.getType(uri));
-        return type;
+        return mime.getExtensionFromMimeType(cR.getType(uri));
     }
 
     public static String getStringFromTimestamp(Long birthdate) {
         Date n = new Date(birthdate);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.getDefault());
         return dateFormat.format(n);
     }
 
@@ -300,8 +289,8 @@ public class Utils {
     }
     public static String roundToHalf(double d) {
         double result = Math.round(d * 2) / 2.0;
-        DecimalFormat formato = new DecimalFormat("####0.00");
-        return formato.format(result);
+        DecimalFormat format = new DecimalFormat("####0.00");
+        return format.format(result);
     }
 
     public static void changeTintIconToolbar(MenuItem item, int color) {
@@ -310,20 +299,21 @@ public class Utils {
         item.setIcon(icon);
 
     }
-
+    private static String getNameProject(Context context){
+        return context.getApplicationContext().getPackageName();
+    }
     public static void generateDynamicLink(Context context,String id,String title,String description,String img,String titlePopUp) {
-        String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
 
-        Task<ShortDynamicLink> dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
+        FirebaseDynamicLinks.getInstance().createDynamicLink()
                 .setLink(Uri.parse("https://projectofinal.page.link?id=" + id))
                 .setDomainUriPrefix("https://projectofinal.page.link")
                 .setAndroidParameters(
-                        new DynamicLink.AndroidParameters.Builder("com.optic.projectofinal")
+                        new DynamicLink.AndroidParameters.Builder()
                                 .setMinimumVersion(1)
                                 .build())
                 .setIosParameters(
-                        new DynamicLink.IosParameters.Builder("com.optic.projectofinal")
-                                .setAppStoreId("whatever")
+                        new DynamicLink.IosParameters.Builder(getNameProject(context))
+                                .setAppStoreId("example")
                                 .setMinimumVersion("1.0.1")
                                 .build())
                 .setSocialMetaTagParameters(
@@ -333,26 +323,23 @@ public class Utils {
                                 .setImageUrl(Uri.parse(img))
                                 .build())
                 .buildShortDynamicLink()
-                .addOnCompleteListener(new OnCompleteListener<ShortDynamicLink>() {
-                    @Override
-                    public void onComplete(@NonNull Task<ShortDynamicLink> task) {
-                        if (task.isSuccessful()) {
-                            // Short link created
-                            Uri shortLink = task.getResult().getShortLink();
-                            Uri flowchartLink = task.getResult().getPreviewLink();
-                            Intent sendIntent = new Intent();
-                            sendIntent.setAction(Intent.ACTION_SEND);
-                            sendIntent.putExtra(Intent.EXTRA_TEXT, titlePopUp + ": " + shortLink.toString());
-                            sendIntent.setType("text/plain");
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Short link created
+                        Uri shortLink = task.getResult().getShortLink();
+                        //Uri flowchartLink = task.getResult().getPreviewLink();
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, titlePopUp + ": " + shortLink.toString());
+                        sendIntent.setType("text/plain");
 
-                            Intent shareIntent = Intent.createChooser(sendIntent, null);
-                            context.startActivity(shareIntent);
-                        } else {
-                            // Error
-                            // ...
-                            Toast.makeText(context, "ERROR", Toast.LENGTH_LONG).show();
-                            Log.e(TAG, "generateDynamicLink erroer onComplete: " );
-                        }
+                        Intent shareIntent = Intent.createChooser(sendIntent, null);
+                        context.startActivity(shareIntent);
+                    } else {
+                        // Error
+                        // ...
+                        Toast.makeText(context, "ERROR", Toast.LENGTH_LONG).show();
+                        Log.e(TAG_LOG, "generateDynamicLink erroer onComplete: ");
                     }
                 });
 
@@ -364,8 +351,7 @@ public class Utils {
             connection.setDoInput(true);
             connection.connect();
             InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
+            return BitmapFactory.decodeStream(input);
         } catch (IOException e) {
             // Log exception
             return null;
@@ -378,10 +364,10 @@ public class Utils {
         editor.putString("lastName", dto.getLastName());
         editor.putString("name", dto.getName());
         editor.putString("photoUser", dto.getPhotoUser());
-        editor.commit();
+        editor.apply();
     }
 
-    public static BasicInformationUser getPersistantBasicUserInformation(Context context){
+    public static BasicInformationUser getPersistentBasicUserInformation(Context context){
         SharedPreferences sharedPref = context.getSharedPreferences("basicUserInformation", MODE_PRIVATE);
 
         BasicInformationUser dto=new BasicInformationUser();
@@ -389,6 +375,25 @@ public class Utils {
         dto.setLastName(sharedPref.getString("lastName", "lastName"));
         dto.setPhotoUser(sharedPref.getString("photoUser", null));
         return dto;
+    }
+    public static void setLanguage(String language,Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences("language", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        editor.putString("language", language);
+
+        editor.apply();
+    }
+    public static String getLanguage(Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences("language", MODE_PRIVATE);
+        return sharedPref.getString("language", "ES");
+    }
+
+    public static Currency getCurrency(Context context){
+        return Currency.getInstance(getLocale(context));
+    }
+    public static Locale getLocale(Context context){
+        return Locale.forLanguageTag(Utils.getLanguage(context));
     }
 }
 

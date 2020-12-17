@@ -1,9 +1,9 @@
-package com.optic.projectofinal.adapters;
+package com.optic.projectofinal.models;
 
 public class SliderItem {
-    String Description;
-    int ImageUrl;
-    String image;
+    private String Description;
+    private int ImageUrl;
+    private String image;
 
     public SliderItem(String image) {
         this.image=image;

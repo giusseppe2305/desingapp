@@ -16,32 +16,54 @@ import com.optic.projectofinal.R;
 import com.optic.projectofinal.databinding.CardviewMessageFromMeBinding;
 import com.optic.projectofinal.models.Message;
 import com.optic.projectofinal.providers.AuthenticationProvider;
-import com.optic.projectofinal.providers.UserDatabaseProvider;
 import com.optic.projectofinal.utils.RelativeTime;
-import com.optic.projectofinal.utils.UtilsUI;
 
 
 public class MessageAdapterFirebase extends FirestoreRecyclerAdapter<Message, MessageAdapterFirebase.ViewHolder> {
-    private final UtilsUI utilsUI;
     private Context context;
-    private UserDatabaseProvider mUserProvider;
     private AuthenticationProvider mAuth;
 
     public MessageAdapterFirebase(@NonNull FirestoreRecyclerOptions<Message> options, Context c) {
         super(options);
-
         context = c;
-        utilsUI=new UtilsUI(context);
-        mUserProvider = new UserDatabaseProvider();
         mAuth = new AuthenticationProvider();
     }
 
     @Override
     protected void onBindViewHolder(@NonNull final ViewHolder holder, int position, @NonNull final Message message) {
-        DocumentSnapshot document = getSnapshots().getSnapshot(position);
-        final String messageId = document.getId();
-        String relativeTime = RelativeTime.timeFormatAMPM(message.getTimestamp());
+        DocumentSnapshot compareDocument;
 
+
+        if( (position==0 &&getSnapshots().size()>0)  ||
+                getSnapshots().size()==1){
+            holder.binding.date.setVisibility(View.VISIBLE);
+            holder.binding.textDate.setText(RelativeTime.getTittleDate(context, message.getTimestamp()));
+        }else if(  position < getSnapshots().size()-1){
+            if (position == 0) {
+
+                compareDocument = getSnapshots().getSnapshot(position + 1);
+
+            } else {
+                compareDocument = getSnapshots().getSnapshot(position - 1);
+
+            }
+
+            Long compare = compareDocument.getLong("timestamp");
+            if (RelativeTime.compare(compare, message.getTimestamp()) == 1) {
+                holder.binding.date.setVisibility(View.VISIBLE);
+                holder.binding.textDate.setText(RelativeTime.getTittleDate(context, message.getTimestamp()));
+            } else {
+                holder.binding.date.setVisibility(View.GONE);
+
+            }
+
+        }else {
+            holder.binding.date.setVisibility(View.GONE);
+
+        }
+
+
+        String relativeTime = RelativeTime.timeFormatAMPM(message.getTimestamp());
 
         if (message.getIdsUserFrom().equals(mAuth.getIdCurrentUser())) {
             holder.binding.messageFromMe.setText(message.getMessage());
@@ -49,13 +71,10 @@ public class MessageAdapterFirebase extends FirestoreRecyclerAdapter<Message, Me
 
             holder.binding.layoutMessageFromMe.setVisibility(View.VISIBLE);
             holder.binding.layoutMessageToMe.setVisibility(View.GONE);
-            if (message.isViewed()) {
-                holder.binding.doubleCheck.setColorFilter(ContextCompat.getColor(context,R.color.checkMessage));
-               // holder.binding.doubleCheck.setImageResource(R.drawable.ic_double_check);
-            } else {
-                holder.binding.doubleCheck.setColorFilter(ContextCompat.getColor(context,R.color.unCheckMessage));
-              //  holder.binding.doubleCheck.setImageResource(R.drawable.ic_add_photo);
-            }
+            if (message.isViewed())
+                holder.binding.doubleCheck.setColorFilter(ContextCompat.getColor(context, R.color.checkMessage));
+             else
+                holder.binding.doubleCheck.setColorFilter(ContextCompat.getColor(context, R.color.unCheckMessage));
         } else {
             holder.binding.messageToMe.setText(message.getMessage());
             holder.binding.timestampToMe.setText(relativeTime);
@@ -76,12 +95,10 @@ public class MessageAdapterFirebase extends FirestoreRecyclerAdapter<Message, Me
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private CardviewMessageFromMeBinding binding;
-
         public ViewHolder(View view) {
             super(view);
             binding = CardviewMessageFromMeBinding.bind(view);
         }
-
     }
 
 }

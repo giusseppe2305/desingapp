@@ -43,7 +43,8 @@ public class LoginActivity extends AppCompatActivity {
     private AuthenticationProvider mAuth;
     private UserDatabaseProvider mUserDatabase;
     private GoogleSignInOptions gso;
-    private CallbackManager callbackManager = CallbackManager.Factory.create();;
+    private CallbackManager callbackManager = CallbackManager.Factory.create();
+    ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,93 +62,57 @@ public class LoginActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mAuth = new AuthenticationProvider();
         mUserDatabase = new UserDatabaseProvider();
-        binding.loginCreateProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(LoginActivity.this, R.style.BottomSheetDialogTheme);
-                ///SET BINDING REGISTER FRAGMENT
-                LayoutRegisterBottomSheetBinding fragmentBinding = LayoutRegisterBottomSheetBinding.inflate(getLayoutInflater());
-                View vista = fragmentBinding.getRoot();
-                fragmentBinding.btnContinueEmail.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-                    }
-                });
-                fragmentBinding.btnRegisterWithGoogle.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        signInGoogleIntent();
-                    }
-                });
-                fragmentBinding.btnRegisterWithFacebook.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        LoginManager.getInstance().logIn(LoginActivity.this,null);
-                    }
-                });
-                fragmentBinding.closeFragment.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        bottomSheetDialog.dismiss();
-                    }
-                });
-                bottomSheetDialog.setContentView(vista);
-                bottomSheetDialog.show();
+        binding.loginCreateProfile.setOnClickListener(view12 -> {
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(LoginActivity.this, R.style.BottomSheetDialogTheme);
+            ///SET BINDING REGISTER FRAGMENT
+            LayoutRegisterBottomSheetBinding fragmentBinding = LayoutRegisterBottomSheetBinding.inflate(getLayoutInflater());
+            View vista = fragmentBinding.getRoot();
+            fragmentBinding.btnContinueEmail.setOnClickListener(view1 -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
+            fragmentBinding.btnRegisterWithGoogle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view12) {
+                    signInGoogleIntent();
+                }
+            });
+            fragmentBinding.btnRegisterWithFacebook.setOnClickListener(view121 ->
+                    LoginManager.getInstance().logIn(LoginActivity.this, null));
+            fragmentBinding.closeFragment.setOnClickListener(view1212 -> bottomSheetDialog.dismiss());
+            bottomSheetDialog.setContentView(vista);
+            bottomSheetDialog.show();
 
 
-            }
         });
 
 
+        binding.loginHaveAccount.setOnClickListener(view13 -> {
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(LoginActivity.this, R.style.BottomSheetDialogTheme);
+            //set binding FRAME SIGN IN FRAGMENT
+            LayoutLoginBottomSheetBinding fragmentBinding = LayoutLoginBottomSheetBinding.inflate(getLayoutInflater());
+            View vista = fragmentBinding.getRoot();
+            bottomSheetDialog.setContentView(vista);
 
-        binding.loginHaveAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(LoginActivity.this, R.style.BottomSheetDialogTheme);
-                //set binding FRAME SIGN IN FRAGMENT
-                LayoutLoginBottomSheetBinding fragmentBinding = LayoutLoginBottomSheetBinding.inflate(getLayoutInflater());
-                View vista = fragmentBinding.getRoot();
-                bottomSheetDialog.setContentView(vista);
-
-                fragmentBinding.btnContinueEmail.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        startActivity(new Intent(LoginActivity.this, SignInActivity.class));
-                    }
-                });
-                fragmentBinding.btnSignInGoogle.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        signInGoogleIntent();
-                    }
-                });
-
-                //fragmentBinding.btnSignInFacebook.setLoginText(getString(R.string.sign_in_with_facebook));
-
-                fragmentBinding.btnSignInFacebook.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        LoginManager.getInstance().logIn(LoginActivity.this,null);
-                    }
-                });
+            fragmentBinding.btnContinueEmail.setOnClickListener(view131 ->
+                    startActivity(new Intent(LoginActivity.this, SignInActivity.class)));
+            fragmentBinding.btnSignInGoogle.setOnClickListener(view1312 ->
+                    signInGoogleIntent());
 
 
-                fragmentBinding.closeFragment.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        bottomSheetDialog.dismiss();
-                    }
-                });
-                bottomSheetDialog.show();
+            fragmentBinding.btnSignInFacebook.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view13) {
 
-            }
+                    LoginManager.getInstance().logIn(LoginActivity.this, null);
+                }
+            });
+
+
+            fragmentBinding.closeFragment.setOnClickListener(view1313 -> bottomSheetDialog.dismiss());
+            bottomSheetDialog.show();
+
         });
 
         registerCallbackLoginFacebook();
     }
-
 
 
     @Override
@@ -167,6 +132,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
     private void registerCallbackLoginFacebook() {
         LoginManager.getInstance().setLoginBehavior(LoginBehavior.WEB_VIEW_ONLY);
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -177,9 +143,9 @@ public class LoginActivity extends AppCompatActivity {
                 mAuth.logInFacebook(loginResult.getAccessToken().getToken()).addOnCompleteListener(new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
-                        if(task.isComplete()){
+                        if (task.isComplete()) {
                             Toast.makeText(LoginActivity.this, "Facebbok firebase OK", Toast.LENGTH_SHORT).show();
-                        }else{
+                        } else {
                             Toast.makeText(LoginActivity.this, "Facebook firebase BAD", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -220,12 +186,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
                     ///set share preference
-                    BasicInformationUser basicInformationUser=new BasicInformationUser();
-                    basicInformationUser.setPhotoUser(documentSnapshot.getString("profileImage"));
-                    basicInformationUser.setName(documentSnapshot.getString("name"));
-                    basicInformationUser.setLastName(documentSnapshot.getString("lastName"));
-
-                    Utils.setPersistantBasicUserInformation(basicInformationUser,LoginActivity.this);
+                    saveSharePreference(documentSnapshot);
 
                     Intent i = new Intent(LoginActivity.this, MainActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -239,11 +200,7 @@ public class LoginActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 ///set share preference
-                                BasicInformationUser basicInformationUser=new BasicInformationUser();
-                                basicInformationUser.setPhotoUser(documentSnapshot.getString("profileImage"));
-                                basicInformationUser.setName(documentSnapshot.getString("name"));
-                                basicInformationUser.setLastName(documentSnapshot.getString("lastName"));
-                                Utils.setPersistantBasicUserInformation(basicInformationUser,LoginActivity.this);
+                                saveSharePreference(documentSnapshot);
 
                                 Intent i = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(i);
@@ -257,6 +214,15 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void saveSharePreference(DocumentSnapshot documentSnapshot) {
+        BasicInformationUser basicInformationUser = new BasicInformationUser();
+        basicInformationUser.setPhotoUser(documentSnapshot.getString("profileImage"));
+        basicInformationUser.setName(documentSnapshot.getString("name"));
+        basicInformationUser.setLastName(documentSnapshot.getString("lastName"));
+        Utils.setPersistantBasicUserInformation(basicInformationUser, LoginActivity.this);
+        Utils.setLanguage("ES", this);
     }
 
 

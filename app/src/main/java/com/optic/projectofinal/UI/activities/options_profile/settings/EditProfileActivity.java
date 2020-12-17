@@ -39,11 +39,13 @@ import java.util.Date;
 
 import dmax.dialog.SpotsDialog;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 public class EditProfileActivity extends AppCompatActivity {
     private final int PICKER_IMAGE_PROFILE_IMAGE = 1;
     private final int PICKER_IMAGE_COVER_IMAGE = 2;
 
-    private static final String TAG = "own";
+
     private ActivityEditProfileBinding binding;
     private UserDatabaseProvider userDatabaseProvider;
     private AuthenticationProvider authenticationProvider;
@@ -146,7 +148,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 Glide.with(EditProfileActivity.this).load(userIterated.getCoverPageImage()).apply(Utils.getOptionsGlide(false)).transform(Utils.getTransformSquareRound()).into(binding.coverPageImage);
                 Glide.with(EditProfileActivity.this).load(userIterated.getProfileImage()).apply(Utils.getOptionsGlide(false)).into(binding.imageProfile);
             }
-        }).addOnFailureListener(v-> Log.e(TAG, "loadUserData: "+v.getMessage() ));
+        }).addOnFailureListener(v-> Log.e(TAG_LOG, "loadUserData: "+v.getMessage() ));
     }
 
     @Override
@@ -244,39 +246,39 @@ public class EditProfileActivity extends AppCompatActivity {
             if (uriCoverImage != null) {
 
                 storageProvider.uploadImageUser(uriCoverImage, StorageProvider.TYPE_IMAGE.COVER_IMAGE).addOnSuccessListener(v->{
-                    Log.e(TAG, "updateDataUser: cambio cover" );
+                    Log.e(TAG_LOG, "updateDataUser: cambio cover" );
                     if(!hasCoverImage){
                         v.getStorage().getDownloadUrl().addOnSuccessListener(c->{
                             User mUser=new User();
                             mUser.setId(authenticationProvider.getIdCurrentUser());
                             mUser.setCoverPageImage(c.toString());
                             userDatabaseProvider.updateUser(mUser);
-                        }).addOnFailureListener(cc-> Log.e(TAG, "updateDataUser: cover "+cc.getMessage() ));
+                        }).addOnFailureListener(cc-> Log.e(TAG_LOG, "updateDataUser: cover "+cc.getMessage() ));
 
                     }
-                }).addOnFailureListener(v -> Log.e(TAG, "fail update cover image prifle " + v.getMessage()));
+                }).addOnFailureListener(v -> Log.e(TAG_LOG, "fail update cover image prifle " + v.getMessage()));
             }
             if (uriImageProfile != null) {
                 storageProvider.uploadImageUser(uriImageProfile, StorageProvider.TYPE_IMAGE.PROFILE_IMAGE)
                         .addOnSuccessListener(v-> {
-                            Log.e(TAG, "updateDataUser: cambio profile image");
+                            Log.e(TAG_LOG, "updateDataUser: cambio profile image");
                             if (!hasProfileImage) {
                                 v.getStorage().getDownloadUrl().addOnSuccessListener(c -> {
                                     User mUser = new User();
                                     mUser.setId(authenticationProvider.getIdCurrentUser());
                                     mUser.setProfileImage(c.toString());
                                     userDatabaseProvider.updateUser(mUser);
-                                }).addOnFailureListener(cc -> Log.e(TAG, "updateDataUser: profile " + cc.getMessage()));
+                                }).addOnFailureListener(cc -> Log.e(TAG_LOG, "updateDataUser: profile " + cc.getMessage()));
 
                             }
                         })
-                        .addOnFailureListener(v -> Log.e(TAG, "fail update  image prifle " + v.getMessage()));
+                        .addOnFailureListener(v -> Log.e(TAG_LOG, "fail update  image prifle " + v.getMessage()));
             }
 
             userDatabaseProvider.updateUser(userUpdate)
                     .addOnSuccessListener(n -> Toast.makeText(this, "Todo update ", Toast.LENGTH_SHORT).show())
                     .addOnFailureListener(v -> {
-                        Log.e(TAG, "updateDataUser: " + v.getMessage());
+                        Log.e(TAG_LOG, "updateDataUser: " + v.getMessage());
                         Toast.makeText(this, "Algo salio mal", Toast.LENGTH_SHORT).show();
                     });
             //check all right

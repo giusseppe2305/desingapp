@@ -73,8 +73,7 @@ public class SwipeRVTouchHelper extends ItemTouchHelper.SimpleCallback {
 
 
             }
-            // If only want to allow swiping in one direction, you can actually delete the if-block above and just
-            // keep the two lines of code below
+
 
 
             View foreground = ((SwipeRVAdapter.SwipeRVViewHolder) viewHolder).getForegroundContainer();

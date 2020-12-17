@@ -50,7 +50,7 @@ public class AuthenticationProvider {
                 context,
                 new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
         ).signOut();
-        ///cerrar en facebbok
+        ///close on facebook
         LoginManager.getInstance().logOut();
     }
    

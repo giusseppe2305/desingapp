@@ -20,8 +20,10 @@ import com.optic.projectofinal.providers.UserDatabaseProvider;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 public class Favourites_Workers_Activity extends AppCompatActivity {
-    private static final String TAG = "own";
+    
     private ActivityFavouritesWorkersActivityBinding binding;
     private UserDatabaseProvider mUserProvider;
     private AuthenticationProvider mAuth;
@@ -59,9 +61,9 @@ public class Favourites_Workers_Activity extends AppCompatActivity {
                         binding.favouritesWorkers.setAdapter(workersAdapter);
                         binding.favouritesWorkers.setLayoutManager(new GridLayoutManager(Favourites_Workers_Activity.this,2));
                     }
-                }).addOnFailureListener(v-> Log.e(TAG, "getAllSaveWorkersById onSuccess: "+v.getMessage() ));
+                }).addOnFailureListener(v-> Log.e(TAG_LOG, "getAllSaveWorkersById onSuccess: "+v.getMessage() ));
             }
-        }).addOnFailureListener(v-> Log.e(TAG, "getAllSaveWorkersById onCreate: failure"+v.getMessage() ));
+        }).addOnFailureListener(v-> Log.e(TAG_LOG, "getAllSaveWorkersById onCreate: failure"+v.getMessage() ));
 
         mUserProvider.getAllWorkers().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -74,6 +76,6 @@ public class Favourites_Workers_Activity extends AppCompatActivity {
                 }
 
             }
-        }).addOnFailureListener(runnable -> Log.e(TAG, "onStart: "+runnable.getMessage() ));
+        }).addOnFailureListener(runnable -> Log.e(TAG_LOG, "onStart: "+runnable.getMessage() ));
     }
 }

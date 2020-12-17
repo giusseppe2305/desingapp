@@ -46,10 +46,12 @@ import com.stfalcon.imageviewer.loader.ImageLoader;
 
 import java.util.ArrayList;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 public class ProfileDetailsActivity extends AppCompatActivity {
 
     private LikeWorkersDatabaseProvider likeProvider;
-    private static final String TAG = "own";
+
     private FragmentStateAdapter adapterPager;
     private ActivityProfileDetailBinding binding;
     private UserDatabaseProvider userDatabaseProvider;
@@ -179,7 +181,7 @@ public class ProfileDetailsActivity extends AppCompatActivity {
                                 binding.contentAppBar.valuated.setRating(totalAmountValuation/queryDocumentSnapshots.getDocuments().size());
                             }
                         }
-                    }).addOnFailureListener(v-> Log.e(TAG, "loadUserData onSuccess: addOnFailureListener" ));
+                    }).addOnFailureListener(v-> Log.e(TAG_LOG, "loadUserData onSuccess: addOnFailureListener" ));
 
 
                     binding.contentAppBar.nameUser.setText(mUser.getName());
@@ -247,10 +249,10 @@ public class ProfileDetailsActivity extends AppCompatActivity {
                     }
 
                 } else {
-                    Log.e(TAG, "ProfileDetailsActivity loadUserData onSuccess: ");
+                    Log.e(TAG_LOG, "ProfileDetailsActivity loadUserData onSuccess: ");
                 }
             }
-        }).addOnFailureListener(v -> Log.e(TAG, "ProfileDetailsActivity->addOnFailureListener ->loadUserData: "));
+        }).addOnFailureListener(v -> Log.e(TAG_LOG, "ProfileDetailsActivity->addOnFailureListener ->loadUserData: "));
     }
 
     public void getIntermediaryViewPager(boolean isWorker) {
@@ -316,7 +318,7 @@ public class ProfileDetailsActivity extends AppCompatActivity {
 
                     menu.findItem(R.id.btnMenuFavourite).setEnabled(true);
                 }
-            }).addOnFailureListener(v-> Log.e(TAG, "onCreateOptionsMenu: "+v.getMessage() ));
+            }).addOnFailureListener(v-> Log.e(TAG_LOG, "onCreateOptionsMenu: "+v.getMessage() ));
         }
 
         return true;

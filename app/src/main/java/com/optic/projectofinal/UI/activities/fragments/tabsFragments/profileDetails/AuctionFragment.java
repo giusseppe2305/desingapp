@@ -10,9 +10,7 @@ import android.widget.ArrayAdapter;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.adapters.AuctionsAdapter;
 import com.optic.projectofinal.databinding.FragmentTabAuctionsBinding;
@@ -22,6 +20,8 @@ import com.optic.projectofinal.providers.JobsDatabaseProvider;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AuctionFragment#newInstance} factory method to
@@ -30,7 +30,7 @@ import java.util.List;
 public class AuctionFragment extends Fragment {
 
 
-    private static final String TAG = "own";
+
     private  String idUser;
     private FragmentTabAuctionsBinding binding;
     public AuctionFragment() {
@@ -59,25 +59,22 @@ public class AuctionFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding =FragmentTabAuctionsBinding.inflate(inflater, container, false);
-        binding.spinner.setAdapter(new ArrayAdapter<String>(getContext(),R.layout.support_simple_spinner_dropdown_item,new String[]{"Fecha (Ascedente)","Fecha (Descendiente)","Precio (Ascendente)"}));
+        binding.spinner.setAdapter(new ArrayAdapter<>(getContext(),R.layout.support_simple_spinner_dropdown_item,new String[]{"Fecha (Ascedente)","Fecha (Descendiente)","Precio (Ascendente)"}));
         
         loadAuctions();
         return binding.getRoot();
     }
 
     private void loadAuctions() {
-        new JobsDatabaseProvider().getAllJobsById(idUser).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-                ArrayList<Job> listJobs=new ArrayList<>();
-                for(DocumentSnapshot i:list){
-                    listJobs.add(i.toObject(Job.class));
-                }
-                binding.listAuctions.setLayoutManager(new LinearLayoutManager(getContext()));
-                binding.listAuctions.setAdapter(new AuctionsAdapter(getContext(),listJobs));
+        new JobsDatabaseProvider().getAllJobsById(idUser).addOnSuccessListener(queryDocumentSnapshots -> {
+            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+            ArrayList<Job> listJobs=new ArrayList<>();
+            for(DocumentSnapshot i:list){
+                listJobs.add(i.toObject(Job.class));
             }
-        }).addOnFailureListener(v-> Log.e(TAG, "loadAuctions: "+v.getMessage() ));
+            binding.listAuctions.setLayoutManager(new LinearLayoutManager(getContext()));
+            binding.listAuctions.setAdapter(new AuctionsAdapter(getContext(),listJobs));
+        }).addOnFailureListener(v-> Log.e(TAG_LOG, "loadAuctions: "+v.getMessage() ));
     }
 
 }

@@ -44,8 +44,10 @@ import com.optic.projectofinal.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 public class EditSettingsWorkerActivity extends AppCompatActivity {
-    private static final String TAG = "own";
+
     private ActivityEditSettingsWorkerBinding binding;
     private ArrayList<Skill> listSkills;
     private SwipeRVAdapter adapterSkills;
@@ -197,7 +199,7 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
         bindingAlertdialog.subCategory.getItems().clear();
         bindingAlertdialog.subCategory.setEnabled(true);
         Category categorySelected = (Category) bindingAlertdialog.category.getItems().get(position);
-        Log.e(TAG, "loadSubCategories: " + categorySelected.getId());
+        Log.e(TAG_LOG, "loadSubCategories: " + categorySelected.getId());
         subcategoriesDatabaseProvider.getAllByCategory(categorySelected.getId()).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -206,12 +208,12 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
                     bindingAlertdialog.subCategory.setItems(result);
 
                     if (isEditingSkillId != null) {
-                        Log.e(TAG, "onSuccess: entra en is editing firebase " + bindingAlertdialog.subCategory.getItems().size());
+                        Log.e(TAG_LOG, "onSuccess: entra en is editing firebase " + bindingAlertdialog.subCategory.getItems().size());
                         for (int i = 0; i < bindingAlertdialog.subCategory.getItems().size(); i++) {
                             SubCategory sub = (SubCategory) bindingAlertdialog.subCategory.getItems().get(i);
-                            Log.e(TAG, sub.getId() + "-" + isEditingSkillId + "-> " + i);
+                            Log.e(TAG_LOG, sub.getId() + "-" + isEditingSkillId + "-> " + i);
                             if (sub.getId().equals(isEditingSkillId)) {
-                                Log.e(TAG, "onSuccess: postition final " + i);
+                                Log.e(TAG_LOG, "onSuccess: postition final " + i);
                                 bindingAlertdialog.subCategory.setSelectedIndex(i);
                             }
                         }
@@ -219,20 +221,20 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
 //                        for(int i=0;i<bindingAlertdialog.subCategory.getItems().size();i++){
 //                            if((((SubCategory)(bindingAlertdialog.subCategory.getItems().get(i))).getId()).equals(isEditingSkillId)){
 //                                bindingAlertdialog.subCategory.setSelectedIndex(position);
-//                                Log.e(TAG, "onSuccess: position "+i );
+//                                Log.e(TAG_LOG, "onSuccess: position "+i );
 //                            }
 //
 //                        }
 
                     }
                 } else {
-                    Log.e("own", "onSuccess:EditSettingsWorkerActivity->loadSubCategories ");
+                    Log.e(TAG_LOG, "onSuccess:EditSettingsWorkerActivity->loadSubCategories ");
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.e("own", "onFailure: EditSettingsWorkerActivity->loadSubCategories");
+                Log.e(TAG_LOG, "onFailure: EditSettingsWorkerActivity->loadSubCategories");
             }
         });
     }
@@ -252,10 +254,10 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
                     loadSkills(listS);
 
                 } else {
-                    Log.e(TAG, "EditSettingsWorkerActivity->loadData -> onSuccess: ");
+                    Log.e(TAG_LOG, "EditSettingsWorkerActivity->loadData -> onSuccess: ");
                 }
             }
-        }).addOnFailureListener(v -> Log.e(TAG, "EditSettingsWorkerActivity->loadData->addOnFailureListener: " + v.getMessage()));
+        }).addOnFailureListener(v -> Log.e(TAG_LOG, "EditSettingsWorkerActivity->loadData->addOnFailureListener: " + v.getMessage()));
     }
 
     private void loadSkills(ArrayList<Skill> listS) {
@@ -312,10 +314,10 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
 
                     }
                 }else{
-                    Log.e(TAG, "EditSettingsWorkerActivity onCreateOptionsMenu onSuccess: " );
+                    Log.e(TAG_LOG, "EditSettingsWorkerActivity onCreateOptionsMenu onSuccess: " );
                 }
             }
-        }).addOnFailureListener(v-> Log.e(TAG, " EditSettingsWorkerActivity addOnFailureListener onCreateOptionsMenu: "+v.getMessage() ));
+        }).addOnFailureListener(v-> Log.e(TAG_LOG, " EditSettingsWorkerActivity addOnFailureListener onCreateOptionsMenu: "+v.getMessage() ));
 
         return true;
 
@@ -340,7 +342,7 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
             public void onSuccess(Void aVoid) {
                 Toast.makeText(EditSettingsWorkerActivity.this, "todo ok", Toast.LENGTH_SHORT).show();
             }
-        }).addOnFailureListener(v-> Log.e(TAG, "EditSettingsWorkerActivity updateDataFirebase: addOnFailureListener"+v.getMessage() ));
+        }).addOnFailureListener(v-> Log.e(TAG_LOG, "EditSettingsWorkerActivity updateDataFirebase: addOnFailureListener"+v.getMessage() ));
     }
 
 

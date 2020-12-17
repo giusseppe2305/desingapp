@@ -15,12 +15,15 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.optic.projectofinal.R;
+
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
 
 public class PermissionCall {
-    private static final String TAG = "own";
+
     private static final int REQUEST_PERMISSION_CALL = 1;
     private static final int REQUEST_PERMISSION_CALL_AGAIN = 2;
-    private Activity context;
+    private final Activity context;
 
     private String number;
 
@@ -32,14 +35,14 @@ public class PermissionCall {
     public void call(String number) {
         this.number = number;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            Log.i(TAG, "PERMISSION GRANTED");
+            Log.i(TAG_LOG, "PERMISSION GRANTED");
             callInside();
         } else {//api level >=23 or disabled the permissions
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.FLAG_PERMISSION_WHITELIST_INSTALLER) {
-                Log.i(TAG, "hte user previously rejected the request");
+                Log.i(TAG_LOG, "hte user previously rejected the request");
 
             } else {
-                Log.i(TAG, "request permissions");
+                Log.i(TAG_LOG, "request permissions");
             }
             ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PERMISSION_CALL);
         }
@@ -49,33 +52,33 @@ public class PermissionCall {
         public void executeOnRequestPermission(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
             if (requestCode == REQUEST_PERMISSION_CALL || requestCode == REQUEST_PERMISSION_CALL_AGAIN) {
                 if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i(TAG, "permission granted->request");
+                    Log.i(TAG_LOG, "permission granted->request");
                     callInside();
                 } else {
-                    Log.i(TAG, "Permission denied ->request");
+                    Log.i(TAG_LOG, "Permission denied ->request");
                     if (ActivityCompat.shouldShowRequestPermissionRationale(context, Manifest.permission.CALL_PHONE)) {
-                        new MaterialAlertDialogBuilder(context).setMessage("you need to enable the permisions")
-                                .setPositiveButton("Try again", (dialogInterface, i) ->
+                        new MaterialAlertDialogBuilder(context)
+                                .setTitle(context.getString(R.string.permission_call_title))
+                                .setMessage(context.getString(R.string.permission_call_reject_message))
+                                .setPositiveButton(context.getString(R.string.permission_call_try_again), (dialogInterface, i) ->
                                         ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PERMISSION_CALL_AGAIN)
                                 )
-                                .setNegativeButton("No thanks", (dialogInterface, i) -> {
-                                    Log.i(TAG, "leave");
-                                }).show();
+                                .setNegativeButton(context.getString(R.string.permission_call_no_thanks), (dialogInterface, i) -> Log.i(TAG_LOG, "leave")).show();
                     } else {
                         if (requestCode == REQUEST_PERMISSION_CALL_AGAIN) {
-                            Toast.makeText(context, "You need to able permissions manually", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, context.getString(R.string.permission_call_enable_manually), Toast.LENGTH_SHORT).show();
                         } else {
-                            Log.i(TAG, "reject permission only way is enable on settins");
-                            new MaterialAlertDialogBuilder(context).setTitle("Information")
-                                    .setMessage("You have rejected many times permissions, so if you want call, you have to enable permissions  manually.")
-                                    .setPositiveButton("OK",(dialogInterface, i) -> {
+                            Log.i(TAG_LOG, "reject permission only way is enable on settings");
+                            new MaterialAlertDialogBuilder(context).setTitle(context.getString(R.string.permission_call_title))
+                                    .setMessage(context.getString(R.string.permission_call_reject_many_times_message))
+                                    .setPositiveButton(context.getString(R.string.permission_call_ok),(dialogInterface, i) -> {
                                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                         Uri uri = Uri.fromParts("package", context.getPackageName(), null);
                                         intent.setData(uri);
                                         context.startActivity(intent);
                                     })
-                                    .setNegativeButton("No thanks",null)
+                                    .setNegativeButton(context.getString(R.string.permission_call_no_thanks),null)
                                     .show();
                         }
                     }

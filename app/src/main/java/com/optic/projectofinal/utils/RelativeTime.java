@@ -1,9 +1,14 @@
 package com.optic.projectofinal.utils;
 
 import android.app.Application;
+import android.content.Context;
+
+import com.optic.projectofinal.R;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class RelativeTime extends Application {
 
@@ -45,7 +50,7 @@ public class RelativeTime extends Application {
 
     public static String timeFormatAMPM(long time) {
 
-        SimpleDateFormat formatter = new SimpleDateFormat("hh:mm a");
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
 
 
         if (time < 1000000000000L) {
@@ -67,9 +72,45 @@ public class RelativeTime extends Application {
         } else if (diff < 48 * HOUR_MILLIS) {
             return "Ayer";
         } else {
-            return "Hace " + diff / DAY_MILLIS + " dias";
+            SimpleDateFormat formatter2 = new SimpleDateFormat("HH:mm");
+            String dateString = formatter2.format(new Date(time));
+            return dateString;
         }
 
     }
+    public static String getTittleDate(Context context, long date) {
+        Calendar now = Calendar.getInstance();
+        now.setTime(new Date());
 
+        Calendar compare = Calendar.getInstance();
+        compare.setTime(new Date(date));
+
+        if(now.get(Calendar.DAY_OF_YEAR)==compare.get(Calendar.DAY_OF_YEAR) &&
+                now.get(Calendar.YEAR)==compare.get(Calendar.YEAR) ) {
+            return context.getString(R.string.date_format_yesterday);
+        }else if(now.get(Calendar.DAY_OF_YEAR)-1==compare.get(Calendar.DAY_OF_YEAR) &&
+                now.get(Calendar.YEAR)==compare.get(Calendar.YEAR))   {
+            return context.getString(R.string.date_format_today);
+        }else {
+            String formatText=String.format("dd '%s' MMMM '%s' yyyy",context.getString(R.string.date_format_of),context.getString(R.string.date_format_of));
+            SimpleDateFormat format1 = new SimpleDateFormat(formatText,Locale.forLanguageTag(Utils.getLanguage(context)));
+            return format1.format(date);
+        }
+
+    }
+    public static int compare(long datePrevious,long date) {
+        Calendar previous = Calendar.getInstance();
+        previous.setTime(new Date(datePrevious));
+
+        Calendar compare = Calendar.getInstance();
+        compare.setTime(new Date(date));
+
+        if(previous.get(Calendar.DAY_OF_YEAR)==compare.get(Calendar.DAY_OF_YEAR) &&
+                previous.get(Calendar.YEAR)==compare.get(Calendar.YEAR) ) {
+            return 0;
+        }else    {
+            return 1;
+        }
+
+    }
 }

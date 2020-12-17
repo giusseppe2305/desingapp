@@ -25,12 +25,12 @@ import com.google.firebase.firestore.Query;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.adapters.ApplyJobAdapterFirebase;
 import com.optic.projectofinal.adapters.SliderAdapterExample;
-import com.optic.projectofinal.adapters.SliderItem;
 import com.optic.projectofinal.databinding.ActivityJobOfferedBinding;
 import com.optic.projectofinal.databinding.AlertDialogApplyJobBinding;
 import com.optic.projectofinal.models.ApplyJob;
 import com.optic.projectofinal.models.Category;
 import com.optic.projectofinal.models.Job;
+import com.optic.projectofinal.models.SliderItem;
 import com.optic.projectofinal.models.User;
 import com.optic.projectofinal.providers.ApplyJobWorkerDatabaseProvider;
 import com.optic.projectofinal.providers.AuthenticationProvider;
@@ -44,8 +44,10 @@ import com.smarteist.autoimageslider.SliderView;
 
 import java.util.ArrayList;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 public class JobOfferedActivity extends AppCompatActivity {
-    private static final String TAG = "own";
+
     private ActivityJobOfferedBinding binding;
     private ApplyJobAdapterFirebase adapter;
     private ApplyJobWorkerDatabaseProvider mApplyJobWorker;
@@ -167,14 +169,14 @@ public class JobOfferedActivity extends AppCompatActivity {
     }
 
     private void removeApplyJob() {
-        mApplyJobWorker.removeApplyJob(idJobSelected, authenticationProvider.getIdCurrentUser()).addOnFailureListener(v -> Log.e(TAG, "JobOfferedActivity removeApplyJob: "));
+        mApplyJobWorker.removeApplyJob(idJobSelected, authenticationProvider.getIdCurrentUser()).addOnFailureListener(v -> Log.e(TAG_LOG, "JobOfferedActivity removeApplyJob: "));
         loadBtnApplyJobInside(false);
     }
 
     private void loadBtnApplyJob() {
         mApplyJobWorker.checkIfExist(idJobSelected + authenticationProvider.getIdCurrentUser()).addOnSuccessListener(v -> {
             loadBtnApplyJobInside(v.exists());
-        }).addOnFailureListener(v -> Log.e(TAG, "JobOfferedActivity loadBtnApplyJob: " + v.getMessage()));
+        }).addOnFailureListener(v -> Log.e(TAG_LOG, "JobOfferedActivity loadBtnApplyJob: " + v.getMessage()));
     }
 
     private void loadBtnApplyJobInside(boolean v) {
@@ -204,7 +206,7 @@ public class JobOfferedActivity extends AppCompatActivity {
                                     .show();
                         }
                     }
-                }).addOnFailureListener(error-> Log.e(TAG, "loadBtnApplyJobInside:"+error.getMessage() ));
+                }).addOnFailureListener(error-> Log.e(TAG_LOG, "loadBtnApplyJobInside:"+error.getMessage() ));
 
 
             }
@@ -220,11 +222,11 @@ public class JobOfferedActivity extends AppCompatActivity {
         it.setIdJob(idJobSelected);
         it.setIdWorkerApply(authenticationProvider.getIdCurrentUser());
         isAppliedJob = true;
-        new ApplyJobWorkerDatabaseProvider().addApply(it, idJobSelected).addOnFailureListener(v -> Log.e(TAG, "JobOfferedActivity applyJobFirebase: " + v.getMessage()));
+        new ApplyJobWorkerDatabaseProvider().addApply(it, idJobSelected).addOnFailureListener(v -> Log.e(TAG_LOG, "JobOfferedActivity applyJobFirebase: " + v.getMessage()));
         User userUpdate=new User();
         userUpdate.setId(authenticationProvider.getIdCurrentUser());
         userUpdate.setProfessional(true);
-        new UserDatabaseProvider().updateUser(userUpdate).addOnFailureListener(v-> Log.e(TAG, "applyJobFirebase: failure "+v.getMessage() ));
+        new UserDatabaseProvider().updateUser(userUpdate).addOnFailureListener(v-> Log.e(TAG_LOG, "applyJobFirebase: failure "+v.getMessage() ));
     }
 
     private boolean checAreValidFields() {
@@ -277,25 +279,25 @@ public class JobOfferedActivity extends AppCompatActivity {
                             if (documentSnapshot.exists()) {
                                 binding.chipSubCategory.setText(documentSnapshot.getString("name"));
                             } else {
-                                Log.e(TAG, "onSuccess: JobOfferedActivity->loadJobData");
+                                Log.e(TAG_LOG, "onSuccess: JobOfferedActivity->loadJobData");
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.e(TAG, "onFailure: JobOfferedActivity->loadJobData");
+                            Log.e(TAG_LOG, "onFailure: JobOfferedActivity->loadJobData");
                         }
                     });
 
 
                 } else {
-                    Log.e(TAG, "onSuccess:else JobOfferedActivity->getJobById");
+                    Log.e(TAG_LOG, "onSuccess:else JobOfferedActivity->getJobById");
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, "onFailure: JobOfferedActivity->loadJobData");
+                Log.e(TAG_LOG, "onFailure: JobOfferedActivity->loadJobData");
             }
         });
 
@@ -316,7 +318,7 @@ public class JobOfferedActivity extends AppCompatActivity {
                     binding.lastNameUser.setText(lastName);
                     Glide.with(JobOfferedActivity.this).load(profileImage).placeholder(R.drawable.loading_).thumbnail(Glide.with(JobOfferedActivity.this).load(R.drawable.loading_)).error(R.drawable.ic_error_404).centerInside().into(binding.ivPhotoProfile);
                 } else {
-                    Log.e("own", "onSuccess: JobOfferedActivity->loadUserData");
+                    Log.e(TAG_LOG, "onSuccess: JobOfferedActivity->loadUserData");
                 }
 
 
@@ -324,7 +326,7 @@ public class JobOfferedActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.e("own", "onFailure: JobOfferedActivity->loadUserData");
+                Log.e(TAG_LOG, "onFailure: JobOfferedActivity->loadUserData");
             }
         });
 

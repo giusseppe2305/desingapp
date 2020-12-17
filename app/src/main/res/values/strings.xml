@@ -86,10 +86,42 @@
     <string name="dialog_confirm_close_create_job_activity_ok">Salir</string>
 
 
+
+
     <string-array name="job_states">
         <item>Publicados</item>
         <item>En progreso</item>
         <item>Finalizados</item>
     </string-array>
+
+<!--    permision call values-->
+    <string name="permission_call_reject_message">Tienes que habilitar los permisos</string>
+    <string name="permission_call_try_again">Intentar de nuevo</string>
+    <string name="permission_call_no_thanks">No, gracias</string>
+    <string name="permission_call_enable_manually">Tienes que habilitar los permisos manualmente</string>
+    <string name="permission_call_title">Permisos requeridos</string>
+    <string name="permission_call_reject_many_times_message">Has rechazado los permisos muchas veces asi que si quieres usar esta funcion, necesitas habilitarlos manualmente</string>
+    <string name="permission_call_ok">Vale</string>
+<!--    values date format-->
+    <string name="date_format_of">de</string>
+    <string name="date_format_yesterday">Hoy</string>
+    <string name="date_format_today">Ayer</string>
+
+<!--    auctions adapter-->
+    <string name="workers_on_auction">trabajadores en la puja</string>
+<!--    jobs adapter-->
+    <string name="jobs_adapter_alert_confirm_title">Confirmacion</string>
+    <string name="jobs_adapter_alert_confirm_message">Esta seguro de marcar como terminado el trabajo</string>
+    <string name="jobs_adapter_alert_confirm_positive_button">Terminado</string>
+    <string name="jobs_adapter_alert_confirm_negative_button">Cancelar</string>
+    <string name="jobs_adapter_alert_opinion_title">Opinion</string>
+    <string name="jobs_adapter_alert_opinion_message">¿Quieres poner la opinion ahora?</string>
+    <string name="jobs_adapter_alert_opinion_positive_button">Opinar</string>
+    <string name="jobs_adapter_alert_opinion_negative_button">Despues</string>
+<!--    my_auctions_fragment-->
+    <string name="my_auctions_fragment_alert_title">Confirmacion</string>
+    <string name="my_auctions_fragment_alert_message">¿Estas seguro que desea eliminar la siguiente skill</string>
+    <string name="my_auctions_fragment_alert_negative_button">Cancelar</string>
+    <string name="my_auctions_fragment_alert_positive_button">Eliminar</string>
 
 </resources>

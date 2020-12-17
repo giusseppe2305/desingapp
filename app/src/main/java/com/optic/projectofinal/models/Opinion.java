@@ -1,7 +1,7 @@
 package com.optic.projectofinal.models;
 
 public class Opinion {
-    private static final String TAG = "own";
+
     private String idUserPutOpinion;
     private Valuation valuationWorker;
     private long timestamp;

@@ -31,8 +31,10 @@ import com.optic.projectofinal.utils.Utils;
 
 import java.util.ArrayList;
 
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+
 public class CategorySelectedActivity extends AppCompatActivity {
-    private static final String TAG = "own";
+
     private Category categorySelected;
     private ActivityCategorySelectedBinding binding;
     private String priceSince,priceUntil;
@@ -177,12 +179,12 @@ public class CategorySelectedActivity extends AppCompatActivity {
                         listWorkers.add(i.toObject(User.class));
                     }
                 }
-                Log.e(TAG, "onSuccess: "+listWorkers.size());
+                Log.e(TAG_LOG, "onSuccess: "+listWorkers.size());
                 workersAdapterFirebase = new WorkersAdapter(CategorySelectedActivity.this, listWorkers);
                 binding.rvCategorySelected.setAdapter(workersAdapterFirebase);
                 binding.rvCategorySelected.setLayoutManager(new LinearLayoutManager(CategorySelectedActivity.this,RecyclerView.VERTICAL,false));
             }
-        }).addOnFailureListener(v-> Log.e(TAG, "doQueryAndUpdateResults: "+v.getMessage() ));
+        }).addOnFailureListener(v-> Log.e(TAG_LOG, "doQueryAndUpdateResults: "+v.getMessage() ));
 
 
     }
