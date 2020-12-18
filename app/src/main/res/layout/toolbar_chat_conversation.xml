@@ -37,15 +37,21 @@
             android:id="@+id/nameUserToToolbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Frank Rodriguez Aguirre"
             android:textColor="@color/teal_700" />
-
+        <TextView
+            android:id="@+id/isTyping"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="escribiendo..."
+            android:textStyle="italic"
+            android:textColor="@color/purple_200"
+            />
         <TextView
             android:id="@+id/statusUserToToolbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Conectado"
             android:textColor="@color/purple_200"
-            android:textStyle="italic" />
+            />
+
     </LinearLayout>
 </com.google.android.material.appbar.MaterialToolbar>

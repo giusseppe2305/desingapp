@@ -1,6 +1,8 @@
 package com.optic.projectofinal.UI.activities;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -23,6 +25,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.jakewharton.rxbinding.widget.RxTextView;
+import com.optic.projectofinal.R;
 import com.optic.projectofinal.adapters.MessageAdapterFirebase;
 import com.optic.projectofinal.databinding.ActivityChatConversationBinding;
 import com.optic.projectofinal.models.Chat;
@@ -39,6 +43,7 @@ import com.optic.projectofinal.utils.UtilsRetrofit;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import static com.optic.projectofinal.channel.NotificationHelper.TYPE_NOTIFICATION.MESSAGE_CHAT;
 import static com.optic.projectofinal.utils.Utils.TAG_LOG;
@@ -56,6 +61,8 @@ public class ChatConversationActivity extends AppCompatActivity {
     private LinearLayoutManager linearLayoutManager;
     private ListenerRegistration listeningChangeDataToolbar;
     private Boolean nonExistChat;
+    private boolean isTyping = false;
+    private ListenerRegistration listeningChangeTyping;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,52 +87,78 @@ public class ChatConversationActivity extends AppCompatActivity {
         idUserToChat = getIntent().getStringExtra("idUserToChat");
         idCurrentChat = getIntent().getStringExtra("idChat");
 
-        binding.btnSendMessageChat.setOnClickListener(new View.OnClickListener() {
+        binding.editTextMessageChat.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                if (idCurrentChat != null && !binding.editTextMessageChat.getText().toString().isEmpty()) {
-                    if(nonExistChat!=null&&nonExistChat){
-                        nonExistChat=false;
-                    }
-
-                    final Message msg = new Message();
-                    msg.setIdChat(idCurrentChat);
-                    msg.setIdsUserFrom(mAuth.getIdCurrentUser());
-                    msg.setIdUserTo(idUserToChat);
-                    msg.setTimestamp(new Date().getTime());
-                    msg.setViewed(false);
-                    msg.setMessage(binding.editTextMessageChat.getText().toString());
-                    mMessageProvider.create(msg).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isComplete()) {
-                                //enviar notifiacion
-                                sendNotification(msg);
-                            } else {
-                                Toast.makeText(ChatConversationActivity.this, "Fallo al subir mensaje", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                    ///diremos que est es el ultimo mensaje del chat
-                    mChatsProvider.updateLastMessageOnChat(idCurrentChat, msg.getId(), ChatConversationActivity.this);
-
-                    Toast.makeText(ChatConversationActivity.this, "Se envio el mensaje", Toast.LENGTH_SHORT).show();
-                    binding.editTextMessageChat.setText("");
-                    mAdapterMessage.notifyDataSetChanged();
-
-
-                } else {
-                    Toast.makeText(ChatConversationActivity.this, "Escriba un mensaje antes de enviar o idchat", Toast.LENGTH_SHORT).show();
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (!isTyping) {
+                    Log.d(TAG_LOG, "start typing");
+                    mChatsProvider.updateIsWritting(idCurrentChat, mAuth.getIdCurrentUser(), true);
+                    isTyping = true;
                 }
+            }
 
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
             }
         });
 
+        RxTextView.textChanges(binding.editTextMessageChat)
+                .debounce(2, TimeUnit.SECONDS)
+                .subscribe(textChanged -> {
+                    if (isTyping) {
+                        Log.d(TAG_LOG, "typing end ");
+                        mChatsProvider.updateIsWritting(idCurrentChat, mAuth.getIdCurrentUser(), false);
+                        isTyping = false;
+                    }
+                });
 
+        binding.btnSendMessageChat.setOnClickListener(view -> {
+            if (idCurrentChat != null && !binding.editTextMessageChat.getText().toString().isEmpty()) {
+                if (nonExistChat != null && nonExistChat) {
+                    nonExistChat = false;
+                }
+
+                final Message msg = new Message();
+                msg.setIdChat(idCurrentChat);
+                msg.setIdsUserFrom(mAuth.getIdCurrentUser());
+                msg.setIdUserTo(idUserToChat);
+                msg.setTimestamp(new Date().getTime());
+                msg.setViewed(false);
+                msg.setMessage(binding.editTextMessageChat.getText().toString());
+                mMessageProvider.create(msg).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isComplete()) {
+                            //send notification
+                            sendNotification(msg);
+                        } else {
+                            Log.d(TAG_LOG, "fail to send message");
+                        }
+                    }
+                });
+                ///diremos que est es el ultimo mensaje del chat
+                mChatsProvider.updateLastMessageOnChat(idCurrentChat, msg.getId(), ChatConversationActivity.this);
+                binding.editTextMessageChat.setText("");
+                mAdapterMessage.notifyDataSetChanged();
+
+
+            } else {
+                Toast.makeText(ChatConversationActivity.this, R.string.chat_conversation_field_message_void, Toast.LENGTH_SHORT).show();
+            }
+
+        });
+
+        Log.d(TAG_LOG, "onCreate: before "+idCurrentChat);
         if (idCurrentChat == null) {
+            Log.d(TAG_LOG, "onCreate: in condition "+idCurrentChat);
             checkifChatExistAndCreate();
         }
-        loadDataToolbar();
+
 
     }
 
@@ -133,17 +166,21 @@ public class ChatConversationActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        if(nonExistChat!=null&&nonExistChat){
-            Toast.makeText(this, "salio", Toast.LENGTH_SHORT).show();
+        if (nonExistChat != null && nonExistChat) {
+
             ///delete chat because dont wrote any message
-            mChatsProvider.deleteChat(idCurrentChat).addOnFailureListener(v-> Log.e(TAG_LOG, "onBackPressed: "+v.getMessage() ));
+            mChatsProvider.deleteChat(idCurrentChat).addOnFailureListener(v -> Log.e(TAG_LOG, "onBackPressed: " + v.getMessage()));
         }
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        getAllMessages();
+        if(idCurrentChat!=null){
+            getAllMessages();
+            loadDataToolbar();
+        }
+
     }
 
     private void getAllMessages() {
@@ -179,68 +216,92 @@ public class ChatConversationActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-      if (listeningChangeDataToolbar != null) {
-          listeningChangeDataToolbar.remove();
-       }
+        if (listeningChangeDataToolbar != null) {
+            listeningChangeDataToolbar.remove();
+        }
+        if (listeningChangeTyping != null) {
+            listeningChangeTyping.remove();
+        }
     }
+
     private void loadDataToolbar() {
-        mUserProvider.getUser(idUserToChat).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(final DocumentSnapshot documentSnapshot) {
 
-                if (documentSnapshot.exists()) {
-                    if (documentSnapshot.contains("name")) {
-                        binding.toolbar.nameUserToToolbar.setText(documentSnapshot.getString("name"));
-                    }
-                    if (documentSnapshot.contains("online") && documentSnapshot.contains("lastConnection")) {
-                        listeningChangeDataToolbar =  mUserProvider.getIsOnlineUser(idUserToChat).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                            @Override
-                            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                                if(value.getBoolean("online")){
-                                    binding.toolbar.statusUserToToolbar.setText("Conectado");
-                                }else{
-                                    binding.toolbar.statusUserToToolbar.setText(RelativeTime.getTimeAgo(value.getLong("lastConnection")));
-                                }
-                            }
-                        });
-                    }
-                    if (documentSnapshot.contains("profileImage")) {
-                        String urlImage = documentSnapshot.getString("profileImage");
-                        if (urlImage != null) {
-                            Glide.with(ChatConversationActivity.this).load(urlImage).apply(Utils.getOptionsGlide(false)).into(binding.toolbar.photoUserToToolbar);
-                        }
-                    }
+        listeningChangeTyping = mChatsProvider.getChatById(idCurrentChat).addSnapshotListener((value, error) -> {
+            if (value.exists()) {
+                Chat it = value.toObject(Chat.class);
+                if (it.getIsTyping() != null && it.getIsTyping().size() > 0) {
 
+                    if (it.getIsTyping().contains(idUserToChat)) {
+                        binding.toolbar.statusUserToToolbar.setVisibility(View.GONE);
+                        binding.toolbar.isTyping.setVisibility(View.VISIBLE);
+                    }
                 } else {
-                    Toast.makeText(ChatConversationActivity.this, "fallo al conseguir user toolbar", Toast.LENGTH_SHORT).show();
+
+                    binding.toolbar.isTyping.setVisibility(View.GONE);
+                    binding.toolbar.statusUserToToolbar.setVisibility(View.VISIBLE);
                 }
+            }
+
+        });
+
+        mUserProvider.getUser(idUserToChat).addOnSuccessListener(documentSnapshot -> {
+
+            if (documentSnapshot.exists()) {
+                if (documentSnapshot.contains("name")) {
+                    binding.toolbar.nameUserToToolbar.setText(documentSnapshot.getString("name"));
+                }
+                if (documentSnapshot.contains("online") && documentSnapshot.contains("lastConnection")) {
+                    listeningChangeDataToolbar = mUserProvider.getIsOnlineUser(idUserToChat).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                            if (value.getBoolean("online")) {
+                                binding.toolbar.statusUserToToolbar.setText(getString(R.string.chat_converstation_connected));
+                            } else {
+                                binding.toolbar.statusUserToToolbar.setText(RelativeTime.getStringForlastConnection(ChatConversationActivity.this,
+                                        value.getLong("lastConnection")));
+                            }
+                        }
+                    });
+                }
+                if (documentSnapshot.contains("profileImage")) {
+                    String urlImage = documentSnapshot.getString("profileImage");
+                    if (urlImage != null) {
+                        Glide.with(ChatConversationActivity.this).load(urlImage)
+                                .apply(Utils.getOptionsGlide(false)).into(binding.toolbar.photoUserToToolbar);
+                    }
+                }
+
+            } else {
+                Log.d(TAG_LOG, "fail to load data toolbar");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(ChatConversationActivity.this, "Ha fallado la busqieda del usiario", Toast.LENGTH_SHORT).show();
+                Log.d(TAG_LOG, "fail to get user to load  toolbar data");
             }
         });
     }
+
     private void checkifChatExistAndCreate() {
-        mChatsProvider.getChatFromUserToAndUserFrom(idUserToChat, mAuth.getIdCurrentUser()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if (queryDocumentSnapshots.size() == 0) {
-                    ///no existe un chat con las comibanciones de los id entonces la creamos
-                    createChat();
-                    nonExistChat=true;
-                } else {
-                    //existe el chat
-                    idCurrentChat = queryDocumentSnapshots.getDocuments().get(0).getString("idChat");
-                }
-                onPause();
-                onStart();
+        mChatsProvider.getChatFromUserToAndUserFrom(idUserToChat, mAuth.getIdCurrentUser()).get().addOnSuccessListener(queryDocumentSnapshots -> {
+            if (queryDocumentSnapshots.size() == 0) {
+                ///no existe un chat con las comibanciones de los id entonces la creamos
+                String idChat = mAuth.getIdCurrentUser() + idUserToChat;
+                createChat(idChat);
+                nonExistChat = true;
+            } else {
+                //existe el chat
+                idCurrentChat = queryDocumentSnapshots.getDocuments().get(0).getString("idChat");
             }
+            Log.d(TAG_LOG, "onSuccess: crea si no existe");
+
+            onStart();
+
+
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(ChatConversationActivity.this, "Error al entrar al chat", Toast.LENGTH_SHORT).show();
+                Log.d(TAG_LOG, "fail to enter chat");
                 finish();
             }
         });
@@ -250,58 +311,46 @@ public class ChatConversationActivity extends AppCompatActivity {
         mMessageProvider.getMessageByChatAndSender(idCurrentChat, idUserToChat).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                System.out.println(idCurrentChat + "---" + idUserToChat);
-                System.out.println("total mensajes " + queryDocumentSnapshots.size());
                 for (DocumentSnapshot i : queryDocumentSnapshots.getDocuments()) {
                     String idDocumentIterated = i.getId();
-                    System.out.println("id mensaje iterado " + idDocumentIterated);
                     mMessageProvider.updateViewd(idDocumentIterated);
                 }
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(ChatConversationActivity.this, "Fallo al marcar el visto", Toast.LENGTH_SHORT).show();
-            }
-        });
+        }).addOnFailureListener(e -> Log.d(TAG_LOG, "fail to set seen message "));
     }
 
-    private void createChat() {
-        String idChat = mAuth.getIdCurrentUser() + idUserToChat;
+    private void createChat(String idChat) {
         idCurrentChat = idChat;
 
         Chat chat = new Chat();
         chat.setIdChat(idChat);
         chat.setIdUserTo(idUserToChat);
         chat.setIdUserFrom(mAuth.getIdCurrentUser());
-        chat.setWritting(false);
         chat.setTimestamp(new Date().getTime());
         String[] idChats = new String[]{chat.getIdUserFrom(), chat.getIdUserTo()};
         chat.setIdsChats(Arrays.asList(idChats));
 
         mChatsProvider.create(chat);
     }
-    public void sendNotification(Message model){
-        if(idUserToChat==null){
+
+    public void sendNotification(Message model) {
+        if (idUserToChat == null) {
             return;
         }
-        new UserDatabaseProvider().getUser(mAuth.getIdCurrentUser()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()){
-                    NotificationMessageDTO notificationMessageDTO=new NotificationMessageDTO("Nuevo Mensaje", MESSAGE_CHAT,model.getMessage());
-                    notificationMessageDTO.setIdChat(model.getIdChat());
-                    notificationMessageDTO.setNameUser(documentSnapshot.getString("name")+" "+documentSnapshot.getString("lastName"));
-                    notificationMessageDTO.setPhotoProfile(documentSnapshot.getString("profileImage"));
-                    notificationMessageDTO.setIdUserToChat(idUserToChat);
+        new UserDatabaseProvider().getUser(mAuth.getIdCurrentUser()).addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                NotificationMessageDTO notificationMessageDTO = new NotificationMessageDTO(getString(R.string.notification_new_message), MESSAGE_CHAT, model.getMessage());
+                notificationMessageDTO.setIdChat(model.getIdChat());
+                notificationMessageDTO.setNameUser(documentSnapshot.getString("name") + " " + documentSnapshot.getString("lastName"));
+                notificationMessageDTO.setPhotoProfile(documentSnapshot.getString("profileImage"));
+                notificationMessageDTO.setIdUserToChat(idUserToChat);
 
-                    String code = model.getIdsUserFrom().substring(model.getIdsUserFrom().length() - 3);
-                    notificationMessageDTO.setIdNotification(UtilsRetrofit.stringToInt(code));
-                    WrapperNotification<NotificationMessageDTO> wrapperNotification=new WrapperNotification<>(notificationMessageDTO);
-                    UtilsRetrofit.sendNotificationMessage(wrapperNotification,false);
-                }
-
+                String code = model.getIdsUserFrom().substring(model.getIdsUserFrom().length() - 3);
+                notificationMessageDTO.setIdNotification(UtilsRetrofit.stringToInt(code));
+                WrapperNotification<NotificationMessageDTO> wrapperNotification = new WrapperNotification<>(notificationMessageDTO);
+                UtilsRetrofit.sendNotificationMessage(wrapperNotification, false);
             }
+
         });
 
     }

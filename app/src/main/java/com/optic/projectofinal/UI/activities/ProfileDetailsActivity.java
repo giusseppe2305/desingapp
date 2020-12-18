@@ -120,13 +120,10 @@ public class ProfileDetailsActivity extends AppCompatActivity {
             }
         });
 
-        binding.contentAppBar.openChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(ProfileDetailsActivity.this, ChatConversationActivity.class);
-                i.putExtra("idUserToChat", idUserToSee);
-                startActivity(i);
-            }
+        binding.contentAppBar.openChat.setOnClickListener(view -> {
+            Intent i = new Intent(ProfileDetailsActivity.this, ChatConversationActivity.class);
+            i.putExtra("idUserToChat", idUserToSee);
+            startActivity(i);
         });
         //////
 //        adapterPager = new ViewPagerProfileDetailsWorker(this, idUserToSee);

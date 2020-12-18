@@ -5,7 +5,7 @@ import java.util.List;
 public class Chat {
     private String idChat;
     private List<String> idsChats;
-    private boolean isWritting;
+    private List<String> isTyping;
     private long timestamp;
     private String idUserTo;
     private String idLastMessage;
@@ -34,10 +34,9 @@ public class Chat {
         this.idsChats = idsChats;
     }
 
-    public Chat(String idChat, List<String> idsChats, boolean isWritting, long timestamp, String idUserTo, String idUserFrom) {
+    public Chat(String idChat, List<String> idsChats,  long timestamp, String idUserTo, String idUserFrom) {
         this.idChat = idChat;
         this.idsChats = idsChats;
-        this.isWritting = isWritting;
         this.timestamp = timestamp;
         this.idUserTo = idUserTo;
         this.idUserFrom = idUserFrom;
@@ -60,13 +59,7 @@ public class Chat {
     }
 
     private String idUserFrom;
-    public boolean isWritting() {
-        return isWritting;
-    }
 
-    public void setWritting(boolean writting) {
-        isWritting = writting;
-    }
 
     public long getTimestamp() {
         return timestamp;
@@ -77,5 +70,13 @@ public class Chat {
     }
 
     public Chat() {
+    }
+
+    public List<String> getIsTyping() {
+        return isTyping;
+    }
+
+    public void setIsTyping(List<String> isTyping) {
+        this.isTyping = isTyping;
     }
 }

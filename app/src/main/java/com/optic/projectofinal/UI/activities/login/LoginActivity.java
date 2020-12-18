@@ -222,7 +222,7 @@ public class LoginActivity extends AppCompatActivity {
         basicInformationUser.setName(documentSnapshot.getString("name"));
         basicInformationUser.setLastName(documentSnapshot.getString("lastName"));
         Utils.setPersistantBasicUserInformation(basicInformationUser, LoginActivity.this);
-        Utils.setLanguage("ES", this);
+        Utils.setLanguage("es-Es", this);
     }
 
 

@@ -75,7 +75,7 @@ public class UtilsRetrofit {
                 wrapper.getData().setIdUserToChat(new AuthenticationProvider().getIdCurrentUser());
                 sendNotificationInside(wrapper);
             }else{
-                Log.e(TAG_LOG, "onSuccess: fail" );
+                Log.e(TAG_LOG, "onSuccess: getLastThreeMessages queryDocumentSnapshots!=null && !queryDocumentSnapshots.isEmpty()" );
             }
         }).addOnFailureListener(e -> Log.e(TAG_LOG, "ailure at get three last messages: "+e.getMessage() ));
     }

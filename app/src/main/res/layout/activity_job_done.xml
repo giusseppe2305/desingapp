@@ -80,13 +80,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="Categoria: " />
+                        android:text="@string/job_done_category" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chipCategory"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Fontaneria" />
+                         />
                 </LinearLayout>
 
                 <LinearLayout
@@ -99,13 +99,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="Subcategoria: " />
+                        android:text="@string/job_done_subcategory" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chipSubCategory"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Fontaneria" />
+                        />
                 </LinearLayout>
 
 
@@ -114,11 +114,11 @@
                     android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="titulo"/>
+                    />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="25dp"
+                    android:textSize="25sp"
                     android:textStyle="bold"
                     android:text="100€"
                     android:layout_gravity="right"
@@ -178,7 +178,7 @@
                 android:id="@+id/opinionUserOffer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""/>
+                />
             <TextView
                 android:id="@+id/opinionUserApplied"
                 android:layout_width="wrap_content"
@@ -191,19 +191,19 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="Puntuacion"/>
+                    android:textSize="20sp"
+                    android:text="@string/job_done_valuation"/>
 
                <FrameLayout
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:orientation="horizontal"
-                   android:layout_marginRight="40dp"
-                   android:layout_marginLeft="20dp">
+                   android:layout_marginEnd="40dp"
+                   android:layout_marginStart="20dp">
                    <TextView
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
-                       android:text="Tiempo"/>
+                       android:text="@string/job_done_speed_contact"/>
 
                    <me.zhanghai.android.materialratingbar.MaterialRatingBar
                        android:id="@+id/rating1"
@@ -226,12 +226,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginRight="40dp"
-                    android:layout_marginLeft="20dp">
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginStart="20dp">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Resultado final"/>
+                        android:text="@string/job_done_amiability"/>
 
                     <me.zhanghai.android.materialratingbar.MaterialRatingBar
                         android:id="@+id/rating2"
@@ -253,13 +253,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginRight="40dp"
-                    android:layout_marginLeft="20dp">
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginStart="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Precio" />
+                        android:text="@string/job_done_speed_end_job" />
 
                     <me.zhanghai.android.materialratingbar.MaterialRatingBar
                         android:id="@+id/rating3"
@@ -281,13 +281,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginRight="40dp"
-                    android:layout_marginLeft="20dp">
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginStart="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Precio" />
+                        android:text="@string/job_done_punctuality" />
 
                     <me.zhanghai.android.materialratingbar.MaterialRatingBar
                         android:id="@+id/rating4"

@@ -25,7 +25,7 @@ public class JobsActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.ownToolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Subastas");
+        getSupportActionBar().setTitle(R.string.jobs_activity_title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         TabLayout tabLayout = findViewById(R.id.tab_layout_jobs);
@@ -39,10 +39,10 @@ public class JobsActivity extends AppCompatActivity {
                     @Override
                     public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                         if (position == 0) {
-                            tab.setText("Trabajos recibidos");
+                            tab.setText(R.string.jobs_activity_jobs_received);
 
                         }else if (position == 1){
-                            tab.setText("Trabajos realizados");
+                            tab.setText(R.string.jobs_activity_jobs_done);
                         }
                     }
                 }).attach();

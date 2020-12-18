@@ -48,8 +48,8 @@
                            android:layout_weight="1"
                            android:layout_height="wrap_content"
                            android:layout_marginStart="20dp"
-                           android:text="Skills"
-                           android:textSize="20dp"/>
+                           android:text="@string/edit_settings_worker_skills"
+                           android:textSize="20sp"/>
 
                        <ImageView
                            android:background="?selectableItemBackground"
@@ -62,7 +62,7 @@
                            app:tint="@color/purple_200"
                            android:paddingBottom="10dp"
                            android:layout_marginEnd="10dp"
-                           />
+                           android:focusable="true" />
                    </LinearLayout>
                    <LinearLayout
                        android:layout_width="match_parent"
@@ -104,8 +104,8 @@
                            android:layout_weight="1"
                            android:layout_height="wrap_content"
                            android:layout_marginStart="20dp"
-                           android:text="Resources"
-                           android:textSize="20dp"/>
+                           android:text="@string/edit_settings_resources"
+                           android:textSize="20sp"/>
                        <ImageView
                            android:background="?selectableItemBackground"
                            android:clickable="true"
@@ -117,7 +117,7 @@
                            app:tint="@color/purple_200"
                            android:paddingBottom="10dp"
                            android:layout_marginEnd="10dp"
-                           />
+                           android:focusable="true" />
                    </LinearLayout>
                    <LinearLayout
                        android:layout_width="match_parent"

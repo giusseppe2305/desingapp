@@ -29,6 +29,12 @@
     <string name="sign_in_activity_title">Iniciar sesion</string>
     <string name="title_activity_chat_conversation">Conversacion</string>
     <string name="post_fragment_title">Menu principal</string>
+    <string name="edit_profile_activity_title">Editar perfil</string>
+    <string name="auctions_activity_title">Subastas</string>
+    <string name="favourites_workers_activity_title">Favoritos</string>
+    <string name="jobs_activity_title">Trabajos</string>
+    <string name="settings_activity_title">Ajustes</string>
+    <string name="verify_account_activity_title">Verificar numero telefono</string>
     <!-- Register Activiy values-->
     <string name="activity_register_hint_password_input_text">Contraseña <font fgcolor='red'>*</font></string>
     <string name="activity_register_hint_password_repeat_input_text">Repetir contraseña <font fgcolor='red'>*</font></string>
@@ -43,15 +49,25 @@
     <string name="patter_spinner_subcategories">Seleccione alguna categoria/subcategoria</string>
     <string name="patter_select_almost_one_image">Selecciona una imagen</string>
     <!-- Values pattern password-->
-    <string name="pattern_password_digits_between_0_9">Debe tener menos un numero entre 0-9.</string>
+    <string name="pattern_password_digits_between_0_9">Debe tener menos un numero entre 0–9.</string>
     <string name="pattern_password_min_lower_case">Debe tener al menos una minúscula.</string>
     <string name="pattern_password_min_upper_case">Debe tener al menos una mayúscula.</string>
-    <string name="pattern_password_corretly_length">Debe ser entre 8-20 caracteres.</string>
+    <string name="pattern_password_corretly_length">Debe ser entre 8–20 caracteres</string>
+    <!-- Values pattern last name-->
+    <string name="pattern_last_name_correct_length">Apellido demasiado largo</string>
+    <string name="pattern_last_name_void_field">Debe introducir algun apellido.</string>
+    <!-- Values pattern about-->
+    <string name="pattern_about_correct_length">Sobre mi demasiado largo</string>
+    <!-- Values pattern schedule-->
+    <string name="pattern_schedule_correct_length">Horario demasiado largo</string>
     <!-- Values pattern title-->
-    <string name="pattern_title_correct_length">Debe ser entre 0-40 caracteres.</string>
+    <string name="pattern_title_correct_length">Debe ser entre 0–40 caracteres.</string>
     <string name="pattern_title_void_field">Debe introducir algun titulo.</string>
+    <!-- Values pattern name-->
+    <string name="pattern_name_correct_length">Nombre demasiado largo</string>
+    <string name="pattern_name_void_field">Debe introducir algun nombre.</string>
     <!-- Values pattern description job-->
-    <string name="pattern_description_correct_length">Debe ser entre 0-240 caracteres.</string>
+    <string name="pattern_description_correct_length">Debe ser entre 0–240 caracteres.</string>
     <string name="pattern_description_void_field">Debe introducir alguna descripcion.</string>
     <!-- Values pattern email-->
     <string name="pattern_email_void_field">Introduzca algun correo.</string>
@@ -86,15 +102,13 @@
     <string name="dialog_confirm_close_create_job_activity_ok">Salir</string>
 
 
-
-
     <string-array name="job_states">
         <item>Publicados</item>
         <item>En progreso</item>
         <item>Finalizados</item>
     </string-array>
 
-<!--    permision call values-->
+    <!--    permision call values-->
     <string name="permission_call_reject_message">Tienes que habilitar los permisos</string>
     <string name="permission_call_try_again">Intentar de nuevo</string>
     <string name="permission_call_no_thanks">No, gracias</string>
@@ -102,14 +116,14 @@
     <string name="permission_call_title">Permisos requeridos</string>
     <string name="permission_call_reject_many_times_message">Has rechazado los permisos muchas veces asi que si quieres usar esta funcion, necesitas habilitarlos manualmente</string>
     <string name="permission_call_ok">Vale</string>
-<!--    values date format-->
+    <!--    values date format-->
     <string name="date_format_of">de</string>
     <string name="date_format_yesterday">Hoy</string>
     <string name="date_format_today">Ayer</string>
 
-<!--    auctions adapter-->
+    <!--    auctions adapter-->
     <string name="workers_on_auction">trabajadores en la puja</string>
-<!--    jobs adapter-->
+    <!--    jobs adapter-->
     <string name="jobs_adapter_alert_confirm_title">Confirmacion</string>
     <string name="jobs_adapter_alert_confirm_message">Esta seguro de marcar como terminado el trabajo</string>
     <string name="jobs_adapter_alert_confirm_positive_button">Terminado</string>
@@ -118,10 +132,60 @@
     <string name="jobs_adapter_alert_opinion_message">¿Quieres poner la opinion ahora?</string>
     <string name="jobs_adapter_alert_opinion_positive_button">Opinar</string>
     <string name="jobs_adapter_alert_opinion_negative_button">Despues</string>
-<!--    my_auctions_fragment-->
+    <!--    my_auctions_fragment-->
     <string name="my_auctions_fragment_alert_title">Confirmacion</string>
     <string name="my_auctions_fragment_alert_message">¿Estas seguro que desea eliminar la siguiente skill</string>
     <string name="my_auctions_fragment_alert_negative_button">Cancelar</string>
     <string name="my_auctions_fragment_alert_positive_button">Eliminar</string>
+
+<!--    verify account-->
+    <string name="fail_to_send_sms">Error al enviar el sms</string>
+    <string name="jobs_activity_jobs_received">Trabajos recibidos</string>
+<!--    jobs activity-->
+    <string name="jobs_activity_jobs_done">Trabajos realizados</string>
+<!--    chat conversation-->
+    <string name="chat_conversation_write_message">Escribir mensaje...</string>
+    <string name="chat_conversation_field_message_void">Escriba un mensaje</string>
+    <string name="chat_converstation_last_connection_today">ult. vez hoy a las</string>
+    <string name="chat_converstation_last_connection_yesterday">ult. vez ayer a las</string>
+    <string name="chat_converstation_last_connection">ult. vez</string>
+    <string name="chat_converstation_connected">conectado</string>
+<!--    notifications value-->
+    <string name="notification_new_message">Nuevo Mensaje</string>
+<!--    edit profile-->
+    <string name="edit_profile_delete_account">ELIMINAR CUENTA</string>
+    <string name="edit_profile_location_exact">Ubicacion exacta</string>
+    <string name="edit_profile_location">Ubicacion</string>
+    <string name="edit_profile_birthdate">Fecha nacimiento</string>
+    <string name="edit_profile_sex">Sexo</string>
+    <string name="edit_profile_private_information">Informacion privada</string>
+    <string name="edit_profile_schedule">Horario</string>
+    <string name="edit_profile_about">Sobre mi</string>
+    <string name="edit_profile_last_name">Apellidos</string>
+    <string name="edit_profile_name">Nombre</string>
+    <string name="edit_profile_basic_information">Informacion basica</string>
+    <string name="edit_profile_change">Cambiar</string>
+    <string name="edit_profile_change_photo_profile">Cambiar foto de perfil</string>
+    <string name="edit_profile_change_landscape_photo">Cambiar foto de portada</string>
+    <string name="edit_profile_select_date">Selecciona una fecha</string>
+    <string name="edit_profile_dialog_select_image_from_tittle">Elige una opcion</string>
+    <string name="edit_profile_dialog_select_image_from_option1">Elegir de la galeria</string>
+    <string name="edit_profile_dialog_select_image_from_option2">Tomar FOTO AHORA</string>
+    <string name="edit_profile_dialog_select_image_from_negative_button">Cancelar</string>
+    <string name="edit_profile_fields_are_invalid">Campos invalidos</string>
+<!--    edit settings-->
+    <string name="edit_settings_worker_skills">Skills</string>
+    <string name="edit_settings_resources">Resources</string>
+<!--    favourites workers-->
+    <string name="favourites_workers_save_favourites">Guarda tus favoritos</string>
+    <string name="favourites_workers_description">Aqui encontraras a todos los trabajadores que marques como favoritos</string>
+<!--    job done-->
+    <string name="job_done_category">Categoria:</string>
+    <string name="job_done_subcategory">Subcategoria:</string>
+    <string name="job_done_valuation">Puntuacion</string>
+    <string name="job_done_speed_contact">Tiempo</string>
+    <string name="job_done_amiability">Resultado final</string>
+    <string name="job_done_speed_end_job">Precio</string>
+    <string name="job_done_punctuality">Precio</string>
 
 </resources>

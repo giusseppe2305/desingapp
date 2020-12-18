@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.optic.projectofinal.R;
 import com.optic.projectofinal.databinding.ActivityVerifyAccountBinding;
 import com.optic.projectofinal.models.User;
 import com.optic.projectofinal.providers.UserDatabaseProvider;
@@ -36,6 +37,11 @@ public class VerifyAccountActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding=ActivityVerifyAccountBinding.inflate(getLayoutInflater());
+
+        setSupportActionBar(binding.toolbar.ownToolbar);
+        getSupportActionBar().setTitle(R.string.verify_account_activity_title);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         mUser=new UserDatabaseProvider();
         setContentView(binding.getRoot());
         PhoneNumberFormattingTextWatcher watcher = new PhoneNumberFormattingTextWatcher();
@@ -67,7 +73,7 @@ public class VerifyAccountActivity extends AppCompatActivity {
                                     @Override
                                     public void onVerificationFailed(@NonNull FirebaseException e) {
                                         Log.d(TAG_LOG, "onVerificationCompleted: fallo verifico "+e.getMessage());
-                                        Snackbar.make(binding.getRoot(),"Error al enviar el sms", BaseTransientBottomBar.LENGTH_LONG).show();
+                                        Snackbar.make(binding.getRoot(), R.string.fail_to_send_sms, BaseTransientBottomBar.LENGTH_LONG).show();
                                     }
 
                                     @Override

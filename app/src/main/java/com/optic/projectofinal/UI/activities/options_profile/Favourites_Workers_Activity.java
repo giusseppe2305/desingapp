@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.optic.projectofinal.R;
 import com.optic.projectofinal.adapters.WorkersAdapter;
 import com.optic.projectofinal.databinding.ActivityFavouritesWorkersActivityBinding;
 import com.optic.projectofinal.models.User;
@@ -36,7 +37,7 @@ public class Favourites_Workers_Activity extends AppCompatActivity {
 
 
         setSupportActionBar(binding.toolbar.ownToolbar);
-        getSupportActionBar().setTitle("Favoritos");
+        getSupportActionBar().setTitle(R.string.favourites_workers_activity_title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mAuth = new AuthenticationProvider();

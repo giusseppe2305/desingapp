@@ -29,15 +29,16 @@
                 android:layout_marginTop="3dp"
                 android:clickable="true"
                 android:foreground="?android:selectableItemBackground"
-                android:theme="@style/Base.CardView">
+                android:theme="@style/Base.CardView"
+                android:focusable="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingLeft="20dp"
+                    android:paddingStart="20dp"
                     android:paddingTop="10dp"
-                    android:paddingRight="10dp"
+                    android:paddingEnd="10dp"
                     android:paddingBottom="10dp">
 
                     <ImageView
@@ -51,14 +52,14 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:gravity="center|left"
+                        android:gravity="center|start"
                         android:orientation="vertical"
-                        android:paddingLeft="10dp">
+                        android:paddingStart="10dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Cambiar foto de portada" />
+                            android:text="@string/edit_profile_change_landscape_photo" />
 
 
                     </LinearLayout>
@@ -85,15 +86,16 @@
                 android:layout_marginTop="1dp"
                 android:clickable="true"
                 android:foreground="?android:selectableItemBackground"
-                android:theme="@style/Base.CardView">
+                android:theme="@style/Base.CardView"
+                android:focusable="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingLeft="20dp"
+                    android:paddingStart="20dp"
                     android:paddingTop="5dp"
-                    android:paddingRight="10dp"
+                    android:paddingEnd="10dp"
                     android:paddingBottom="5dp">
 
                     <de.hdodenhof.circleimageview.CircleImageView
@@ -106,14 +108,14 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:gravity="center|left"
+                        android:gravity="center|start"
                         android:orientation="vertical"
-                        android:paddingLeft="10dp">
+                        android:paddingStart="10dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Cambiar foto de perfil" />
+                            android:text="@string/edit_profile_change_photo_profile" />
 
 
                     </LinearLayout>
@@ -133,65 +135,6 @@
 
             </androidx.cardview.widget.CardView>
 
-<!--            GONE-->
-            <androidx.cardview.widget.CardView
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:clickable="true"
-                android:foreground="?android:selectableItemBackground"
-                android:theme="@style/Base.CardView">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="20dp"
-                    android:paddingTop="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingBottom="10dp">
-
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="horizontal"
-                        android:paddingLeft="10dp">
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center|left"
-                            android:text="frank_2305@hotmail.com"
-                            android:textStyle="bold" />
-
-                        <Button
-                            android:id="@+id/changeEmail"
-                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                            android:layout_width="70dp"
-                            android:layout_height="30dp"
-                            android:layout_marginRight="15dp"
-                            android:text="Cambiar"
-                            android:textSize="7sp" />
-
-                    </LinearLayout>
-
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_arrow_right"
-                            app:tint="#E0E0E0" />
-                    </FrameLayout>
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
 
 
             <androidx.cardview.widget.CardView
@@ -209,17 +152,17 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text="Informacion basica" />
+                        android:layout_marginStart="20dp"
+                        android:text="@string/edit_profile_basic_information" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/name"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:layout_marginTop="5dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         app:boxBackgroundColor="@color/white"
                         app:counterEnabled="true"
                         app:counterMaxLength="20"
@@ -229,7 +172,7 @@
                             android:layout_width="match_parent"
 
                             android:layout_height="wrap_content"
-                            android:hint="Nombre"
+                            android:hint="@string/edit_profile_name"
                             android:inputType="text"
 
                             />
@@ -241,9 +184,9 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:layout_marginTop="5dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         app:boxBackgroundColor="@color/white"
                         app:counterEnabled="true"
                         app:counterMaxLength="40"
@@ -252,7 +195,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Apellidos"
+                            android:hint="@string/edit_profile_last_name"
                             android:inputType="text"
                         />
 
@@ -263,9 +206,9 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:layout_marginTop="5dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         app:boxBackgroundColor="@color/white"
                         app:counterEnabled="true"
                         app:counterMaxLength="240"
@@ -275,7 +218,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="top"
-                            android:hint="Sobre mi"
+                            android:hint="@string/edit_profile_about"
                             android:inputType="textMultiLine"
                             android:lines="5" />
 
@@ -286,9 +229,9 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:layout_marginTop="5dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         app:boxBackgroundColor="@color/white"
                         app:counterEnabled="true"
                         app:counterMaxLength="240"
@@ -298,7 +241,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="top"
-                            android:hint="Horario"
+                            android:hint="@string/edit_profile_schedule"
                             android:inputType="textMultiLine"
                             android:lines="5" />
 
@@ -323,22 +266,22 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text="Informacion privada" />
+                        android:layout_marginStart="20dp"
+                        android:text="@string/edit_profile_private_information" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:layout_marginTop="5dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         app:boxBackgroundColor="@color/white">
                         <AutoCompleteTextView
                             android:id="@+id/sex"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Sexo"
+                            android:hint="@string/edit_profile_sex"
                             android:inputType="none" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -348,9 +291,9 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:layout_marginTop="5dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         app:boxBackgroundColor="@color/white"
                         app:endIconMode="clear_text">
 
@@ -361,7 +304,7 @@
                             android:layout_height="wrap_content"
                             android:clickable="true"
                             android:focusable="false"
-                            android:hint="Fecha nacimiento"
+                            android:hint="@string/edit_profile_birthdate"
                             android:inputType="date" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -371,9 +314,9 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:layout_marginTop="5dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         app:boxBackgroundColor="@color/white"
                         app:endIconMode="clear_text">
 
@@ -382,7 +325,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
 
-                            android:hint="Ubicacion"
+                            android:hint="@string/edit_profile_location"
                             android:inputType="text" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -391,9 +334,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:paddingTop="10dp"
-                        android:paddingRight="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         >
 
@@ -408,14 +352,14 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:orientation="vertical"
-                            android:paddingLeft="10dp"
-                            android:gravity="left|center">
+                            android:paddingStart="10dp"
+                            android:gravity="start|center">
 
                             <TextView
 
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Ubicacion exacta" />
+                                android:text="@string/edit_profile_location_exact" />
 
 
                         </LinearLayout>
@@ -437,32 +381,27 @@
                 android:layout_marginBottom="1dp"
                 android:clickable="true"
                 android:foreground="?android:selectableItemBackground"
-                >
+                android:focusable="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
                     android:paddingTop="10dp"
-                    android:paddingRight="10dp"
+
                     android:paddingBottom="10dp"
                     >
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="left|center">
+
 
                         <TextView
+                            android:gravity="start|center"
                             android:textAlignment="center"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="ELIMINAR CUENTA" />
+                            android:text="@string/edit_profile_delete_account" />
 
-
-                    </LinearLayout>
 
 
                 </LinearLayout>

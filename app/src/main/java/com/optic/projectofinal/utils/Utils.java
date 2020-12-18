@@ -386,7 +386,7 @@ public class Utils {
     }
     public static String getLanguage(Context context){
         SharedPreferences sharedPref = context.getSharedPreferences("language", MODE_PRIVATE);
-        return sharedPref.getString("language", "ES");
+        return sharedPref.getString("language", "es-Es");
     }
 
     public static Currency getCurrency(Context context){

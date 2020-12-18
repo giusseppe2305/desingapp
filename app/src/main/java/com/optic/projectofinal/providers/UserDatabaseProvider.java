@@ -25,9 +25,10 @@ public class UserDatabaseProvider {
 
     
     private CollectionReference database;
-
+    private AuthenticationProvider mAuth;
     public UserDatabaseProvider() {
         database = FirebaseFirestore.getInstance().collection("Users");
+        mAuth=new AuthenticationProvider();
     }
     public CollectionReference getCollection(){
         return database;
@@ -49,12 +50,13 @@ public class UserDatabaseProvider {
         return database.document(user.getId()).update(update);
     }
 
-    public Task<Void> updateUserOnline(String idUser, boolean status){
+    public void updateOnline(boolean status){
         Map<String, Object> update = new HashMap<>();
         update.put("online",status);
         update.put("lastConnection",new Date().getTime());
 
-        return database.document(idUser).update(update);
+         database.document(mAuth.getIdCurrentUser()).update(update)
+                 .addOnFailureListener(error-> Log.e(TAG_LOG, "fail to update status user connected disconnected "+error.getMessage()));
     }
 
     public DocumentReference getIsOnlineUser(String idCurrentUser) {

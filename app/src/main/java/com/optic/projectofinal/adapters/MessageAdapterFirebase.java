@@ -34,11 +34,11 @@ public class MessageAdapterFirebase extends FirestoreRecyclerAdapter<Message, Me
         DocumentSnapshot compareDocument;
 
 
-        if( (position==0 &&getSnapshots().size()>0)  ||
-                getSnapshots().size()==1){
+        if ((position == 0 && getSnapshots().size() > 0) ||
+                getSnapshots().size() == 1) {
             holder.binding.date.setVisibility(View.VISIBLE);
             holder.binding.textDate.setText(RelativeTime.getTittleDate(context, message.getTimestamp()));
-        }else if(  position < getSnapshots().size()-1){
+        } else if (position < getSnapshots().size() ) {
             if (position == 0) {
 
                 compareDocument = getSnapshots().getSnapshot(position + 1);
@@ -57,13 +57,13 @@ public class MessageAdapterFirebase extends FirestoreRecyclerAdapter<Message, Me
 
             }
 
-        }else {
+        } else {
             holder.binding.date.setVisibility(View.GONE);
 
         }
 
 
-        String relativeTime = RelativeTime.timeFormatAMPM(message.getTimestamp());
+        String relativeTime = RelativeTime.getHourPM(message.getTimestamp());
 
         if (message.getIdsUserFrom().equals(mAuth.getIdCurrentUser())) {
             holder.binding.messageFromMe.setText(message.getMessage());
@@ -73,7 +73,7 @@ public class MessageAdapterFirebase extends FirestoreRecyclerAdapter<Message, Me
             holder.binding.layoutMessageToMe.setVisibility(View.GONE);
             if (message.isViewed())
                 holder.binding.doubleCheck.setColorFilter(ContextCompat.getColor(context, R.color.checkMessage));
-             else
+            else
                 holder.binding.doubleCheck.setColorFilter(ContextCompat.getColor(context, R.color.unCheckMessage));
         } else {
             holder.binding.messageToMe.setText(message.getMessage());
@@ -95,6 +95,7 @@ public class MessageAdapterFirebase extends FirestoreRecyclerAdapter<Message, Me
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private CardviewMessageFromMeBinding binding;
+
         public ViewHolder(View view) {
             super(view);
             binding = CardviewMessageFromMeBinding.bind(view);

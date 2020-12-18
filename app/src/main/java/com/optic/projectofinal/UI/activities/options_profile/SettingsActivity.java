@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.optic.projectofinal.R;
 import com.optic.projectofinal.UI.activities.login.LoginActivity;
 import com.optic.projectofinal.UI.activities.options_profile.settings.EditProfileActivity;
 import com.optic.projectofinal.UI.activities.options_profile.settings.EditSettingsWorkerActivity;
@@ -21,7 +22,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar.ownToolbar);
-        getSupportActionBar().setTitle("Ajustes");
+        getSupportActionBar().setTitle(R.string.settings_activity_title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         binding.optionEditProfile.setOnClickListener(v -> startActivity(new Intent(SettingsActivity.this, EditProfileActivity.class)));

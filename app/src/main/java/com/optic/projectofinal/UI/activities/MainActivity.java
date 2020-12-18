@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         ///In order to have an previous activity,, we receive an id and from here we redirected to new activity,so when the user press back button dont close de app and come to the main activity
         if (getIntent().getStringExtra("idUserToSee") != null) {
             Intent intent = new Intent(this, ProfileDetailsActivity.class);
@@ -147,24 +148,27 @@ public class MainActivity extends AppCompatActivity {
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    if (item.getItemId() == R.id.btnMenuCreateJob) {
-                        openFragment((workersFragment == null) ? workersFragment = new WorkersFragment() : workersFragment);
-                        getSupportActionBar().setTitle(getString(R.string.menuNameWorkers));
-                    }
-                    if (item.getItemId() == R.id.btnMenuJobs) {
-                        openFragment((jobsFragment == null) ? jobsFragment = new JobsFragment() : jobsFragment);
-                        getSupportActionBar().setTitle(getString(R.string.menuNameJobs));
-                    }
-                    if (item.getItemId() == R.id.btnMenuChats) {
-                        openFragment((chatsFragment == null) ? chatsFragment = new ChatsFragment() : chatsFragment);
-                        getSupportActionBar().setTitle(getString(R.string.menuNameChats));
-                    }
-                    if (item.getItemId() == R.id.btnMenuProfile) {
-                        openFragment((profileFragment == null) ? profileFragment = new ProfileFragment() : profileFragment);
-                        getSupportActionBar().setTitle(getString(R.string.menuNameProfile));
-                    }
+                    switch (item.getItemId()) {
+                        case R.id.btnMenuWotkers:
+                            openFragment((workersFragment ==null)? workersFragment =new WorkersFragment(): workersFragment);
+                            getSupportActionBar().setTitle(getString(R.string.menuNameWorkers));
+                            return true;
+                        case R.id.btnMenuJobs:
+                            openFragment((jobsFragment ==null)? jobsFragment =new JobsFragment(): jobsFragment);
+                            getSupportActionBar().setTitle(getString(R.string.menuNameJobs));
+                            return true;
+                        case R.id.btnMenuChats:
+                            openFragment((chatsFragment==null)?chatsFragment=new ChatsFragment():chatsFragment);
+                            getSupportActionBar().setTitle(getString(R.string.menuNameChats));
 
+                            return true;
+                        case R.id.btnMenuProfile:
+                            //startActivity(new Intent(MainActivity.this, ScrollingActivity.class));
+                            openFragment((profileFragment==null)?profileFragment=new ProfileFragment():profileFragment);
+                            getSupportActionBar().setTitle(getString(R.string.menuNameProfile));
 
+                            return true;
+                    }
                     return false;
                 }
             };

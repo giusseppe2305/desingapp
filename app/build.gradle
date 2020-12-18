@@ -35,6 +35,7 @@ dependencies {
 
     implementation platform('com.google.firebase:firebase-bom:26.1.0')
 
+    compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
 
     implementation 'com.github.aqoong:ExpandableTextView:1.0.1'
     implementation 'com.github.dhaval2404:imagepicker:1.7.5'//image picker

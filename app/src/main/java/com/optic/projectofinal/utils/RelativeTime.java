@@ -17,7 +17,6 @@ public class RelativeTime extends Application {
     private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
     private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
 
-
     public static String getTimeAgo(long time) {
         if (time < 1000000000000L) {
             // if timestamp given in seconds, convert to millis
@@ -47,7 +46,9 @@ public class RelativeTime extends Application {
             return "Hace " + diff / DAY_MILLIS + " dias";
         }
     }
-
+    public static String getHourPM(long timestamp){
+        return new SimpleDateFormat("HH:mm").format(new Date(timestamp));
+    }
     public static String timeFormatAMPM(long time) {
 
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
@@ -96,6 +97,27 @@ public class RelativeTime extends Application {
             SimpleDateFormat format1 = new SimpleDateFormat(formatText,Locale.forLanguageTag(Utils.getLanguage(context)));
             return format1.format(date);
         }
+
+    }
+    public static String getStringForlastConnection(Context context,long date) {
+        Calendar now = Calendar.getInstance();
+        now.setTime(new Date());
+
+        Calendar compare = Calendar.getInstance();
+        compare.setTime(new Date(date));
+
+        String formatText;
+        if(now.get(Calendar.DAY_OF_YEAR)==compare.get(Calendar.DAY_OF_YEAR) &&
+                now.get(Calendar.YEAR)==compare.get(Calendar.YEAR) ) {
+            formatText=String.format("'%s' HH:mm",context.getString(R.string.chat_converstation_last_connection_today));
+        }else if(now.get(Calendar.DAY_OF_YEAR)-1==compare.get(Calendar.DAY_OF_YEAR) &&
+                now.get(Calendar.YEAR)==compare.get(Calendar.YEAR))   {
+            formatText=String.format("'%s' HH:mm",context.getString(R.string.chat_converstation_last_connection_yesterday));
+        }else {
+            formatText=String.format("'%s' dd/mm/yyyy HH:mm",context.getString(R.string.chat_converstation_last_connection));
+
+        }
+        return new SimpleDateFormat(formatText).format(date);
 
     }
     public static int compare(long datePrevious,long date) {

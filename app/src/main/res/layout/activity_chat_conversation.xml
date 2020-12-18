@@ -32,18 +32,17 @@
             android:paddingRight="10dp"
             >
 
+
             <EditText
                 android:id="@+id/editTextMessageChat"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/edit_text_chat"
-                android:hint="Escribir mensaje..."
+                android:hint="@string/chat_conversation_write_message"
                 android:inputType="textMultiLine"
-                android:layout_marginRight="5dp"
-
-                />
-
+                android:autofillHints="" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/btnSendMessageChat"

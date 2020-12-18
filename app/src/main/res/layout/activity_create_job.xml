@@ -43,7 +43,8 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:src="@drawable/ic_add_photo"
-                    app:tint="@color/teal_700" />
+                    app:tint="@color/teal_700"
+                     />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvImagesSelected"
@@ -123,9 +124,9 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     app:boxBackgroundColor="@color/white">
 
                     <AutoCompleteTextView
@@ -141,9 +142,9 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     app:boxBackgroundColor="@color/white">
 
                     <AutoCompleteTextView

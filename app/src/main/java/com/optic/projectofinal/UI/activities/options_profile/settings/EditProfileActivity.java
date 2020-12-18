@@ -19,11 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.databinding.ActivityEditProfileBinding;
 import com.optic.projectofinal.models.Sex;
@@ -36,8 +33,6 @@ import com.optic.projectofinal.utils.Utils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
-import dmax.dialog.SpotsDialog;
 
 import static com.optic.projectofinal.utils.Utils.TAG_LOG;
 
@@ -66,7 +61,7 @@ public class EditProfileActivity extends AppCompatActivity {
         binding = ActivityEditProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar.ownToolbar);
-        getSupportActionBar().setTitle("Editar perfil");
+        getSupportActionBar().setTitle(R.string.edit_profile_activity_title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //instance objects
         authenticationProvider = new AuthenticationProvider();
@@ -87,7 +82,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
         MaterialDatePicker.Builder buider = MaterialDatePicker.Builder.datePicker();
-        buider.setTitleText("Selecciona una fecha");
+        buider.setTitleText(R.string.edit_profile_select_date);
         buider.setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR);
         MaterialDatePicker materialDatePicker = buider.build();
 
@@ -99,22 +94,16 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
         ///
-        dialogUpdate = new SpotsDialog.Builder()
-                .setContext(this)
-                .setMessage("Actualizando informacion")
-                .setCancelable(false).build();
-        ///
-        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-            @Override
-            public void onPositiveButtonClick(Object selection) {
 
-                Date date = new Date();
-                date.setTime(Long.parseLong(selection.toString()));
-                String formatDate = new SimpleDateFormat("dd/MM/yyyy").format(date);
-                binding.datePicker.setText(formatDate);
-                if (EditProfileActivity.this.getCurrentFocus() != null)
-                    EditProfileActivity.this.getCurrentFocus().clearFocus();
-            }
+        ///
+        materialDatePicker.addOnPositiveButtonClickListener(selection -> {
+
+            Date date = new Date();
+            date.setTime(Long.parseLong(selection.toString()));
+            String formatDate = new SimpleDateFormat("dd/MM/yyyy").format(date);
+            binding.datePicker.setText(formatDate);
+            if (EditProfileActivity.this.getCurrentFocus() != null)
+                EditProfileActivity.this.getCurrentFocus().clearFocus();
         });
         //////
         binding.btnChangeCoverImage.setOnClickListener(v -> showDialogSelectImage(TYPE_IMAGE.COVER_IMAGE));
@@ -124,30 +113,27 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void loadUserData() {
-        userDatabaseProvider.getUser(authenticationProvider.getIdCurrentUser()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                User userIterated=documentSnapshot.toObject(User.class);
-                binding.name.getEditText().setText(userIterated.getName());
-                binding.lastName.getEditText().setText(userIterated.getLastName());
-                binding.about.getEditText().setText(userIterated.getAbout());
-                binding.schedule.getEditText().setText(userIterated.getSchedule());
-                Sex sex=Utils.getSexByIdJson(EditProfileActivity.this,userIterated.getSex());
-                sexSelected=sex.getId();
-                binding.sex.setText(sex.getTitleString(),false);
-                if(userIterated.getBirthdate()!=null)
-                binding.birthDate.getEditText().setText(Utils.getStringFromTimestamp(userIterated.getBirthdate()));
-                binding.location.getEditText().setText(userIterated.getLocation());
-                //images
-                if(userIterated.getCoverPageImage()!=null&&!userIterated.getCoverPageImage().isEmpty()){
-                    hasCoverImage=true;
-                }
-                if(userIterated.getProfileImage()!=null&&!userIterated.getProfileImage().isEmpty()){
-                    hasProfileImage=true;
-                }
-                Glide.with(EditProfileActivity.this).load(userIterated.getCoverPageImage()).apply(Utils.getOptionsGlide(false)).transform(Utils.getTransformSquareRound()).into(binding.coverPageImage);
-                Glide.with(EditProfileActivity.this).load(userIterated.getProfileImage()).apply(Utils.getOptionsGlide(false)).into(binding.imageProfile);
+        userDatabaseProvider.getUser(authenticationProvider.getIdCurrentUser()).addOnSuccessListener(documentSnapshot -> {
+            User userIterated=documentSnapshot.toObject(User.class);
+            binding.name.getEditText().setText(userIterated.getName());
+            binding.lastName.getEditText().setText(userIterated.getLastName());
+            binding.about.getEditText().setText(userIterated.getAbout());
+            binding.schedule.getEditText().setText(userIterated.getSchedule());
+            Sex sex=Utils.getSexByIdJson(EditProfileActivity.this,userIterated.getSex());
+            sexSelected=sex.getId();
+            binding.sex.setText(sex.getTitleString(),false);
+            if(userIterated.getBirthdate()!=null)
+            binding.birthDate.getEditText().setText(Utils.getStringFromTimestamp(userIterated.getBirthdate()));
+            binding.location.getEditText().setText(userIterated.getLocation());
+            //images
+            if(userIterated.getCoverPageImage()!=null&&!userIterated.getCoverPageImage().isEmpty()){
+                hasCoverImage=true;
             }
+            if(userIterated.getProfileImage()!=null&&!userIterated.getProfileImage().isEmpty()){
+                hasProfileImage=true;
+            }
+            Glide.with(EditProfileActivity.this).load(userIterated.getCoverPageImage()).apply(Utils.getOptionsGlide(false)).transform(Utils.getTransformSquareRound()).into(binding.coverPageImage);
+            Glide.with(EditProfileActivity.this).load(userIterated.getProfileImage()).apply(Utils.getOptionsGlide(false)).into(binding.imageProfile);
         }).addOnFailureListener(v-> Log.e(TAG_LOG, "loadUserData: "+v.getMessage() ));
     }
 
@@ -189,7 +175,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 uriImageProfile = fileUri;
                 Glide.with(this).load(uriImageProfile).apply(Utils.getOptionsGlide(true)).into(binding.imageProfile);
             } else if (resultCode == ImagePicker.RESULT_ERROR) {
-                Toast.makeText(this, ImagePicker.Companion.getError(data), Toast.LENGTH_SHORT).show();
+                Log.e(TAG_LOG, "fail on get select image "+ ImagePicker.Companion.getError(data) );
             } else {
                 Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
             }
@@ -198,8 +184,9 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void showDialogSelectImage(TYPE_IMAGE type) {
         new MaterialAlertDialogBuilder(this).
-                setTitle("Elige una opcion")
-                .setItems(new String[]{"Elegir de la galeria", "Tomar FOTO AHORA"}, new DialogInterface.OnClickListener() {
+                setTitle(R.string.edit_profile_dialog_select_image_from_tittle)
+                .setItems(new String[]{getString(R.string.edit_profile_dialog_select_image_from_option1),
+                        getString(R.string.edit_profile_dialog_select_image_from_option2)}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         ImagePicker.Builder show = ImagePicker.Companion.with(EditProfileActivity.this)
@@ -221,10 +208,10 @@ public class EditProfileActivity extends AppCompatActivity {
                         }
                     }
                 })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.edit_profile_dialog_select_image_from_negative_button, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(EditProfileActivity.this, "Cancelaste la opcion de elegir donde sacar imagen", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG_LOG, "the user cancel dialog where you selec option gallery or camera");
                     }
                 }).setCancelable(false).show();
     }
@@ -246,7 +233,7 @@ public class EditProfileActivity extends AppCompatActivity {
             if (uriCoverImage != null) {
 
                 storageProvider.uploadImageUser(uriCoverImage, StorageProvider.TYPE_IMAGE.COVER_IMAGE).addOnSuccessListener(v->{
-                    Log.e(TAG_LOG, "updateDataUser: cambio cover" );
+
                     if(!hasCoverImage){
                         v.getStorage().getDownloadUrl().addOnSuccessListener(c->{
                             User mUser=new User();
@@ -279,12 +266,12 @@ public class EditProfileActivity extends AppCompatActivity {
                     .addOnSuccessListener(n -> Toast.makeText(this, "Todo update ", Toast.LENGTH_SHORT).show())
                     .addOnFailureListener(v -> {
                         Log.e(TAG_LOG, "updateDataUser: " + v.getMessage());
-                        Toast.makeText(this, "Algo salio mal", Toast.LENGTH_SHORT).show();
+
                     });
             //check all right
             finish();
         } else {
-            Toast.makeText(this, "Campos invalidos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.edit_profile_fields_are_invalid, Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -295,36 +282,35 @@ public class EditProfileActivity extends AppCompatActivity {
         boolean ret3 = true;
         boolean ret4 = true;
         if (binding.name.getEditText().getText().toString().length() == 0) {
-            binding.name.setError("Introduza un nombre");
+            binding.name.setError(getString(R.string.pattern_name_void_field));
         } else if (binding.name.getEditText().getText().toString().length() >= 20) {
-            binding.name.setError("Nombre demasiado largo");
+            binding.name.setError(getString(R.string.pattern_name_correct_length));
         } else {
             binding.name.setError(null);
             ret = true;
         }
         if (binding.lastName.getEditText().getText().toString().length() == 0) {
-            binding.lastName.setError("Introduza un apellido");
+            binding.lastName.setError(getString(R.string.pattern_last_name_void_field));
         } else if (binding.lastName.getEditText().getText().toString().length() >= 40) {
-            binding.lastName.setError("Apellido demasiado largo");
+            binding.lastName.setError(getString(R.string.pattern_last_name_correct_length));
         } else {
             binding.lastName.setError(null);
             ret2 = true;
         }
 
         if (binding.about.getEditText().getText().toString().length() >= 240) {
-            binding.about.setError("Apellido demasiado largo");
+            binding.about.setError(getString(R.string.pattern_about_correct_length));
             ret3 = false;
         } else {
             binding.about.setError(null);
         }
 
         if (binding.schedule.getEditText().getText().toString().length() >= 240) {
-            binding.schedule.setError("Apellido demasiado largo");
+            binding.schedule.setError(getString(R.string.pattern_schedule_correct_length));
             ret4 = false;
         } else {
             binding.schedule.setError(null);
         }
-        System.out.println("errores " + ret + ret2 + ret3 + ret4);
         return ret && ret2 && ret3 && ret4;
 
     }

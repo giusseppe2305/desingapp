@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.optic.projectofinal.models.Chat;
@@ -35,7 +37,15 @@ public class ChatsProvider {
 
         return mCollection.whereIn("idChat",ids);
     }
+    public DocumentReference getChatById(String id){
+        return mCollection.document(id);
+    }
+    public void updateIsWritting(String idChat, String idUser, boolean value){
+        final Map<String, Object> update = new HashMap<>();
+        update.put("isTyping", value?FieldValue.arrayUnion(idUser):FieldValue.arrayRemove(idUser));
 
+        mCollection.document(idChat).update(update).addOnFailureListener(e-> Log.e(Utils.TAG_LOG, "updateIsWritting: fail to update typing "+e.getMessage() ));
+    }
     public void updateLastMessageOnChat(final String idCurrentChat, final String idMessage, final Context c) {
         Map<String, Object> update=new HashMap<>();
         update.put("idLastMessage",idMessage);

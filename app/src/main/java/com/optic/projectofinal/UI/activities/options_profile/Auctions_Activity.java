@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.optic.projectofinal.R;
 import com.optic.projectofinal.adapters.ViewPagerAuctions;
 import com.optic.projectofinal.databinding.ActivityAuctionsBinding;
 
@@ -21,7 +22,7 @@ public class Auctions_Activity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar.ownToolbar);
-        getSupportActionBar().setTitle("Subastas");
+        getSupportActionBar().setTitle(R.string.auctions_activity_title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 

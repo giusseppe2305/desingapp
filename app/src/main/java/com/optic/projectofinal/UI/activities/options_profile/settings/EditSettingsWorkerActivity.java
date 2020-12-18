@@ -79,7 +79,7 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
 
         binding.addResource.setOnClickListener(v -> {
             ArrayList<Resource> temp = Utils.getListResourcesJson(this);
-            ;
+       
             temp.removeAll(listResources);
             new MaterialAlertDialogBuilder(this)
                     .setTitle("Elije un recurso")
