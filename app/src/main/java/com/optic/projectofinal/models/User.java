@@ -13,6 +13,7 @@ public class User implements Serializable {
     private String coverPageImage;
     private String schedule;
     private String about;
+    private String thumbnail;
     private Long birthdate;
     private int codeCountry;
     private int phoneNumber;
@@ -248,5 +249,13 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return name;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }

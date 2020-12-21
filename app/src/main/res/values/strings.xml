@@ -138,21 +138,21 @@
     <string name="my_auctions_fragment_alert_negative_button">Cancelar</string>
     <string name="my_auctions_fragment_alert_positive_button">Eliminar</string>
 
-<!--    verify account-->
+    <!--    verify account-->
     <string name="fail_to_send_sms">Error al enviar el sms</string>
     <string name="jobs_activity_jobs_received">Trabajos recibidos</string>
-<!--    jobs activity-->
+    <!--    jobs activity-->
     <string name="jobs_activity_jobs_done">Trabajos realizados</string>
-<!--    chat conversation-->
+    <!--    chat conversation-->
     <string name="chat_conversation_write_message">Escribir mensaje...</string>
     <string name="chat_conversation_field_message_void">Escriba un mensaje</string>
     <string name="chat_converstation_last_connection_today">ult. vez hoy a las</string>
     <string name="chat_converstation_last_connection_yesterday">ult. vez ayer a las</string>
     <string name="chat_converstation_last_connection">ult. vez</string>
     <string name="chat_converstation_connected">conectado</string>
-<!--    notifications value-->
+    <!--    notifications value-->
     <string name="notification_new_message">Nuevo Mensaje</string>
-<!--    edit profile-->
+    <!--    edit profile-->
     <string name="edit_profile_delete_account">ELIMINAR CUENTA</string>
     <string name="edit_profile_location_exact">Ubicacion exacta</string>
     <string name="edit_profile_location">Ubicacion</string>
@@ -173,13 +173,13 @@
     <string name="edit_profile_dialog_select_image_from_option2">Tomar FOTO AHORA</string>
     <string name="edit_profile_dialog_select_image_from_negative_button">Cancelar</string>
     <string name="edit_profile_fields_are_invalid">Campos invalidos</string>
-<!--    edit settings-->
+    <!--    edit settings-->
     <string name="edit_settings_worker_skills">Skills</string>
     <string name="edit_settings_resources">Resources</string>
-<!--    favourites workers-->
+    <!--    favourites workers-->
     <string name="favourites_workers_save_favourites">Guarda tus favoritos</string>
     <string name="favourites_workers_description">Aqui encontraras a todos los trabajadores que marques como favoritos</string>
-<!--    job done-->
+    <!--    job done-->
     <string name="job_done_category">Categoria:</string>
     <string name="job_done_subcategory">Subcategoria:</string>
     <string name="job_done_valuation">Puntuacion</string>

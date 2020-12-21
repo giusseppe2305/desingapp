@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
@@ -79,10 +80,23 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
 
         binding.addResource.setOnClickListener(v -> {
             ArrayList<Resource> temp = Utils.getListResourcesJson(this);
-       
+
+            for(Resource it:temp){
+                Log.d(TAG_LOG, "onCreate:  Resource "+it.getTitleString());
+            }
+            for(Resource it2:listResources){
+                Log.d(TAG_LOG, "onCreate:  listResources "+it2.getTitleString());
+            }
             temp.removeAll(listResources);
             new MaterialAlertDialogBuilder(this)
                     .setTitle("Elije un recurso")
+                    .setAdapter(new ArrayAdapter<>(EditSettingsWorkerActivity.this, R.layout.support_simple_spinner_dropdown_item, temp), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Toast.makeText(EditSettingsWorkerActivity.this, "le dio", Toast.LENGTH_SHORT).show();
+                            adapterResources.addSwipeItem(listResources.size(), temp.get(i));
+                        }
+                    })
                     .setNegativeButton("cancelar", null)
                     .show();
         });

@@ -5,12 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.UI.activities.MainActivity;
 import com.optic.projectofinal.databinding.ActivityRegiterBinding;
@@ -42,37 +38,25 @@ public class RegisterActivity extends AppCompatActivity {
         mUserProvider = new UserDatabaseProvider();
         utilsUI=new UtilsUI(this);
         ////
-        binding.btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (fieldsAreValidated()) {
-                    createUserWithAuthentication();
-                }
+        binding.btnRegister.setOnClickListener(view -> {
+            if (fieldsAreValidated()) {
+                createUserWithAuthentication();
             }
         });
-        binding.txtEmail.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b) {
-                    utilsUI.isEmailValid(binding.txtEmail);
-                }
+        binding.txtEmail.getEditText().setOnFocusChangeListener((view, b) -> {
+            if (!b) {
+                utilsUI.isEmailValid(binding.txtEmail);
             }
         });
-        binding.txtPassword.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if(!b){
-                    utilsUI.isPasswordsValid(binding.txtPassword);
-                }
+        binding.txtPassword.getEditText().setOnFocusChangeListener((view, b) -> {
+            if(!b){
+                utilsUI.isPasswordsValid(binding.txtPassword);
             }
         });
-        binding.txtPasswordRepeat.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if(!b){
-                    if(utilsUI.isPasswordsValid(binding.txtPassword)){
-                        isEqualBothPasswords();
-                    }
+        binding.txtPasswordRepeat.getEditText().setOnFocusChangeListener((view, b) -> {
+            if(!b){
+                if(utilsUI.isPasswordsValid(binding.txtPassword)){
+                    isEqualBothPasswords();
                 }
             }
         });
@@ -104,31 +88,25 @@ public class RegisterActivity extends AppCompatActivity {
         String email = binding.txtEmail.getEditText().getText().toString();
         String pass = binding.txtPassword.getEditText().getText().toString();
 
-        mAuth.createAuthentication(email,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    final User mUser = new User();
-                    mUser.setDefaultData();
-                    mUser.setEmail(email);
-                    mUser.setId(mAuth.getIdCurrentUser());
-                    mUserProvider.createUser(mUser).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(RegisterActivity.this, "Registrado database normal ", Toast.LENGTH_SHORT).show();
-                                Intent i = new Intent(RegisterActivity.this, MainActivity.class);
-                                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(i);
-                            } else {
-                                Toast.makeText(RegisterActivity.this, "Ha habido un error database " + task.getException(), Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-                    Toast.makeText(RegisterActivity.this, "Usuario registrado Authentication", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(RegisterActivity.this, "Ha habido un error AUTHENTICATION " + task.getException(), Toast.LENGTH_LONG).show();
-                }
+        mAuth.createAuthentication(email,pass).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                final User mUser = new User();
+                mUser.setDefaultData();
+                mUser.setEmail(email);
+                mUser.setId(mAuth.getIdCurrentUser());
+                mUserProvider.createUser(mUser).addOnCompleteListener(task1 -> {
+                    if (task1.isSuccessful()) {
+                        Toast.makeText(RegisterActivity.this, "Registrado database normal ", Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(RegisterActivity.this, MainActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(i);
+                    } else {
+                        Toast.makeText(RegisterActivity.this, "Ha habido un error database " + task1.getException(), Toast.LENGTH_LONG).show();
+                    }
+                });
+                Toast.makeText(RegisterActivity.this, "Usuario registrado Authentication", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(RegisterActivity.this, "Ha habido un error AUTHENTICATION " + task.getException(), Toast.LENGTH_LONG).show();
             }
         });
     }

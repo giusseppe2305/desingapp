@@ -1,5 +1,6 @@
 package com.optic.projectofinal.utils;
 
+import android.app.DownloadManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.MenuItem;
@@ -41,11 +43,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.DataInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -61,10 +66,82 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class Utils {
 
+
+    public  enum REGISTER{GOOGLE,FACEBOOK,EMAIL}
     private static final String NAME_FILE_JSON_PROPERTIES = "properties.json";
-    public  static int MAX_IMAGE_CAN_BE_SELECTED=10;
+    private static final String NODE_ALL_CATEGORIES = "all_categories";
+    private static final String NODE_RESOURCES = "all_resources";
+    public  static final int MAX_IMAGE_CAN_BE_SELECTED=10;
     public static final String TAG_LOG="own";
+
+
+    public static String convertDateFormat(String date)  {
+
+        try {
+            SimpleDateFormat format=new SimpleDateFormat("MM/dd/yyyy");
+            SimpleDateFormat format2=new SimpleDateFormat("dd/MM/yyyy");
+            Date fecha = format.parse("05/23/1998");
+            return format2.format(fecha);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public  static void downloadFile(String url,IDo function) {
+        Log.d(TAG_LOG, "downloadFile: ENTRA METODO");
+        new Thread(new Runnable() {
+            
+            @Override
+            public void run() {
+                try {
+                    Log.d(TAG_LOG, "run: entra hilo");
+                    URL u = new URL(url);
+                    URLConnection conn = u.openConnection();
+                    int contentLength = conn.getContentLength();
+                    DataInputStream stream = new DataInputStream(u.openStream());
+                    byte[] buffer = new byte[contentLength];
+                    stream.readFully(buffer);
+                    stream.close();
+                    Log.d(TAG_LOG, "run: acaba hilo");
+                    function.upload(buffer);
+                } catch(FileNotFoundException e) {
+                    Log.e(TAG_LOG, "run: "+e.getMessage() );
+                    return; // swallow a 404
+                } catch (IOException e) {
+                    Log.e(TAG_LOG, "run: "+e.getMessage() );
+                    return; // swallow a 404
+                }
+            }
+        }).start();
+    }
+
+
+    public static void download(Context context,String url){
+        DownloadManager downloadmanager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+        Uri uri = Uri.parse(url);
+
+        DownloadManager.Request request = new DownloadManager.Request(uri);
+        request.setTitle("My File");
+        request.setDescription("Downloading");
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setVisibleInDownloadsUi(false);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"game-of-life");
+
+        downloadmanager.enqueue(request);
+    }
+    public static String arrayToString(String[] strings) {
+        String dev="";
+        for(int i=0;i<strings.length;i++){
+            dev+=strings[i];
+            if(i!=strings.length-1){
+                dev+=",";
+            }
+        }
+
+        return dev;
+    }
     public static int getResId(String resName, Class<?> c) {
+
         try {
             Field idField = c.getDeclaredField(resName);
             return idField.getInt(idField);
@@ -93,8 +170,9 @@ public class Utils {
     }
     private static String getJsonFromAssets(Context context, String fileName) {
         String jsonString;
+        InputStream is = null;
         try {
-            InputStream is = context.getAssets().open(fileName);
+             is = context.getAssets().open(fileName);
 
             int size = is.available();
             byte[] buffer = new byte[size];
@@ -105,6 +183,13 @@ public class Utils {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        }finally {
+            try {
+                if(is!=null)
+                    is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         return jsonString;
@@ -147,18 +232,18 @@ public class Utils {
         return cadenaJson;
     }
     public static String getArrayCategoriesJson(Context context){
-        return getArrayStringJsonByKey(context,"all_categories" );
+        return getArrayStringJsonByKey(context,NODE_ALL_CATEGORIES );
     }
     public static Category getCategoryByIdJson(Context context,int id){
-        Category dev = getObjectFromJsonByKeyAndId(context, "all_categories", id, Category.class);
+        Category dev = getObjectFromJsonByKeyAndId(context, NODE_ALL_CATEGORIES, id, Category.class);
         dev.setTitleString(context);
         return dev;
     }
     public static String getArrayResourcesJson(Context context){
-        return getArrayStringJsonByKey(context,"all_resources" );
+        return getArrayStringJsonByKey(context,NODE_RESOURCES );
     }
     public static Resource getResourcesByIdJson(Context context, int id){
-        Resource dev = getObjectFromJsonByKeyAndId(context, "all_resources", id, Resource.class);
+        Resource dev = getObjectFromJsonByKeyAndId(context, NODE_RESOURCES, id, Resource.class);
         dev.loadData(context);
         return  dev;
     }
@@ -190,7 +275,7 @@ public class Utils {
         return Arrays.asList(new Gson().fromJson(Utils.getArrayStringJsonByKey(context,key), type));
     }
     public static ArrayList<Category> getListCategoriesJson(Context context){
-        List<Category> dev = getListItemsJson(context, "all_categories", Category[].class);
+        List<Category> dev = getListItemsJson(context, NODE_ALL_CATEGORIES, Category[].class);
         for(Category i:dev){
             i.setTitleString(context);
         }
@@ -210,11 +295,10 @@ public class Utils {
         return dev;
     }
     public static ArrayList<Resource> getListResourcesJson(Context context){
-        List<Resource> dev = getListItemsJson(context, "all_resources", Resource[].class);
+        List<Resource> dev = getListItemsJson(context, NODE_RESOURCES, Resource[].class);
         for(Resource i:dev){
             i.loadData(context);
         }
-
         return new ArrayList<>(dev);
     }
     public static String getDateFormatted(Long timestamp,Context context){
@@ -366,7 +450,12 @@ public class Utils {
         editor.putString("photoUser", dto.getPhotoUser());
         editor.apply();
     }
-
+    public static void updateImageProfileBasicUserInformation(String url,Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences("basicUserInformation", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("photoUser", url);
+        editor.apply();
+    }
     public static BasicInformationUser getPersistentBasicUserInformation(Context context){
         SharedPreferences sharedPref = context.getSharedPreferences("basicUserInformation", MODE_PRIVATE);
 

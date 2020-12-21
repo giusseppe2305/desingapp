@@ -27,6 +27,7 @@ public class UserDatabaseProvider {
     private CollectionReference database;
     private AuthenticationProvider mAuth;
     public UserDatabaseProvider() {
+
         database = FirebaseFirestore.getInstance().collection("Users");
         mAuth=new AuthenticationProvider();
     }
@@ -85,7 +86,7 @@ public class UserDatabaseProvider {
                     Log.e(TAG_LOG, "filterWorkers: query 3" );
 
                     query= query.orderBy("pricePerHour", Query.Direction.DESCENDING);
-
+                    break;
                 case DISTANCE:
                     break;
                 case LOWER_TO_HIGHER:

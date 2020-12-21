@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,6 +45,9 @@ import com.optic.projectofinal.providers.SubcategoriesDatabaseProvider;
 import com.optic.projectofinal.utils.Utils;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -70,6 +75,7 @@ public class CreateJobActivity extends AppCompatActivity {
     private Integer positionCategorySelected;
     private Integer positionSubcategorySelected;
     private ArrayList<String> listImagesBeginingEdit;
+    private LinearLayoutManager linerLayoutImages;
 
 
     @Override
@@ -104,7 +110,8 @@ public class CreateJobActivity extends AppCompatActivity {
         adapterImage = new ImagePickerAdapter(this, listUris);
         //config recycler
         binding.rvImagesSelected.setAdapter(adapterImage);
-        binding.rvImagesSelected.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        linerLayoutImages=new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
+        binding.rvImagesSelected.setLayoutManager(linerLayoutImages);
         ///
         mDialogCreateJob = new SpotsDialog.Builder()
                 .setContext(this)
@@ -325,101 +332,130 @@ public class CreateJobActivity extends AppCompatActivity {
     }
 
     private void createUpdateJob() {
-        String idDocument = jobsDatabaseProvider.getIdDocument();
-        Tasks.whenAllComplete(getListTaskUploadPhotos(idDocument)).addOnSuccessListener(new OnSuccessListener<List<Task<?>>>() {
-            @Override
-            public void onSuccess(List<Task<?>> tasks) {
-                ///change dialog
-                mDialogCreateJob.setMessage("Ultimando detalles");
-                ///create object
-                Category category = listCategories.get(positionCategorySelected);
-                SubCategory subCategory = listSubcategories.get(positionSubcategorySelected);
-                Job myJob = new Job();
-                myJob.setId(idDocument);
-                myJob.setTitle(binding.title.getEditText().getText().toString());
-                myJob.setState(Job.State.PUBLISHED);
-                myJob.setIdUserOffer(authenticationProvider.getIdCurrentUser());
-                myJob.setDescription(binding.description.getEditText().getText().toString());
-                myJob.setCategory(category.getId());
-                myJob.setSubcategory(subCategory.getId());
-                /////create list
-                List<Task<Uri>> tasksGetUrl = new ArrayList<>();
-                for (Task<?> _tasks : tasks) {
-                    UploadTask.TaskSnapshot result = (UploadTask.TaskSnapshot) _tasks.getResult();
-                    tasksGetUrl.add(result.getStorage().getDownloadUrl());
-                }
-                Tasks.whenAllComplete(tasksGetUrl).addOnSuccessListener(new OnSuccessListener<List<Task<?>>>() {
-                    @Override
-                    public void onSuccess(List<Task<?>> tasks) {
 
-                        ArrayList<String> urlImages = new ArrayList<>();
+        Job myJob = new Job();
+        myJob.setId(idJobEdit==null?jobsDatabaseProvider.getIdDocument():idJobEdit);
+        Tasks.whenAllComplete(getListTaskUploadPhotos(myJob.getId())).addOnSuccessListener(tasks -> {
+            ///change dialog
+            mDialogCreateJob.setMessage("Ultimando detalles");
+            ///create object
+            Category category = listCategories.get(positionCategorySelected);
+            SubCategory subCategory = listSubcategories.get(positionSubcategorySelected);
 
-                        if (idJobEdit != null) {
-                            for (Uri it : listUris) {
-                                for (String it2 : listImagesBeginingEdit) {
-                                    if (it.toString().equals(it2)) {
+            myJob.setTitle(binding.title.getEditText().getText().toString());
+            myJob.setState(Job.State.PUBLISHED);
+            myJob.setIdUserOffer(authenticationProvider.getIdCurrentUser());
+            myJob.setDescription(binding.description.getEditText().getText().toString());
+            myJob.setCategory(category.getId());
+            myJob.setSubcategory(subCategory.getId());
+            /////create list
+            List<Task<Uri>> tasksGetUrl = new ArrayList<>();
+            for (Task<?> _tasks : tasks) {
+                UploadTask.TaskSnapshot result = (UploadTask.TaskSnapshot) _tasks.getResult();
+                tasksGetUrl.add(result.getStorage().getDownloadUrl());
+            }
+            Tasks.whenAllComplete(tasksGetUrl).addOnSuccessListener(tasks1 -> {
 
-                                        urlImages.add(it2);
-                                        break;
-                                    }
-                                }
+                ArrayList<String> urlImages = new ArrayList<>();
 
+                if (idJobEdit != null) {
+                    for (Uri it : listUris) {
+                        for (String it2 : listImagesBeginingEdit) {
+                            if (it.toString().equals(it2)) {
+
+                                urlImages.add(it2);
+                                break;
                             }
                         }
 
-                        for (Task<?> uri : tasks) {
-                            Uri result = (Uri) uri.getResult();
-                            urlImages.add(result.toString());
-                        }
-
-                        myJob.setImages(urlImages);
-                        if (idJobEdit == null) {
-                            myJob.setTimestamp(new Date().getTime());
-                            jobsDatabaseProvider.createJob(myJob).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    mDialogCreateJob.dismiss();
-                                    Toast.makeText(CreateJobActivity.this, "Creado correctamente", Toast.LENGTH_SHORT).show();
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.e(TAG_LOG, "onFailure: create CreateJobActivity->createJob");
-                                    Toast.makeText(CreateJobActivity.this, "Fallo al crear ", Toast.LENGTH_SHORT).show();
-                                    mDialogCreateJob.dismiss();
-                                }
-                            });
-                        } else {
-                            myJob.setId(idJobEdit);
-                            jobsDatabaseProvider.updateJob(myJob).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    mDialogCreateJob.dismiss();
-                                    Intent intent=new Intent();
-                                    setResult(Activity.RESULT_OK,intent);
-                                    finish();
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.e(TAG_LOG, "onFailure: update CreateJobActivity->createJob");
-                                    Toast.makeText(CreateJobActivity.this, "Fallo al Actualizado ", Toast.LENGTH_SHORT).show();
-                                    mDialogCreateJob.dismiss();
-                                }
-                            });
-
-
-                        }
-
-
                     }
-                });
+                }
+
+                for (Task<?> uri : tasks1) {
+                    Uri result = (Uri) uri.getResult();
+                    urlImages.add(result.toString());
+                }
+
+                myJob.setImages(urlImages);
 
 
-            }
+                if (idJobEdit == null) {
+                    myJob.setTimestamp(new Date().getTime());
+                    jobsDatabaseProvider.createJob(myJob).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            //we create a thumbnail
+                            createThumbnail(urlImages.get(0),myJob.getId());
+
+                            mDialogCreateJob.dismiss();
+                            Toast.makeText(CreateJobActivity.this, "Creado correctamente", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                            Log.e(TAG_LOG, "onFailure: create CreateJobActivity->createJob");
+                            Toast.makeText(CreateJobActivity.this, "Fallo al crear ", Toast.LENGTH_SHORT).show();
+                            mDialogCreateJob.dismiss();
+                        }
+                    });
+                } else {
+                    jobsDatabaseProvider.updateJob(myJob).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            //we create a thumbnail
+                            createThumbnail(urlImages.get(0),myJob.getId());
+
+                            mDialogCreateJob.dismiss();
+                            Intent intent = new Intent();
+                            setResult(Activity.RESULT_OK, intent);
+                            finish();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e(TAG_LOG, "onFailure: update CreateJobActivity->createJob");
+                            Toast.makeText(CreateJobActivity.this, "Fallo al Actualizado ", Toast.LENGTH_SHORT).show();
+                            mDialogCreateJob.dismiss();
+                        }
+                    });
+
+
+                }
+
+
+            });
+
+
         });
 
 
+    }
+
+    private void createThumbnail(String image,String idJob) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(image);
+                    Bitmap imageBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    storageProvider.createThumbnail(idJob,imageBitmap,"all_jobs_thumbnail",idJob).addOnSuccessListener(taskSnapshot ->
+                            taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
+                        Job update=new Job();
+                        update.setId(idJob);
+                        update.setThumbnail(uri.toString());
+                        jobsDatabaseProvider.updateJob(update).addOnFailureListener(e-> Log.e(TAG_LOG, "fail to save thumbnail job "+e.getMessage() ));
+                    }).addOnFailureListener(e -> Log.d(TAG_LOG, "fail get url thumbnail  "+e.getMessage())));
+
+                } catch (MalformedURLException e) {
+                    Log.e(TAG_LOG, "createThumbnail: "+e.getMessage() );
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    Log.e(TAG_LOG, "createThumbnail: "+e.getMessage() );
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private List<StorageTask<UploadTask.TaskSnapshot>> getListTaskUploadPhotos(String idDocument) {
@@ -427,7 +463,7 @@ public class CreateJobActivity extends AppCompatActivity {
         mDialogCreateJob.show();
         for (Uri _uri : listUris) {
             if (!_uri.toString().contains("https://")) {
-                StorageTask<UploadTask.TaskSnapshot> task = storageProvider.uploadImageNewJob(_uri, idDocument).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                StorageTask<UploadTask.TaskSnapshot> task = storageProvider.uploadImageNewJob(_uri, idDocument, CreateJobActivity.this).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         if (taskSnapshot != null) {
@@ -480,9 +516,9 @@ public class CreateJobActivity extends AppCompatActivity {
         outState.putString("description", binding.description.getEditText().getText().toString());
         outState.putString("title", binding.title.getEditText().getText().toString());
         outState.putParcelableArrayList("list_uris", listUris);
-        if (listCategories.size() > 0&&positionCategorySelected!=null)
+        if (listCategories.size() > 0 && positionCategorySelected != null)
             outState.putString("idCategory", listCategories.get(positionCategorySelected).getTitleString());
-        if (listSubcategories.size() > 0&&positionSubcategorySelected!=null)
+        if (listSubcategories.size() > 0 && positionSubcategorySelected != null)
             outState.putString("idSubcategory", listSubcategories.get(positionSubcategorySelected).getName());
     }
 

@@ -20,13 +20,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.UI.activities.MainActivity;
+import com.optic.projectofinal.UI.activities.login.register.RegisterStep1Activity;
 import com.optic.projectofinal.databinding.ActivityLoginBinding;
 import com.optic.projectofinal.databinding.LayoutLoginBottomSheetBinding;
 import com.optic.projectofinal.databinding.LayoutRegisterBottomSheetBinding;
@@ -36,6 +36,9 @@ import com.optic.projectofinal.providers.AuthenticationProvider;
 import com.optic.projectofinal.providers.UserDatabaseProvider;
 import com.optic.projectofinal.utils.Utils;
 
+import java.util.Arrays;
+import java.util.Date;
+
 public class LoginActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_GOOGLE = 1;
     private GoogleSignInClient mGoogleSignInClient;
@@ -44,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     private UserDatabaseProvider mUserDatabase;
     private GoogleSignInOptions gso;
     private CallbackManager callbackManager = CallbackManager.Factory.create();
-    ;
+    private String[] permissionsFacebook=new String[]{"email","user_birthday","public_profile","user_gender"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +55,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //set binding
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
-        setContentView(view);
+        setContentView(binding.getRoot());
         ///intance object
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getResources().getString(R.string.default_web_client_id))
@@ -62,21 +64,20 @@ public class LoginActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mAuth = new AuthenticationProvider();
         mUserDatabase = new UserDatabaseProvider();
-        binding.loginCreateProfile.setOnClickListener(view12 -> {
+
+        binding.loginCreateProfile.setOnClickListener(click -> {
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(LoginActivity.this, R.style.BottomSheetDialogTheme);
             ///SET BINDING REGISTER FRAGMENT
             LayoutRegisterBottomSheetBinding fragmentBinding = LayoutRegisterBottomSheetBinding.inflate(getLayoutInflater());
             View vista = fragmentBinding.getRoot();
-            fragmentBinding.btnContinueEmail.setOnClickListener(view1 -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
-            fragmentBinding.btnRegisterWithGoogle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view12) {
-                    signInGoogleIntent();
-                }
+            fragmentBinding.btnContinueEmail.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
+            fragmentBinding.btnRegisterWithGoogle.setOnClickListener(view ->{
+                signInGoogleIntent();
+                bottomSheetDialog.dismiss();
             });
-            fragmentBinding.btnRegisterWithFacebook.setOnClickListener(view121 ->
-                    LoginManager.getInstance().logIn(LoginActivity.this, null));
-            fragmentBinding.closeFragment.setOnClickListener(view1212 -> bottomSheetDialog.dismiss());
+            fragmentBinding.btnRegisterWithFacebook.setOnClickListener(view ->
+                    LoginManager.getInstance().logIn(LoginActivity.this, Arrays.asList(permissionsFacebook) ) );
+            fragmentBinding.closeFragment.setOnClickListener(view -> bottomSheetDialog.dismiss());
             bottomSheetDialog.setContentView(vista);
             bottomSheetDialog.show();
 
@@ -84,34 +85,32 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-        binding.loginHaveAccount.setOnClickListener(view13 -> {
+        binding.loginHaveAccount.setOnClickListener(click -> {
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(LoginActivity.this, R.style.BottomSheetDialogTheme);
             //set binding FRAME SIGN IN FRAGMENT
             LayoutLoginBottomSheetBinding fragmentBinding = LayoutLoginBottomSheetBinding.inflate(getLayoutInflater());
             View vista = fragmentBinding.getRoot();
             bottomSheetDialog.setContentView(vista);
 
-            fragmentBinding.btnContinueEmail.setOnClickListener(view131 ->
+            fragmentBinding.btnContinueEmail.setOnClickListener(view ->
                     startActivity(new Intent(LoginActivity.this, SignInActivity.class)));
-            fragmentBinding.btnSignInGoogle.setOnClickListener(view1312 ->
-                    signInGoogleIntent());
-
-
-            fragmentBinding.btnSignInFacebook.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view13) {
-
-                    LoginManager.getInstance().logIn(LoginActivity.this, null);
-                }
+            fragmentBinding.btnSignInGoogle.setOnClickListener(view ->
+            {
+                signInGoogleIntent();
+                bottomSheetDialog.dismiss();
             });
 
 
-            fragmentBinding.closeFragment.setOnClickListener(view1313 -> bottomSheetDialog.dismiss());
+            fragmentBinding.btnSignInFacebook.setOnClickListener(view -> LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList(permissionsFacebook) ));
+
+
+            fragmentBinding.closeFragment.setOnClickListener(view -> bottomSheetDialog.dismiss());
             bottomSheetDialog.show();
 
         });
 
         registerCallbackLoginFacebook();
+
     }
 
 
@@ -140,18 +139,19 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(LoginResult loginResult) {
 
                 Toast.makeText(LoginActivity.this, "Facebook success", Toast.LENGTH_SHORT).show();
-                mAuth.logInFacebook(loginResult.getAccessToken().getToken()).addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (task.isComplete()) {
-                            Toast.makeText(LoginActivity.this, "Facebbok firebase OK", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Facebook firebase BAD", Toast.LENGTH_SHORT).show();
-                        }
+                mAuth.logInFacebook(loginResult.getAccessToken().getToken()).addOnCompleteListener(task -> {
+                    if (task.isComplete()) {
+                        checkUserExist(mAuth.getIdCurrentUser(), Utils.REGISTER.FACEBOOK);
+
+
+                        Toast.makeText(LoginActivity.this, "Facebbok firebase OK", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Facebook firebase BAD", Toast.LENGTH_SHORT).show();
                     }
                 });
-            }
 
+            }
             @Override
             public void onCancel() {
                 Toast.makeText(LoginActivity.this, "Facebook cancel", Toast.LENGTH_SHORT).show();
@@ -168,50 +168,49 @@ public class LoginActivity extends AppCompatActivity {
 
     private void firebaseAuthWithGoogle(String idToken) {
 
-        mAuth.logInGoogle(idToken).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    checkUserExist(task.getResult().getUser().getUid());
-                } else {
-                    Toast.makeText(LoginActivity.this, "No se pudo iniciar con google " + task.getException().toString(), Toast.LENGTH_SHORT).show();
-                }
+        mAuth.logInGoogle(idToken).addOnCompleteListener(this, (OnCompleteListener<AuthResult>) task -> {
+            if (task.isSuccessful()) {
+                checkUserExist(task.getResult().getUser().getUid(),Utils.REGISTER.GOOGLE);
+            } else {
+                Toast.makeText(LoginActivity.this, "No se pudo iniciar con google " + task.getException().toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void checkUserExist(final String id) {
-        mUserDatabase.getUser(id).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    ///set share preference
-                    saveSharePreference(documentSnapshot);
+    private void checkUserExist(final String id, Utils.REGISTER option) {
+        mUserDatabase.getUser(id).addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                ///the user exist
+                ///set share preference
+                saveSharePreference(documentSnapshot);
 
-                    Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(i);
-                } else {
-                    User mUser = new User();
-                    mUser.setEmail(mAuth.getFirebaseAuth().getCurrentUser().getEmail());
-                    mUser.setId(id);
-                    mUserDatabase.createUser(mUser).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                ///set share preference
-                                saveSharePreference(documentSnapshot);
+                Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+            } else {
+                //the user not exist so we create it
+                User  mUser = new User();
+                mUser.setEmail(mAuth.getFirebaseAuth().getCurrentUser().getEmail());
+                mUser.setId(id);
+                mUser.setTimestamp(new Date().getTime());
+                mUserDatabase.createUser(mUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            ///set share preference
+                            saveSharePreference(documentSnapshot);
+                            Intent i = new Intent(LoginActivity.this, RegisterStep1Activity.class);
+                            i.putExtra("idUser",id);
+                            i.putExtra("optionRegister",option);
+                            startActivity(i);
 
-                                Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(i);
-                                Toast.makeText(LoginActivity.this, "Registrado database normal ", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(LoginActivity.this, "Ha habido un error database " + task.getException(), Toast.LENGTH_LONG).show();
-                            }
+                            Toast.makeText(LoginActivity.this, "Registrado database normal ", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Ha habido un error database " + task.getException(), Toast.LENGTH_LONG).show();
                         }
-                    });
+                    }
+                });
 
-                }
             }
         });
     }

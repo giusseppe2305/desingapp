@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -19,6 +21,7 @@ import com.optic.projectofinal.UI.activities.fragments.ChatsFragment;
 import com.optic.projectofinal.UI.activities.fragments.JobsFragment;
 import com.optic.projectofinal.UI.activities.fragments.ProfileFragment;
 import com.optic.projectofinal.UI.activities.fragments.WorkersFragment;
+import com.optic.projectofinal.UI.activities.options_profile.settings.EditSettingsWorkerActivity;
 import com.optic.projectofinal.databinding.ActivityMainBinding;
 import com.optic.projectofinal.providers.TokenProvider;
 
@@ -44,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("idUserToSee", getIntent().getStringExtra("idUserToSee"));
             startActivity(intent);
         }
+        if(getIntent().getBooleanExtra("isProfessional",false)){
+            startActivity(new Intent(this, EditSettingsWorkerActivity.class));
+        }
+
         //set binding
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -63,8 +70,15 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getString(R.string.menuNameWorkers));
 
         createToken();
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
 
 
+        //new StorageProvider(this).createThumbnail("prueba", Uri.parse("https://firebasestorage.googleapis.com/v0/b/projecto-final-b5adb.appspot.com/o/jobs_photos%2FNqCsoz2vJeKAwVAHrPVv%2FSun%20Dec%2020%2015%3A27%3A14%20GMT%2B01%3A00%202020IMG_20201220_152702188.jpg?alt=media&token=b2b7c8fa-0e2a-47a7-a63a-0137891f0ddb"),"all_jobs","prueba");
+
+       // Log.d(TAG_LOG, "onCreate: "+acct.getPhotoUrl().toString());
+
+        //Utils.downloadFile("https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=3408049219249663&width=500&ext=1611006682&hash=AeT3HtJphqZV0K5-NL8");
+        //Utils.download(this,"https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=3408049219249663&width=500&ext=1611006682&hash=AeT3HtJphqZV0K5-NL8");
 //        NotificationMessageDTO notificationDTO=new NotificationMessageDTO("titulo", NotificationHelper.TYPE_NOTIFICATION.MESSAGE_CHAT.toString(),"cuerpo", idChat);
 //        PodamFactoryImpl podamFactory=new PodamFactoryImpl();
 //        Message[] messages=new Message[3];

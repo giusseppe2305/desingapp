@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +25,7 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.databinding.ActivityEditProfileBinding;
+import com.optic.projectofinal.models.BasicInformationUser;
 import com.optic.projectofinal.models.Sex;
 import com.optic.projectofinal.models.User;
 import com.optic.projectofinal.providers.AuthenticationProvider;
@@ -30,11 +33,15 @@ import com.optic.projectofinal.providers.StorageProvider;
 import com.optic.projectofinal.providers.UserDatabaseProvider;
 import com.optic.projectofinal.utils.Utils;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 import static com.optic.projectofinal.utils.Utils.TAG_LOG;
+import static com.optic.projectofinal.utils.Utils.updateImageProfileBasicUserInformation;
 
 public class EditProfileActivity extends AppCompatActivity {
     private final int PICKER_IMAGE_PROFILE_IMAGE = 1;
@@ -182,6 +189,17 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
+    private void updateSharePreference(User user) {
+        BasicInformationUser basicInformationUser = new BasicInformationUser();
+        basicInformationUser.setName(user.getName());
+        basicInformationUser.setLastName(user.getLastName());
+        if(uriImageProfile!=null)
+            basicInformationUser.setPhotoUser(uriImageProfile.toString());
+
+        Utils.setPersistantBasicUserInformation(basicInformationUser, this);
+        Utils.setLanguage("es-Es", this);
+    }
+
     private void showDialogSelectImage(TYPE_IMAGE type) {
         new MaterialAlertDialogBuilder(this).
                 setTitle(R.string.edit_profile_dialog_select_image_from_tittle)
@@ -229,6 +247,7 @@ public class EditProfileActivity extends AppCompatActivity {
             userUpdate.setBirthdate(Utils.getTimestampFromString(binding.birthDate.getEditText().getText().toString()));
             userUpdate.setLocation(binding.location.getEditText().getText().toString());
 
+            updateSharePreference(userUpdate);
 
             if (uriCoverImage != null) {
 
@@ -255,6 +274,9 @@ public class EditProfileActivity extends AppCompatActivity {
                                     mUser.setId(authenticationProvider.getIdCurrentUser());
                                     mUser.setProfileImage(c.toString());
                                     userDatabaseProvider.updateUser(mUser);
+                                    //create thumbnail
+                                    createThumbnail(c.toString(),mUser.getId());
+
                                 }).addOnFailureListener(cc -> Log.e(TAG_LOG, "updateDataUser: profile " + cc.getMessage()));
 
                             }
@@ -275,7 +297,33 @@ public class EditProfileActivity extends AppCompatActivity {
         }
 
     }
+    private void createThumbnail(String image,String idUser) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(image);
+                    Bitmap imageBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    storageProvider.createThumbnail(idUser,imageBitmap,"all_jobs_thumbnail",idUser).addOnSuccessListener(taskSnapshot ->
+                            taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
+                                User update=new User();
+                                update.setId(idUser);
+                                update.setThumbnail(uri.toString());
+                                userDatabaseProvider.updateUser(update).addOnFailureListener(e-> Log.e(TAG_LOG, "fail to save thumbnail user "+e.getMessage() ));
+                                updateImageProfileBasicUserInformation(uri.toString(), EditProfileActivity.this);
 
+                            }).addOnFailureListener(e -> Log.d(TAG_LOG, "fail get url thumbnail  "+e.getMessage())));
+
+                } catch (MalformedURLException e) {
+                    Log.e(TAG_LOG, "createThumbnail: "+e.getMessage() );
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    Log.e(TAG_LOG, "createThumbnail: "+e.getMessage() );
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
     private boolean checkFieldAreValid() {
         boolean ret = false;
         boolean ret2 = false;

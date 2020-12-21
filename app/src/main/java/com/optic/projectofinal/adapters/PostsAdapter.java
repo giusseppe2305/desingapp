@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.optic.projectofinal.R;
 
 import java.util.ArrayList;
@@ -34,12 +33,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull PostsAdapter.ViewHolder holder, int position) {
-        holder.title.setText("titulo "+numeros.get(position));
-        if(position%2==0){
-            Glide.with(context).load(R.drawable.prueba2).placeholder(R.drawable.loading_).thumbnail(Glide.with(context).load(R.drawable.loading_)).error(R.drawable.ic_error_404).centerInside().into(holder.ivPost);
-        }else{
-            Glide.with(context).load(R.drawable.prueba).placeholder(R.drawable.loading_).thumbnail(Glide.with(context).load(R.drawable.loading_)).error(R.drawable.ic_error_404).centerInside().into(holder.ivPost);
-        }
+
     }
 
     @Override
