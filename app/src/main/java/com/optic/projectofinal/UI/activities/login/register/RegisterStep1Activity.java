@@ -1,7 +1,6 @@
 package com.optic.projectofinal.UI.activities.login.register;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -38,7 +36,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -156,38 +153,34 @@ public class RegisterStep1Activity extends AppCompatActivity {
                                 mUser.setProfileImage(c.toString());
                                 userDatabaseProvider.updateUser(mUser);
                                 //create thumbnail
-                                createThumbnail(c.toString(),mUser.getId());
+                                createThumbnail(c.toString(), mUser.getId());
                             }).addOnFailureListener(cc -> Log.e(TAG_LOG, "updateDataUser: profile " + cc.getMessage()));
 
                         })
                         .addOnFailureListener(v -> Log.e(TAG_LOG, "fail update  image prifle " + v.getMessage()));
             } else if (uriImageProfile == null && (urlImageFacebook != null || urlImageGoogle != null)) {
-                Utils.downloadFile(urlImageFacebook != null?urlImageFacebook:urlImageGoogle, file -> {
-                    storageProvider.uploadImageUser(file, StorageProvider.TYPE_IMAGE.PROFILE_IMAGE).addOnSuccessListener(taskSnapshot -> {
-                        Log.e(TAG_LOG, "updateDataUser: cambio profile image facebook");
-                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(c -> {
-                            User mUser = new User();
-                            mUser.setId(authenticationProvider.getIdCurrentUser());
-                            mUser.setProfileImage(c.toString());
-                            userDatabaseProvider.updateUser(mUser);
-                            //create thumbnail
-                            createThumbnail(c.toString(),mUser.getId());
-                        }).addOnFailureListener(cc -> Log.e(TAG_LOG, "updateDataUser: profile facebook" + cc.getMessage()));
-                    }).addOnFailureListener(e -> Log.e(TAG_LOG, "updateDataUser: fail to upload phtoto profile from facebook"));
-                });
+                Utils.downloadFile(urlImageFacebook != null ? urlImageFacebook : urlImageGoogle, file ->
+                        storageProvider.uploadImageUser(file, StorageProvider.TYPE_IMAGE.PROFILE_IMAGE).addOnSuccessListener(taskSnapshot -> {
+                    Log.e(TAG_LOG, "updateDataUser: cambio profile image facebook");
+                    taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(c -> {
+                        User mUser = new User();
+                        mUser.setId(authenticationProvider.getIdCurrentUser());
+                        mUser.setProfileImage(c.toString());
+                        userDatabaseProvider.updateUser(mUser);
+                        //create thumbnail
+                        createThumbnail(c.toString(), mUser.getId());
+                    }).addOnFailureListener(cc -> Log.e(TAG_LOG, "updateDataUser: profile facebook" + cc.getMessage()));
+                }).addOnFailureListener(e -> Log.e(TAG_LOG, "updateDataUser: fail to upload phtoto profile from facebook")));
             }
 
             userDatabaseProvider.updateUser(userUpdate)
                     .addOnSuccessListener(n -> Toast.makeText(this, "Todo update ", Toast.LENGTH_SHORT).show())
-                    .addOnFailureListener(v -> {
-
-                        Log.e(TAG_LOG, "updateDataUser: " + v.getMessage());
-                    });
+                    .addOnFailureListener(v -> Log.e(TAG_LOG, "updateDataUser: " + v.getMessage()));
 
             saveSharePreference(userUpdate);
 
             Intent i = new Intent(this, MainActivity.class);
-            i.putExtra("isProfessional",binding.isProfessional.isChecked());
+            i.putExtra("isProfessional", binding.isProfessional.isChecked());
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
         } else {
@@ -195,39 +188,35 @@ public class RegisterStep1Activity extends AppCompatActivity {
         }
 
     }
-    private void createThumbnail(String image,String idUser) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL(image);
-                    Bitmap imageBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    storageProvider.createThumbnail(idUser,imageBitmap,"all_jobs_thumbnail",idUser).addOnSuccessListener(taskSnapshot ->
-                            taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
-                                User update=new User();
-                                update.setId(idUser);
-                                update.setThumbnail(uri.toString());
-                                userDatabaseProvider.updateUser(update).addOnFailureListener(e-> Log.e(TAG_LOG, "fail to save thumbnail user "+e.getMessage() ));
-                                updateImageProfileBasicUserInformation(uri.toString(),RegisterStep1Activity.this);
 
-                            }).addOnFailureListener(e -> Log.d(TAG_LOG, "fail get url thumbnail  "+e.getMessage())));
+    private void createThumbnail(String image, String idUser) {
+        new Thread(() -> {
+            try {
+                URL url = new URL(image);
+                Bitmap imageBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                storageProvider.createThumbnail(idUser, imageBitmap, "all_jobs_thumbnail", idUser).addOnSuccessListener(taskSnapshot ->
+                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
+                            User update = new User();
+                            update.setId(idUser);
+                            update.setThumbnail(uri.toString());
+                            userDatabaseProvider.updateUser(update).addOnFailureListener(e -> Log.e(TAG_LOG, "fail to save thumbnail user " + e.getMessage()));
+                            updateImageProfileBasicUserInformation(uri.toString(), RegisterStep1Activity.this);
 
-                } catch (MalformedURLException e) {
-                    Log.e(TAG_LOG, "createThumbnail: "+e.getMessage() );
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    Log.e(TAG_LOG, "createThumbnail: "+e.getMessage() );
-                    e.printStackTrace();
-                }
+                        }).addOnFailureListener(e -> Log.d(TAG_LOG, "fail get url thumbnail  " + e.getMessage())));
+
+            } catch (IOException e) {
+                Log.e(TAG_LOG, "createThumbnail: " + e.getMessage());
+                e.printStackTrace();
             }
         }).start();
     }
+
     private void saveSharePreference(User user) {
         BasicInformationUser basicInformationUser = new BasicInformationUser();
         basicInformationUser.setName(user.getName());
         basicInformationUser.setLastName(user.getLastName());
-        if(uriImageProfile!=null)
-        basicInformationUser.setPhotoUser(uriImageProfile.toString());
+        basicInformationUser.setPhotoUser((uriImageProfile) == null ? "nonPhoto" : uriImageProfile.toString());
+
 
         Utils.setPersistantBasicUserInformation(basicInformationUser, this);
         Utils.setLanguage("es-Es", this);
@@ -239,7 +228,7 @@ public class RegisterStep1Activity extends AppCompatActivity {
             if (acct != null) {
                 binding.name.getEditText().setText(acct.getGivenName());
                 binding.lastName.getEditText().setText(acct.getFamilyName());
-                urlImageGoogle=acct.getPhotoUrl().toString();
+                urlImageGoogle = acct.getPhotoUrl().toString();
                 Glide.with(this).load(acct.getPhotoUrl()).apply(Utils.getOptionsGlide(false)).into(binding.imageProfile);
 
             }
@@ -251,77 +240,71 @@ public class RegisterStep1Activity extends AppCompatActivity {
             Log.d(TAG_LOG, "onCompleted: token " + token.getGraphDomain());
             GraphRequest request = GraphRequest.newMeRequest(
                     token,
-                    new GraphRequest.GraphJSONObjectCallback() {
-                        @Override
-                        public void onCompleted(JSONObject object, GraphResponse response) {
+                    (object, response) -> {
 
-                            Log.v("LoginActivity", response.toString());
+                        Log.v("LoginActivity", response.toString());
 
 
-                            JSONObject json = response.getJSONObject();
-                            try {
-                                if (json != null) {
-                                    for (int i = 0; i < json.names().length(); i++) {
-                                        Log.d(Utils.TAG_LOG, "key = " + json.names().getString(i) + " value = " + json.get(object.names().getString(i)));
-                                    }
-                                    binding.birthdate.getEditText().setText(Utils.convertDateFormat(json.getString("birthday")));
-                                    binding.name.getEditText().setText(json.getString("first_name"));
-                                    binding.lastName.getEditText().setText(json.getString("last_name"));
-                                    int typeGender;
-                                    switch (json.getString("gender")) {
-                                        case "male":
-                                            typeGender = 0;
-                                            break;
-                                        case "female":
-                                            typeGender = 1;
-                                            break;
-                                        default:
-                                            typeGender = 2;
-                                    }
-
-                                    Sex sex = Utils.getSexByIdJson(RegisterStep1Activity.this, typeGender);
-                                    sexSelected = sex.getId();
-                                    binding.sex.setText(sex.getTitleString(), false);
-
-                                    String idFacebook = json.getString("id");
-
-
-                                    Log.d(TAG_LOG, "onCompleted: token " + token);
-                                    GraphRequest request = GraphRequest.newGraphPathRequest(
-                                            token,
-                                            "/" + idFacebook + "/picture",
-                                            new GraphRequest.Callback() {
-                                                @Override
-                                                public void onCompleted(GraphResponse response) {
-                                                    if (response.getError() == null) {
-                                                        JSONObject object = null;
-                                                        try {
-                                                            object = new JSONObject(response.getRawResponse());
-                                                            String image = object.getJSONObject("data").getString("url");
-                                                            Log.d(TAG_LOG, "onCompleted: image " + image);
-                                                            Glide.with(RegisterStep1Activity.this).load(image).apply(Utils.getOptionsGlide(true)).into(binding.imageProfile);
-                                                            urlImageFacebook = image;
-                                                        } catch (JSONException e) {
-                                                            e.printStackTrace();
-                                                        }
-                                                    }
-                                                }
-                                            });
-
-                                    Bundle parameters = new Bundle();
-                                    parameters.putString("width", "500");
-                                    parameters.putString("redirect", "false");
-                                    parameters.putString("access_token", token.getToken());
-                                    request.setParameters(parameters);
-
-                                    request.executeAsync();
-
-
+                        JSONObject json = response.getJSONObject();
+                        try {
+                            if (json != null) {
+                                for (int i = 0; i < json.names().length(); i++) {
+                                    Log.d(Utils.TAG_LOG, "key = " + json.names().getString(i) + " value = " + json.get(object.names().getString(i)));
+                                }
+                                binding.birthdate.getEditText().setText(Utils.convertDateFormat(json.getString("birthday")));
+                                binding.name.getEditText().setText(json.getString("first_name"));
+                                binding.lastName.getEditText().setText(json.getString("last_name"));
+                                int typeGender;
+                                switch (json.getString("gender")) {
+                                    case "male":
+                                        typeGender = 0;
+                                        break;
+                                    case "female":
+                                        typeGender = 1;
+                                        break;
+                                    default:
+                                        typeGender = 2;
                                 }
 
-                            } catch (JSONException e) {
+                                Sex sex = Utils.getSexByIdJson(RegisterStep1Activity.this, typeGender);
+                                sexSelected = sex.getId();
+                                binding.sex.setText(sex.getTitleString(), false);
+
+                                String idFacebook = json.getString("id");
+
+
+                                Log.d(TAG_LOG, "onCompleted: token " + token);
+                                GraphRequest request1 = GraphRequest.newGraphPathRequest(
+                                        token,
+                                        "/" + idFacebook + "/picture",
+                                        response1 -> {
+                                            if (response1.getError() == null) {
+                                                JSONObject object1;
+                                                try {
+                                                    object1 = new JSONObject(response1.getRawResponse());
+                                                    String image = object1.getJSONObject("data").getString("url");
+                                                    Log.d(TAG_LOG, "onCompleted: image " + image);
+                                                    Glide.with(RegisterStep1Activity.this).load(image).apply(Utils.getOptionsGlide(true)).into(binding.imageProfile);
+                                                    urlImageFacebook = image;
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        });
+
+                                Bundle parameters = new Bundle();
+                                parameters.putString("width", "500");
+                                parameters.putString("redirect", "false");
+                                parameters.putString("access_token", token.getToken());
+                                request1.setParameters(parameters);
+
+                                request1.executeAsync();
+
 
                             }
+
+                        } catch (JSONException ignored) {
+
                         }
                     });
             Bundle parameters = new Bundle();
@@ -341,8 +324,7 @@ public class RegisterStep1Activity extends AppCompatActivity {
         if (requestCode == PICKER_IMAGE_COVER_IMAGE) {
             if (resultCode == Activity.RESULT_OK) {
                 //Image Uri will not be null for RESULT_OK
-                Uri fileUri = data.getData();
-                uriCoverImage = fileUri;
+                uriCoverImage = data.getData();
                 Glide.with(this).load(uriCoverImage).apply(Utils.getOptionsGlide(true)).centerCrop().into(binding.coverPageImage);
             } else if (resultCode == ImagePicker.RESULT_ERROR) {
                 Toast.makeText(this, ImagePicker.Companion.getError(data), Toast.LENGTH_SHORT).show();
@@ -353,8 +335,7 @@ public class RegisterStep1Activity extends AppCompatActivity {
         if (requestCode == PICKER_IMAGE_PROFILE_IMAGE) {
             if (resultCode == Activity.RESULT_OK) {
                 //Image Uri will not be null for RESULT_OK
-                Uri fileUri = data.getData();
-                uriImageProfile = fileUri;
+                uriImageProfile = data.getData();
                 Glide.with(this).load(uriImageProfile).apply(Utils.getOptionsGlide(true)).into(binding.imageProfile);
             } else if (resultCode == ImagePicker.RESULT_ERROR) {
                 Log.e(TAG_LOG, "fail on get select image " + ImagePicker.Companion.getError(data));
@@ -368,34 +349,26 @@ public class RegisterStep1Activity extends AppCompatActivity {
         new MaterialAlertDialogBuilder(this).
                 setTitle(R.string.edit_profile_dialog_select_image_from_tittle)
                 .setItems(new String[]{getString(R.string.edit_profile_dialog_select_image_from_option1),
-                        getString(R.string.edit_profile_dialog_select_image_from_option2)}, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        ImagePicker.Builder show = ImagePicker.Companion.with(RegisterStep1Activity.this)
-                                .compress(1024)            //Final image size will be less than 1 MB(Optional)
-                                .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
-                                .galleryMimeTypes(new String[]{"image/png", "image/jpeg", "image/jpg"});
-                        if (i == 0) {
-                            show.galleryOnly();
+                        getString(R.string.edit_profile_dialog_select_image_from_option2)}, (dialogInterface, i) -> {
+                            ImagePicker.Builder show = ImagePicker.Companion.with(RegisterStep1Activity.this)
+                                    .compress(1024)            //Final image size will be less than 1 MB(Optional)
+                                    .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
+                                    .galleryMimeTypes(new String[]{"image/png", "image/jpeg", "image/jpg"});
+                            if (i == 0) {
+                                show.galleryOnly();
 
-                        } else {
-                            show.cameraOnly();
-                        }
-                        if (type == RegisterStep1Activity.TYPE_IMAGE.COVER_IMAGE) {
-                            show.crop(16f, 9f);
-                            show.start(PICKER_IMAGE_COVER_IMAGE);
-                        } else {
-                            show.crop();
-                            show.start(PICKER_IMAGE_PROFILE_IMAGE);
-                        }
-                    }
-                })
-                .setNegativeButton(R.string.edit_profile_dialog_select_image_from_negative_button, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Log.d(TAG_LOG, "the user cancel dialog where you selec option gallery or camera");
-                    }
-                }).setCancelable(false).show();
+                            } else {
+                                show.cameraOnly();
+                            }
+                            if (type == TYPE_IMAGE.COVER_IMAGE) {
+                                show.crop(16f, 9f);
+                                show.start(PICKER_IMAGE_COVER_IMAGE);
+                            } else {
+                                show.crop();
+                                show.start(PICKER_IMAGE_PROFILE_IMAGE);
+                            }
+                        })
+                .setNegativeButton(R.string.edit_profile_dialog_select_image_from_negative_button, (dialogInterface, i) -> Log.d(TAG_LOG, "the user cancel dialog where you selec option gallery or camera")).setCancelable(false).show();
     }
 
     private boolean checkFieldAreValid() {

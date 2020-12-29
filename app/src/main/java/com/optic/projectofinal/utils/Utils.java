@@ -1,6 +1,5 @@
 package com.optic.projectofinal.utils;
 
-import android.app.DownloadManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.MenuItem;
@@ -30,6 +28,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.BaseRequestOptions;
 import com.bumptech.glide.request.RequestOptions;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.gson.Gson;
@@ -61,6 +61,7 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -74,7 +75,19 @@ public class Utils {
     public  static final int MAX_IMAGE_CAN_BE_SELECTED=10;
     public static final String TAG_LOG="own";
 
-
+    public static <T> Map<String, Object> convertClassToMap(T obj){
+        Map<String, Object> update = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL).convertValue(obj, Map.class);
+        ArrayList<String> delete=new ArrayList<>();
+        for (Map.Entry<String, Object> entry : update.entrySet()) {
+            if(entry.getValue().toString().length()>0 &&entry.getValue().toString().charAt(0)=='0'){
+                delete.add(entry.getKey());
+            }
+        }
+        for(String del:delete){
+            update.remove(del);
+        }
+        return update;
+    }
     public static String convertDateFormat(String date)  {
 
         try {
@@ -116,19 +129,7 @@ public class Utils {
     }
 
 
-    public static void download(Context context,String url){
-        DownloadManager downloadmanager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-        Uri uri = Uri.parse(url);
 
-        DownloadManager.Request request = new DownloadManager.Request(uri);
-        request.setTitle("My File");
-        request.setDescription("Downloading");
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setVisibleInDownloadsUi(false);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"game-of-life");
-
-        downloadmanager.enqueue(request);
-    }
     public static String arrayToString(String[] strings) {
         String dev="";
         for(int i=0;i<strings.length;i++){
@@ -301,9 +302,13 @@ public class Utils {
         }
         return new ArrayList<>(dev);
     }
-    public static String getDateFormatted(Long timestamp,Context context){
+    public static String getDateFormattedAdvance(Long timestamp,Context context){
         Date date = new Date(timestamp);
         SimpleDateFormat df2 = new SimpleDateFormat("HH:mm - dd MMMM yyyy",Locale.forLanguageTag(Utils.getLanguage(context)));
+        return df2.format(date);
+    }public static String getDateFormattedSimple(Long timestamp,Context context){
+        Date date = new Date(timestamp);
+        SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yyyy",Locale.forLanguageTag(Utils.getLanguage(context)));
         return df2.format(date);
     }
     public static long getTimestampFromString(String date){
@@ -377,6 +382,9 @@ public class Utils {
         return format.format(result);
     }
 
+    public static String getFormatPrice(double num, Context context){
+        return String.format("%.2f %s",num,getCurrency(context).getSymbol());
+    }
     public static void changeTintIconToolbar(MenuItem item, int color) {
         Drawable icon = item.getIcon();
         icon.setColorFilter(color, PorterDuff.Mode.SRC_IN);
@@ -447,6 +455,7 @@ public class Utils {
 
         editor.putString("lastName", dto.getLastName());
         editor.putString("name", dto.getName());
+        if(!dto.getPhotoUser().equals("nonPhoto"))
         editor.putString("photoUser", dto.getPhotoUser());
         editor.apply();
     }

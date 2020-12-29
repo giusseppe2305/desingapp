@@ -20,13 +20,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.adapters.ResourcesAdapter;
 import com.optic.projectofinal.adapters.ViewPagerProfileDetails;
@@ -42,7 +40,6 @@ import com.optic.projectofinal.providers.UserDatabaseProvider;
 import com.optic.projectofinal.utils.PermissionCall;
 import com.optic.projectofinal.utils.Utils;
 import com.stfalcon.imageviewer.StfalconImageViewer;
-import com.stfalcon.imageviewer.loader.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -74,7 +71,7 @@ public class ProfileDetailsActivity extends AppCompatActivity {
         Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout toolBarLayout = binding.toolbarLayout;
-        getSupportActionBar().setTitle("pruena");
+        getSupportActionBar().setTitle(" ");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolBarLayout.setExpandedTitleColor(Color.TRANSPARENT);
 
@@ -86,10 +83,10 @@ public class ProfileDetailsActivity extends AppCompatActivity {
             idUserToSee = authenticationProvider.getIdCurrentUser();
         }
         //insntance
-        jobsDatabaseProvider=new JobsDatabaseProvider();
+        jobsDatabaseProvider = new JobsDatabaseProvider();
         userDatabaseProvider = new UserDatabaseProvider();
         likeProvider = new LikeWorkersDatabaseProvider(authenticationProvider.getIdCurrentUser());
-        permissionCall=new PermissionCall(this);
+        permissionCall = new PermissionCall(this);
 
 
         binding.appBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -105,7 +102,7 @@ public class ProfileDetailsActivity extends AppCompatActivity {
                     window.setStatusBarColor(Color.MAGENTA);
                 }
                 if (scrollRange + verticalOffset == 0) {
-                    toolBarLayout.setTitle("Title");
+                    toolBarLayout.setTitle(" ");
                     isShow = true;
                     Window window = getWindow();
                     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -125,27 +122,7 @@ public class ProfileDetailsActivity extends AppCompatActivity {
             i.putExtra("idUserToChat", idUserToSee);
             startActivity(i);
         });
-        //////
-//        adapterPager = new ViewPagerProfileDetailsWorker(this, idUserToSee);
-//        binding.contentProfileDetail.viewPager.setAdapter(adapterPager);
-//
-//        new TabLayoutMediator(binding.tabs, binding.contentProfileDetail.viewPager,
-//                new TabLayoutMediator.TabConfigurationStrategy() {
-//                    @Override
-//                    public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-//                        if (position == 0) {
-//                            tab.setText("Habilidades");
-//                            BadgeDrawable bg = tab.getOrCreateBadge();
-//                            bg.setBackgroundColor(Color.RED);
-//                            bg.setVisible(true);
-//                            bg.setNumber(13);
-//                        } else if (position == 1) {
-//                            tab.setText("Opiniones");
-//                        } else {
-//                            tab.setText("Subastas");
-//                        }
-//                    }
-//                }).attach();
+
 
         loadUserData();
 
@@ -154,100 +131,82 @@ public class ProfileDetailsActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-         permissionCall.executeOnRequestPermission(requestCode,permissions,grantResults);
+        permissionCall.executeOnRequestPermission(requestCode, permissions, grantResults);
     }
 
     private void loadUserData() {
-        userDatabaseProvider.getUser(idUserToSee).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    User mUser = documentSnapshot.toObject(User.class);
-                    //ling viewpager to tabs
-                    getIntermediaryViewPager(mUser.isProfessional());
-                    ///set rating value
-                    jobsDatabaseProvider.getValuationsFromUser(idUserToSee).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            float totalAmountValuation=0;
-                            for(DocumentSnapshot it:queryDocumentSnapshots.getDocuments()){
-                                totalAmountValuation+=it.toObject(Job.class).getValuation().getAverageTotal();
-                            }
-                            if(totalAmountValuation>0){
-                                binding.contentAppBar.numOpinions.setText("("+queryDocumentSnapshots.getDocuments().size()+")");
-                                binding.contentAppBar.valuated.setRating(totalAmountValuation/queryDocumentSnapshots.getDocuments().size());
-                            }
-                        }
-                    }).addOnFailureListener(v-> Log.e(TAG_LOG, "loadUserData onSuccess: addOnFailureListener" ));
-
-
-                    binding.contentAppBar.nameUser.setText(mUser.getName());
-                    binding.contentAppBar.lastNameUser.setText(mUser.getLastName());
-
-                    if(mUser.getPhoneNumber()!=0&&String.valueOf(mUser.getPhoneNumber()).length()>0){
-                        binding.contentAppBar.btnCall.setOnClickListener(v->{
-                            permissionCall.call(String.valueOf(mUser.getPhoneNumber()));
-
-                        });
-                        binding.contentAppBar.phoneNumber.setText(String.valueOf(mUser.getPhoneNumber()));
-                    }else{
-                        binding.contentAppBar.btnCall.setVisibility(View.GONE);
-                        binding.contentAppBar.phoneNumber.setVisibility(View.GONE);
+        userDatabaseProvider.getUser(idUserToSee).addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                User mUser = documentSnapshot.toObject(User.class);
+                //ling viewpager to tabs
+                getIntermediaryViewPager(mUser.isProfessional());
+                ///set rating value
+                jobsDatabaseProvider.getValuationsFromUser(idUserToSee).addOnSuccessListener(queryDocumentSnapshots -> {
+                    float totalAmountValuation = 0;
+                    for (DocumentSnapshot it : queryDocumentSnapshots.getDocuments()) {
+                        totalAmountValuation += it.toObject(Job.class).getValuation().getAverageTotal();
                     }
-
-
-                    binding.contentAppBar.about.setText(mUser.getAbout());
-                    if (mUser.isVerified()) {
-                        binding.contentAppBar.verified.setVisibility(View.VISIBLE);
+                    if (totalAmountValuation > 0) {
+                        binding.contentAppBar.numOpinions.setText("(" + queryDocumentSnapshots.getDocuments().size() + ")");
+                        binding.contentAppBar.valuated.setRating(totalAmountValuation / queryDocumentSnapshots.getDocuments().size());
                     }
-                    binding.contentAppBar.imageProfileStatus.setImageResource(mUser.isOnline() ? R.color.teal_200 : R.color.black);
-                    Glide.with(ProfileDetailsActivity.this).load(mUser.getProfileImage()).apply(Utils.getOptionsGlide(true)).into(binding.contentAppBar.imageProfile);
-                    imageProfileUser=mUser.getProfileImage();
-                    Glide.with(ProfileDetailsActivity.this).load(mUser.getCoverPageImage()).apply(Utils.getOptionsGlide(true)).into(binding.contentAppBar.coverPageImage);
-                    ///gallery
-                    if (mUser.getProfileImage() != null) {
-                        binding.contentAppBar.imageProfile.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-                                ImageView iv = (ImageView) view;
-                                new StfalconImageViewer.Builder<String>(ProfileDetailsActivity.this, new String[]{mUser.getProfileImage()}, new ImageLoader<String>() {
-                                    @Override
-                                    public void loadImage(ImageView imageView, String image) {
-                                        Glide.with(ProfileDetailsActivity.this).load(image).apply(Utils.getOptionsGlide(false)).into(imageView);
-                                    }
-                                }).withHiddenStatusBar(false).show();
-                            }
-                        });
-                    }
-                    if (mUser.getCoverPageImage() != null) {
-                        binding.contentAppBar.coverPageImage.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-                                ImageView iv = (ImageView) view;
-                                new StfalconImageViewer.Builder<String>(ProfileDetailsActivity.this, new String[]{mUser.getCoverPageImage()}, new ImageLoader<String>() {
-                                    @Override
-                                    public void loadImage(ImageView imageView, String image) {
-                                        Glide.with(ProfileDetailsActivity.this).load(image).apply(Utils.getOptionsGlide(true)).into(imageView);
-                                    }
-                                }).withHiddenStatusBar(false).show();
-                            }
-                        });
-                    }
+                }).addOnFailureListener(v -> Log.e(TAG_LOG, "loadUserData onSuccess: addOnFailureListener"));
 
 
-                    //resources
-                    if (mUser.getResources() != null && mUser.getResources().size() > 0) {
-                        listResources = Utils.createListResourcesByIds(ProfileDetailsActivity.this, mUser.getResources());
-                        adapterResource = new ResourcesAdapter(ProfileDetailsActivity.this, listResources);
-                        binding.contentAppBar.listResources.setLayoutManager(new LinearLayoutManager(ProfileDetailsActivity.this, RecyclerView.HORIZONTAL, false));
-                        binding.contentAppBar.listResources.setAdapter(adapterResource);
-                    }
+                binding.contentAppBar.nameUser.setText(mUser.getName());
+                binding.contentAppBar.lastNameUser.setText(mUser.getLastName());
 
+                if (mUser.getPhoneNumber() != 0 && String.valueOf(mUser.getPhoneNumber()).length() > 0) {
+                    binding.contentAppBar.btnCall.setOnClickListener(v -> {
+                        permissionCall.call(String.valueOf(mUser.getPhoneNumber()));
+
+                    });
+                    binding.contentAppBar.phoneNumber.setText(String.valueOf(mUser.getPhoneNumber()));
                 } else {
-                    Log.e(TAG_LOG, "ProfileDetailsActivity loadUserData onSuccess: ");
+                    binding.contentAppBar.btnCall.setVisibility(View.GONE);
+                    binding.contentAppBar.phoneNumber.setVisibility(View.GONE);
                 }
+
+
+                binding.contentAppBar.about.setText(mUser.getAbout());
+                if (mUser.isVerified()) {
+                    binding.contentAppBar.verified.setVisibility(View.VISIBLE);
+                }
+                if (mUser.isOnline()) {
+                    binding.contentAppBar.imageProfileStatus.setVisibility(View.VISIBLE);
+                }
+                Glide.with(ProfileDetailsActivity.this).load(mUser.getProfileImage()).apply(Utils.getOptionsGlide(false)).into(binding.contentAppBar.imageProfile);
+                imageProfileUser = mUser.getProfileImage();
+                Glide.with(ProfileDetailsActivity.this).load(mUser.getCoverPageImage()).apply(Utils.getOptionsGlide(false)).into(binding.contentAppBar.coverPageImage);
+                ///gallery
+                if (mUser.getProfileImage() != null) {
+                    binding.contentAppBar.imageProfile.setOnClickListener(view -> {
+
+                        ImageView iv = (ImageView) view;
+                        new StfalconImageViewer.Builder<String>(ProfileDetailsActivity.this, new String[]{mUser.getProfileImage()}, (imageView, image) ->
+                                Glide.with(ProfileDetailsActivity.this).load(image).apply(Utils.getOptionsGlide(false)).into(imageView)).withHiddenStatusBar(false).show();
+                    });
+                }
+                if (mUser.getCoverPageImage() != null) {
+                    binding.contentAppBar.coverPageImage.setOnClickListener(view -> {
+
+                        ImageView iv = (ImageView) view;
+                        new StfalconImageViewer.Builder<String>(ProfileDetailsActivity.this, new String[]{mUser.getCoverPageImage()}, (imageView, image) ->
+                                Glide.with(ProfileDetailsActivity.this).load(image).apply(Utils.getOptionsGlide(false)).into(imageView)).withHiddenStatusBar(false).show();
+                    });
+                }
+
+
+                //resources
+                if (mUser.getResources() != null && mUser.getResources().size() > 0) {
+                    listResources = Utils.createListResourcesByIds(ProfileDetailsActivity.this, mUser.getResources());
+                    adapterResource = new ResourcesAdapter(ProfileDetailsActivity.this, listResources);
+                    binding.contentAppBar.listResources.setLayoutManager(new LinearLayoutManager(ProfileDetailsActivity.this, RecyclerView.HORIZONTAL, false));
+                    binding.contentAppBar.listResources.setAdapter(adapterResource);
+                }
+
+            } else {
+                Log.e(TAG_LOG, "ProfileDetailsActivity loadUserData onSuccess: ");
             }
         }).addOnFailureListener(v -> Log.e(TAG_LOG, "ProfileDetailsActivity->addOnFailureListener ->loadUserData: "));
     }
@@ -295,27 +254,24 @@ public class ProfileDetailsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_profile_detail, menu);
-        if(idUserToSee==authenticationProvider.getIdCurrentUser()){
+        if (idUserToSee.equals(authenticationProvider.getIdCurrentUser())) {
             menu.findItem(R.id.btnMenuFavourite).setVisible(false);
             binding.contentAppBar.containerCallChat.setVisibility(View.GONE);
-        }else{
-            likeProvider.chekIfExistLikeToWorker(idUserToSee).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    if(queryDocumentSnapshots.getDocuments().size()>0){
-                        //exist like
-                        Utils.changeTintIconToolbar(menu.findItem(R.id.btnMenuFavourite),getResources().getColor(R.color.checkMessage));
-                        likeWorker=true;
-                    }else
-                    {
-                        Utils.changeTintIconToolbar(menu.findItem(R.id.btnMenuFavourite),getResources().getColor(R.color.grey_200));
-                        //not exist like
-                        likeWorker=false;
-                    }
+        } else {
 
-                    menu.findItem(R.id.btnMenuFavourite).setEnabled(true);
+
+            likeProvider.chekIfExistLikeToWorker(idUserToSee).addOnSuccessListener(queryDocumentSnapshots -> {
+                if (queryDocumentSnapshots.getDocuments().size() > 0) {
+                    //exist like
+                    Utils.changeTintIconToolbar(menu.findItem(R.id.btnMenuFavourite), getResources().getColor(R.color.likedWorker));
+                    likeWorker = true;
+                } else {
+                    Utils.changeTintIconToolbar(menu.findItem(R.id.btnMenuFavourite), getResources().getColor(R.color.unLikedWorker));
+                    //not exist like
+                    likeWorker = false;
                 }
-            }).addOnFailureListener(v-> Log.e(TAG_LOG, "onCreateOptionsMenu: "+v.getMessage() ));
+                menu.findItem(R.id.btnMenuFavourite).setEnabled(true);
+            }).addOnFailureListener(v -> Log.e(TAG_LOG, "onCreateOptionsMenu: " + v.getMessage()));
         }
 
         return true;
@@ -325,32 +281,34 @@ public class ProfileDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.btnMenuShare:
-                    share();
-                    return true;
+                share();
+                return true;
 
             case R.id.btnMenuFavourite:
+
                 likeWorker(item);
                 return true;
 
+        }
+        if (item.getItemId() == android.R.id.home) {
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
     private void likeWorker(MenuItem item) {
-        likeWorker=likeWorker;
-        if(likeWorker){
-            Utils.changeTintIconToolbar(item,getResources().getColor(R.color.checkMessage));
-
-        }else{
-            Utils.changeTintIconToolbar(item,getResources().getColor(R.color.grey_200));
-
+        if (likeWorker) {
+            Utils.changeTintIconToolbar(item, getResources().getColor(R.color.unLikedWorker));
+        } else {
+            Utils.changeTintIconToolbar(item, getResources().getColor(R.color.likedWorker));
         }
+        likeWorker = !likeWorker;
         likeProvider.doLike(idUserToSee);
     }
 
     private void share() {
-        Utils.generateDynamicLink(this,idUserToSee,"Conoces a: "+binding.contentAppBar.nameUser.getText().toString(),"description ",
-               imageProfileUser!=null?imageProfileUser:"https://static.thenounproject.com/png/17241-200.png","Comparte a este trabajador");
+        Utils.generateDynamicLink(this, idUserToSee, getString(R.string.dinamic_link_know) + binding.contentAppBar.nameUser.getText().toString(), getString(R.string.dinamic_link_description),
+                imageProfileUser != null ? imageProfileUser : "https://static.thenounproject.com/png/17241-200.png", getString(R.string.dinamic_link_share_user));
     }
 }

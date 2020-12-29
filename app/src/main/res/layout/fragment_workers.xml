@@ -6,7 +6,13 @@
     tools:context=".UI.activities.fragments.WorkersFragment"
     android:background="@color/primaryColor"
     >
-
+    <ProgressBar
+        android:visibility="gone"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/loading"
+        android:layout_gravity="center"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

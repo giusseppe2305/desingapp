@@ -33,9 +33,9 @@ public class ApplyJobAdapterFirebase extends FirestoreRecyclerAdapter<ApplyJob, 
     @Override
     protected void onBindViewHolder(@NonNull final ViewHolder holder, int position, @NonNull ApplyJob model) {
         holder.binding.descriptionApplyJob.setText(model.getMessage());
-        holder.binding.priceApplyJob.setText(String.valueOf(model.getPrice()));
+        holder.binding.priceApplyJob.setText(Utils.getFormatPrice(model.getPrice(),context));
         ///load user data
-
+        Log.d(TAG_LOG, "onBindViewHolder: "+model.getIdWorkerApply());
         loadApplyWorkerData(holder, model.getIdWorkerApply());
     }
 

@@ -1,4 +1,4 @@
-package com.optic.projectofinal.models;
+package com.optic.projectofinal.modelsRetrofit;
 
 
 import java.util.ArrayList;

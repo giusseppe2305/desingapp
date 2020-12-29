@@ -1,8 +1,8 @@
 package com.optic.projectofinal.providers;
 
 
-import com.optic.projectofinal.models.FCMBody;
-import com.optic.projectofinal.models.FCMResponse;
+import com.optic.projectofinal.modelsRetrofit.FCMBody;
+import com.optic.projectofinal.modelsRetrofit.FCMResponse;
 import com.optic.projectofinal.retrofit.IFCMApi;
 import com.optic.projectofinal.retrofit.RetrofitClient;
 

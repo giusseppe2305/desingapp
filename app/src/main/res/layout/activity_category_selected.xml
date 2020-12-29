@@ -34,7 +34,7 @@
                     android:layout_height="wrap_content"
                     android:paddingRight="10dp"
                     android:layout_marginRight="2dp"
-                    android:text="Ordenar"
+                    android:text="@string/category_selected_order"
                     app:chipBackgroundColor="@color/purple_200" />
 
 
@@ -44,14 +44,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="2dp"
-                    android:text="Precio"
+                    android:text="@string/category_selected_price"
                     app:chipBackgroundColor="@color/purple_200" />
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipLastConexion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="2dp"
-                    android:text="Ultima conexion"
+                    android:text="@string/category_selected_last_conexion"
                     app:chipBackgroundColor="@color/purple_200" />
 
             </LinearLayout>
@@ -63,6 +63,12 @@
             android:padding="10dp"
             android:layout_marginBottom="20dp"/>
     </LinearLayout>
-
+    <ProgressBar
+        android:visibility="gone"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/loading"
+        android:layout_gravity="center"
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

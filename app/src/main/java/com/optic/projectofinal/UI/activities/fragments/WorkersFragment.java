@@ -12,20 +12,26 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.adapters.CategoriesAdapter;
-import com.optic.projectofinal.adapters.WorkersAdapter;
+import com.optic.projectofinal.adapters.WorkersqueryAdapter;
 import com.optic.projectofinal.databinding.FragmentWorkersBinding;
-import com.optic.projectofinal.models.User;
+import com.optic.projectofinal.modelsRetrofit.WorkerQueryModel;
 import com.optic.projectofinal.providers.AuthenticationProvider;
 import com.optic.projectofinal.providers.UserDatabaseProvider;
+import com.optic.projectofinal.retrofit.FunctionsApi;
+import com.optic.projectofinal.retrofit.RetrofitClient;
 import com.optic.projectofinal.utils.Utils;
 
-import java.util.ArrayList;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.optic.projectofinal.retrofit.RetrofitClient.FIREBASE_FUNCTIONS;
 import static com.optic.projectofinal.utils.Utils.TAG_LOG;
 
 /**
@@ -38,7 +44,7 @@ public class WorkersFragment extends Fragment {
 
     private UserDatabaseProvider mUserProvider;
     private AuthenticationProvider mAuth;
-    private WorkersAdapter workersAdapter;
+    private WorkersqueryAdapter workersAdapter;
     private FragmentWorkersBinding binding;
     private CategoriesAdapter adapterCategories;
 
@@ -49,9 +55,8 @@ public class WorkersFragment extends Fragment {
     }
 
 
-    public static WorkersFragment newInstance(String param1, String param2) {
-        WorkersFragment fragment = new WorkersFragment();
-        return fragment;
+    public static WorkersFragment newInstance() {
+        return new WorkersFragment();
     }
 
     @Override
@@ -61,7 +66,7 @@ public class WorkersFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentWorkersBinding.inflate(inflater, container, false);
 
@@ -73,47 +78,62 @@ public class WorkersFragment extends Fragment {
         binding.rvCategories.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         binding.rvCategories.setAdapter(adapterCategories);
 
+        binding.loading.setVisibility(View.VISIBLE);
+        RetrofitClient.getClient(FIREBASE_FUNCTIONS).create(FunctionsApi.class)
+                .getAllProfessionals(mAuth.getIdCurrentUser()).enqueue(new Callback<List<WorkerQueryModel>>() {
+            @Override
+            public void onResponse(@NotNull Call<List<WorkerQueryModel>> call, @NotNull Response<List<WorkerQueryModel>> response) {
+                Log.d(TAG_LOG, "onResponse: entro");
+                if(response.isSuccessful()){
+                    for(WorkerQueryModel it:response.body())
+                    {
+                        Log.d(TAG_LOG, "onResponse: "+it.toString());
+                    }
+                    binding.loading.setVisibility(View.GONE);
+
+                    workersAdapter = new WorkersqueryAdapter(getContext(), response.body());
+                    binding.rvWorkers.setAdapter(workersAdapter);
+                    binding.rvWorkers.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+                }else{
+                    Log.d(TAG_LOG, "onResponse: fallo ");
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<List<WorkerQueryModel>> call, @NotNull Throwable t) {
+                Log.d(TAG_LOG, "onFailure: "+t.getMessage());
+            }
+        });
 
         return binding.getRoot();
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NotNull Menu menu, @NotNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_main_activity, menu);
-        menu.findItem(R.id.menuNotifications).getActionView().findViewById(R.id.containerNotifications).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        menu.findItem(R.id.menuNotifications).getActionView().findViewById(R.id.containerNotifications).setOnClickListener(view -> {
 
-            }
         });
+
+
+
+
+//
+//        mUserProvider.getAllWorkers().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//            @Override
+//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                ArrayList<User> lisWorkers=new ArrayList<>();
+//                for(DocumentSnapshot i:queryDocumentSnapshots.getDocuments()){
+//                    if(!i.getString("id").equals(mAuth.getIdCurrentUser())){
+//                        lisWorkers.add(i.toObject(User.class));
+//                    }
+//                }
+//                workersAdapter = new WorkersAdapter(getContext(), lisWorkers);
+//                binding.rvWorkers.setAdapter(workersAdapter);
+//                binding.rvWorkers.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+//            }
+//        }).addOnFailureListener(runnable -> Log.e(TAG_LOG, "onStart: "+runnable.getMessage() ));
     }
-
-
-    ///cycle life
-
-    @Override
-    public void onStart() {
-        super.onStart();
-         mUserProvider.getAllWorkers().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-             @Override
-             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                 ArrayList<User> lisWorkers=new ArrayList<>();
-                 for(DocumentSnapshot i:queryDocumentSnapshots.getDocuments()){
-                     if(!i.getString("id").equals(mAuth.getIdCurrentUser())){
-                        lisWorkers.add(i.toObject(User.class));
-                     }
-                 }
-                 workersAdapter = new WorkersAdapter(getContext(), lisWorkers);
-                 binding.rvWorkers.setAdapter(workersAdapter);
-                 binding.rvWorkers.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-             }
-         }).addOnFailureListener(runnable -> Log.e(TAG_LOG, "onStart: "+runnable.getMessage() ));
-
-
-    }
-
-
-
 
 }

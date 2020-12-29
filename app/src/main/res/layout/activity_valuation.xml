@@ -18,7 +18,7 @@
            android:layout_marginTop="40dp"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:text="Valora tu experiencia"
+           android:text="@string/valuation_header"
            android:textSize="25dp"
            />
         <TextView
@@ -28,7 +28,7 @@
             android:textAlignment="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pulsa en las estrellas para dejar tu valoracion.A mas estrellas, mejor experiencia"
+            android:text="@string/valuation_body"
             />
 
        <androidx.appcompat.widget.AppCompatRatingBar
@@ -59,7 +59,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
-            android:text="Rapidez de contacto"
+            android:text="@string/job_done_speed_contact"
             android:gravity="left"/>
            <me.zhanghai.android.materialratingbar.MaterialRatingBar
                android:id="@+id/rating1"
@@ -67,7 +67,9 @@
                android:layout_width="150dp"
                android:layout_height="match_parent"
                android:numStars="5"
-               android:rating="1"
+               android:progressTint="@color/startRating"
+               android:rating="0"
+               app:mrb_progressBackgroundTint="@color/startRatingBackground"
                android:layout_marginEnd="35dp"
                android:scaleY="1.25"
                android:scaleX="1.25"               />
@@ -84,16 +86,17 @@
                android:layout_width="0dp"
                android:layout_weight="1"
                android:layout_height="match_parent"
-               android:text="Amabilidad"
+               android:text="@string/job_done_amiability"
                android:gravity="left"/>
            <me.zhanghai.android.materialratingbar.MaterialRatingBar
                android:id="@+id/rating2"
-
                style="@style/Widget.MaterialRatingBar.RatingBar"
                android:layout_width="150dp"
                android:layout_height="match_parent"
                android:numStars="5"
-               android:rating="1"
+               android:progressTint="@color/startRating"
+               android:rating="0"
+               app:mrb_progressBackgroundTint="@color/startRatingBackground"
 
                android:layout_marginEnd="35dp"
                android:scaleY="1.25"
@@ -111,7 +114,7 @@
                android:layout_width="0dp"
                android:layout_weight="1"
                android:layout_height="match_parent"
-               android:text="Veloidad de trabajo"
+               android:text="@string/job_done_speed_end_job"
                android:gravity="left"/>
            <me.zhanghai.android.materialratingbar.MaterialRatingBar
                android:id="@+id/rating3"
@@ -120,7 +123,9 @@
                android:layout_width="150dp"
                android:layout_height="match_parent"
                android:numStars="5"
-               android:rating="1"
+               android:progressTint="@color/startRating"
+               android:rating="0"
+               app:mrb_progressBackgroundTint="@color/startRatingBackground"
                android:layout_marginEnd="35dp"
                android:scaleY="1.25"
                android:scaleX="1.25"
@@ -138,7 +143,7 @@
                android:layout_width="0dp"
                android:layout_weight="1"
                android:layout_height="match_parent"
-               android:text="Puntialidad"
+               android:text="@string/job_done_punctuality"
                android:gravity="left"/>
            <me.zhanghai.android.materialratingbar.MaterialRatingBar
                android:id="@+id/rating4"
@@ -147,7 +152,9 @@
                android:layout_width="150dp"
                android:layout_height="match_parent"
                android:numStars="5"
-               android:rating="1"
+               android:progressTint="@color/startRating"
+               android:rating="0"
+               app:mrb_progressBackgroundTint="@color/startRatingBackground"
                android:layout_marginEnd="35dp"
                android:scaleY="1.25"
                android:scaleX="1.25"
@@ -168,7 +175,7 @@
                android:minLines="5"
                android:layout_height="wrap_content"
                android:inputType="textMultiLine"
-               android:hint="deja un comentario"
+               android:hint="@string/valuation_put_comment"
                android:background="@android:color/transparent"
                android:gravity="bottom"
 />

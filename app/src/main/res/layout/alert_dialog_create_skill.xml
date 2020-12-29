@@ -60,7 +60,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Precio por hora"
+                android:hint="@string/price_per_hour"
                 android:inputType="numberDecimal"
                 />
 

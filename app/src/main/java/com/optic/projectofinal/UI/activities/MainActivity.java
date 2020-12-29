@@ -11,8 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -70,7 +68,176 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getString(R.string.menuNameWorkers));
 
         createToken();
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+
+//        String[] names={"Jan",
+//                "Jose Joaquin",
+//                "Martin",
+//                "Luis Carlos",
+//                "Paulino",
+//                "Anas",
+//                "Gael",
+//                "Alonso",
+//                "David",
+//                "Jose David",
+//                "Emilio",
+//                "Holgado",
+//                "Jose Fernando",
+//                "Hipolito",
+//                "Marti",
+//                "Eneko",
+//                "Adan",
+//                "Jesus Antonio",
+//                "Ali",
+//                "Ismail",
+//                "Nestor",
+//                "Enrique",
+//                "Carlos",
+//                "Ramiro",
+//                "Jose Daniel",
+//                "Evaristo",
+//                "Jan",
+//                "Marco",
+//                "Aleix",
+//                "Eugenio",
+//                "Jose Ramon",
+//                "Jose Javier",
+//                "Guillem",
+//                "Pedro",
+//                "Francisco",
+//                "Josu",};
+//        String[] lastnames={"Badia",
+//        "Esteve",
+//        "de Los Santos",
+//        "Wu",
+//        "Rojo",
+//        "Belda",
+//        "Miguel",
+//        "Contreras",
+//        "Quesada",
+//        "Novoa",
+//        "Portillo",
+//        "Quesada",
+//        "Aguilera",
+//        "Casado",
+//        "Sanchis",
+//        "Gago",
+//        "Aroca",
+//        "Sala",
+//        "Dominguez",
+//        "Casal",
+//        "Enrique Monzon",
+//        "Galan",
+//        "Puerto",
+//        "Agudo",
+//        "Clemente",
+//        "Oliveira",
+//        "Zhang",
+//        "Marrero",
+//        "Borja",
+//        "Pulido",
+//        "Vergara",
+//        "del Pino",
+//        "Crespo",
+//        "San-Jose",
+//        "Amaya",
+//        "Castillo",
+//        };
+//
+//        long[] times={1609238824000L,
+//                1609152424000L,
+//                1609066024000L,
+//                1608979624000L,
+//                1608893224000L,
+//                1608806824000L,
+//                1608720424000L,
+//                1608634024000L,
+//                1609152424000L,
+//                1609152424000L,
+//                1609243140000L,
+//                1608897547000L,
+//                1608922747000L,
+//                1609095547000L,
+//                1609092907000L,
+//                1609179307000L,
+//                1608660907000L,
+//                1608632107000L,
+//                1608603307000L,
+//                1608171307000L,
+//                1608243307000L,
+//                1608149707000L,
+//                1608236107000L,
+//                1608379264000L,
+//                1609138864000L,
+//                1609243287000L,
+//                1609243293000L,
+//                1609243356000L,
+//                1609156956000L,
+//                1609070556000L,
+//                1609243384000L,
+//                1609243393000L,
+//                1609228993000L,
+//                1609243405000L,
+//                1609239805000L,
+//                1609243405000L
+//        };
+//        String[] photo={"https://concepto.de/wp-content/uploads/2018/08/persona-e1533759204552.jpg",
+//                "https://www.ashoka.org/sites/default/files/styles/medium_1600x1000/public/thumbnails/images/daniela-kreimer.jpg?itok=R89tVtb4",
+//                "https://lamenteesmaravillosa.com/wp-content/uploads/2018/09/hombre-creido-pensando-que-sabe.jpg"
+//        ,"https://cdnb.20m.es/sites/112/2019/04/cara6-620x618.jpg"
+//        ,"https://static2.abc.es/media/bienestar/2019/10/01/personas-magneticas-k02H--1200x630@abc.jpg"
+//        ,"https://img.freepik.com/foto-gratis/retrato-joven-sonriente-gafas_171337-4842.jpg?size=626&ext=jpg"
+//        ,"https://pymstatic.com/5028/conversions/personas-genuinas-thumb.jpg"
+//        ,"https://www.contrareplica.mx/uploads/galerias/normal/d51adde6198cd2e5a32ddda82d2ee9b6.jpg"
+//        ,"https://assets.entrepreneur.com/content/3x2/2000/20181012160100-atractiva.jpeg?width=700&crop=2:1"
+//        ,"https://e00-elmundo.uecdn.es/assets/multimedia/imagenes/2019/11/14/15737278746181.jpg"
+//        ,"https://pymstatic.com/5028/conversions/personas-genuinas-thumb.jpg"
+//        ,"https://www.decideo.com/photo/art/default/42090343-35199053.jpg?v=1579807427"
+//        ,"https://img.huffingtonpost.com/asset/5c8a98102400006f054c0b94.jpeg?ops=scalefit_630_noupscale"
+//        ,"https://www.xlsemanal.com/wp-content/uploads/sites/3/2019/12/edward-norton-no-te-puedes-fiar-de-las-personas-que-fueron-felices-cuanto-tenian-14-anso-1366x768.jpg"
+//        ,"https://estaticos.muyinteresante.es/media/cache/760x570_thumb/uploads/images/article/55365cde3787b2187a1f0fbc/impresion-cara.jpg"
+//        ,"https://www.pactomundial.org/wp-content/uploads/2019/12/Tribuna-DKV.jpg"
+//        ,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSECZABdj8GRifBnxBh_Io5PK5T_nTcYS4yZw&usqp=CAU"
+//        ,"https://pymstatic.com/30196/conversions/personas-susceptibles-social.jpg"
+//        ,"https://mk0lanoticiavesdar5g.kinstacdn.com/wp-content/uploads/2020/06/12-cualidades-de-las-personas-inteligentes.jpg"
+//        ,"https://selecciones.com.mx/wp-content/uploads/2019/06/que-hace-inteligentes-a-las-personas.jpg"
+//        ,"https://www.cancer.net/sites/cancer.net/files/styles/blog_media/public/markham_merry-jennifer_headshot.jpg.png?itok=GnzqyjcQ"
+//        ,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRumXy60SJVLtfeAjroZHXcuW1ywhdWpWpzlw&usqp=CAU"
+//        ,"https://aws.glamour.mx/prod/designs/v1/assets/620x788/186096.jpg"
+//        ,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXN1_znAMM_0_oHVZDIYEnC5gia-gX6xgihg&usqp=CAU"
+//        ,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSynd5Ve0wlgyxKe0ZmRxSxPuWi533Ddctsg&usqp=CAU"
+//        ,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdrPaLw3a8bVzFJczIhU3OBQWNJ_rrOYARwg&usqp=CAU"
+//        ,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-AxVBAfzfgFrnqum4s3E8ORcSAeAU4XpYdg&usqp=CAU"
+//        ,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4NcbXoYdtv8VgPlKbxl6lnD5AchZlkARJ5A&usqp=CAU"
+//        ,"https://www.redaccionmedica.com/images/destacados/las-personas-con-un-riesgo-genetico-bajo-de-tdah-son-mas-afortunadas--2868.jpg"
+//        ,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGGf-4-jszpgMNsMztOCu92ZwqjUrOCssiOw&usqp=CAU"
+//        ,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIhJnQbE88bpupI2Nm6rOgAF3JPbmi_bElBQ&usqp=CAU"
+//        ,"https://www.trecebits.com/wp-content/uploads/2019/02/Persona-1-445x445.jpg"
+//        ,"https://www.gravatar.com/avatar/24acd98e5d71a6a789488b4c049de9fe?s=200"
+//        ,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0iAxGNQ5h9k2Pr1J_iUKEZz0fbK0KRQIytw&usqp=CAU"
+//        ,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRl5MRBjEoUriQOZffpjWCGvsCC8Yi8n0PTA&usqp=CAU"
+//        ,"https://persona-app-es.herokuapp.com/assets/personas/1-e0e7223aeb2f66a659d032fb393d11d7e62e00706b1bef5f9f1a13eaa93d4b4b.png"
+//        };
+//        for(int i=0;i<names.length;i++)
+//        {
+//            DocumentReference users = FirebaseFirestore.getInstance().collection("Users").document();
+//            User user1=new User();
+//            user1.setId(users.getId());
+//            user1.setName(names[i]);
+//            user1.setLastName(lastnames[i]);
+//            user1.setThumbnail(photo[i]);
+//            user1.setProfileImage(photo[i]);
+//            user1.setCoverPageImage("https://fundspeople-repository.s3.amazonaws.com/system/picture/file/211455/07ff9dc0f0bf87a7.jpg");
+//            user1.setOnline(false);
+//            user1.setAbout("Sobre mi "+user1.getName()+" "+user1.getLastName());
+//            user1.setBirthdate(times[i]);
+//            user1.setTimestamp(times[i]);
+//            user1.setLastConnection(times[i]);
+//            user1.setProfessional(true);
+//            user1.setVerified(true);
+//            user1.setPhoneNumber(657560689);
+//            user1.setResources(new ArrayList<>(Arrays.asList(new Integer[]{1,2,4})));
+//            users.set(user1);
+//        }
 
 
         //new StorageProvider(this).createThumbnail("prueba", Uri.parse("https://firebasestorage.googleapis.com/v0/b/projecto-final-b5adb.appspot.com/o/jobs_photos%2FNqCsoz2vJeKAwVAHrPVv%2FSun%20Dec%2020%2015%3A27%3A14%20GMT%2B01%3A00%202020IMG_20201220_152702188.jpg?alt=media&token=b2b7c8fa-0e2a-47a7-a63a-0137891f0ddb"),"all_jobs","prueba");
@@ -139,7 +306,40 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    static class categ{
+        String name;
+        int idCategory;
+        String id;
+        public categ(String name, int idCategory, String id) {
+            this.name = name;
+            this.idCategory = idCategory;
+            this.id = id;
+        }
 
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getIdCategory() {
+            return idCategory;
+        }
+
+        public void setIdCategory(int idCategory) {
+            this.idCategory = idCategory;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+    }
     private void createToken() {
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {

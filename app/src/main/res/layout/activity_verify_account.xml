@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
 
                 android:layout_height="wrap_content"
-                android:hint="introduzca numero"
+                android:hint="@string/verify_account_number"
                 android:inputType="phone"
                 android:maxLength="12"
                 />
@@ -56,7 +56,7 @@
                 android:layout_width="match_parent"
 
                 android:layout_height="wrap_content"
-                android:hint="confirmar"
+                android:hint="@string/verify_confirm"
                 android:inputType="number"
 
                 />
@@ -67,12 +67,20 @@
             android:id="@+id/btnSendSMS"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="enviar sms" />
+            android:text="@string/verify_send_sms" />
         <Button
             android:visibility="gone"
             android:id="@+id/btnConfirmCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="confirmar" />
+            android:text="@string/verify_confirm" />
+
+        <ProgressBar
+            android:id="@+id/load"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            />
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

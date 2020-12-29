@@ -3,7 +3,9 @@ package com.optic.projectofinal.UI.activities.options_profile;
 import android.os.Bundle;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,21 +50,19 @@ public class VerifyAccountActivity extends AppCompatActivity {
         watcher.beforeTextChanged("+34",0,3,3);
         binding.numberPhone.getEditText().addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
-        binding.btnConfirmCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, binding.confirmCode.getEditText().getText().toString());
-                updateNumberPhone(credential);
+        binding.btnConfirmCode.setOnClickListener(view -> {
+            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, binding.confirmCode.getEditText().getText().toString());
+            updateNumberPhone(credential);
 
-            }
         });
         binding.btnSendSMS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                binding.load.setVisibility(View.VISIBLE);
                 PhoneAuthOptions options =
                         PhoneAuthOptions.newBuilder(mAuth)
                                 .setPhoneNumber("+34"+binding.numberPhone.getEditText().getText().toString())       // Phone number to verify
-                                .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                                .setTimeout(200L, TimeUnit.SECONDS) // Timeout and unit
                                     .setActivity(VerifyAccountActivity.this)                 // Activity (for callback binding)
                                 .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                                     @Override
@@ -79,17 +79,24 @@ public class VerifyAccountActivity extends AppCompatActivity {
                                     @Override
                                     public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                                         super.onCodeSent(s, forceResendingToken);
+                                        binding.load.setVisibility(View.GONE);
                                         mVerificationId=s;
                                         Log.d(TAG_LOG, "onCodeSent: "+s+" "+forceResendingToken.toString());
-
                                         updateUI(true);
-
                                     }
                                 })          // OnVerificationStateChangedCallbacks
                                 .build();
                 PhoneAuthProvider.verifyPhoneNumber(options);
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void updateUI(boolean option) {
@@ -111,14 +118,16 @@ public class VerifyAccountActivity extends AppCompatActivity {
                     User update=new User();
                     update.setId(mAuth.getCurrentUser().getUid());
                     update.setVerified(true);
-                    update.setPhoneNumber(Integer.parseInt(binding.numberPhone.getEditText().getText().toString()));
+                    update.setPhoneNumber(Integer.parseInt(binding.numberPhone.getEditText().getText().toString().replaceAll("\\s+","")));
                     mUser.updateUser(update).addOnFailureListener(error-> Log.e(TAG_LOG, "onComplete: "+error.getMessage()));
+                    Toast.makeText(VerifyAccountActivity.this, getString(R.string.code_confirmed), Toast.LENGTH_SHORT).show();
+                    finish();
                 } else {
                     // Sign in failed, display a message and update the UI
                     Log.w(TAG_LOG, "signInWithCredential:failure", task.getException());
                     if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                         // The verification code entered was invalid
-
+                        binding.confirmCode.setError(getString(R.string.wrong_code));
                     }
 
                 }

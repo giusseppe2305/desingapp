@@ -16,7 +16,7 @@
             android:id="@+id/imgSkill"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@color/teal_700"/>
+            android:src="@color/grey_500"/>
 
        <LinearLayout
            android:layout_width="match_parent"
@@ -35,7 +35,6 @@
                    android:layout_below="@id/titleSkill"
                    android:layout_alignParentStart="true"
                    android:layout_marginTop="1dp"
-                   android:text="Email address"
                    />
                <TextView
                    android:id="@+id/price"
@@ -44,7 +43,6 @@
                    android:layout_below="@id/titleSkill"
                    android:layout_alignParentStart="true"
                    android:layout_marginTop="1dp"
-                   android:text="12.00€"
                    android:layout_marginEnd="2dp"
                    />
            </LinearLayout>
@@ -61,7 +59,15 @@
                    android:layout_alignParentStart="true"
                    android:layout_marginTop="1dp"
                    android:textSize="10sp"
-                   android:text="Email address"
+                   />
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_below="@id/titleSkill"
+                   android:layout_alignParentStart="true"
+                   android:layout_marginTop="1dp"
+                   android:textSize="10sp"
+                   android:text=" -> "
                    />
                <TextView
                    android:layout_marginStart="5dp"
@@ -72,7 +78,6 @@
                    android:layout_alignParentStart="true"
                    android:layout_marginTop="1dp"
                    android:textSize="10sp"
-                   android:text="Email address"
                    />
            </LinearLayout>
        </LinearLayout>

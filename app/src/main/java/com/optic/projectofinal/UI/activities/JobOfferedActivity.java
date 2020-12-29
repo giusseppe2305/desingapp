@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -141,10 +142,10 @@ public class JobOfferedActivity extends AppCompatActivity {
         //alert dialog apply
         bindingDialog = AlertDialogApplyJobBinding.inflate(getLayoutInflater());
         dialogApplyJob = new MaterialAlertDialogBuilder(JobOfferedActivity.this)
-                .setTitle("Aplicar al trabajo")
-                .setMessage("Rellene los datos")
-                .setPositiveButton("Aplicar", null)
-                .setNegativeButton("Cancelar", null)
+                .setTitle(R.string.job_offered_dialog_apply_title)
+                .setMessage(R.string.job_offered_dialog_apply_message)
+                .setPositiveButton(R.string.job_offered_dialog_apply_positive_button, null)
+                .setNegativeButton(R.string.job_offered_dialog_apply_negative_button, null)
                 .setCancelable(false)
                 .setView(bindingDialog.getRoot())
                 .create();
@@ -159,13 +160,21 @@ public class JobOfferedActivity extends AppCompatActivity {
         });
         //alerDialog un apply
         dialogCancelApplyJob = new MaterialAlertDialogBuilder(JobOfferedActivity.this)
-                .setTitle("Confirmacion")
-                .setMessage("¿Esta seguro que quiera dejar de aplicar a este trabajo?")
-                .setPositiveButton("Si,estoy seguro", (dialogInterface, i) -> removeApplyJob())
-                .setNegativeButton("Cancelar", null)
+                .setTitle(R.string.job_offered_dialog_confirm_cancel_title)
+                .setMessage(R.string.job_offered_dialog_confirm_cancel_message)
+                .setPositiveButton(R.string.job_offered_dialog_confirm_cancel_positive_button, (dialogInterface, i) -> removeApplyJob())
+                .setNegativeButton(R.string.job_offered_dialog_confirm_cancel_negative_button, null)
                 .create();
         ///
         loadBtnApplyJob();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void removeApplyJob() {
@@ -181,10 +190,10 @@ public class JobOfferedActivity extends AppCompatActivity {
 
     private void loadBtnApplyJobInside(boolean v) {
         if (v) {
-            binding.applyJob.setText("Cancelar aplicacion");
+            binding.applyJob.setText(R.string.job_offered_cancel);
             isAppliedJob = true;
         } else {
-            binding.applyJob.setText("Aplicar trabajo");
+            binding.applyJob.setText(R.string.job_offered_apply);
             isAppliedJob = false;
         }
         binding.applyJob.setVisibility(View.VISIBLE);
@@ -197,12 +206,12 @@ public class JobOfferedActivity extends AppCompatActivity {
                         if(runnable.getBoolean("professional")){
                             dialogApplyJob.show();
                         }else{
-                            new MaterialAlertDialogBuilder(this).setTitle("Confirmation")
-                                    .setMessage("If you apply to any job, your status of worker wil be seated enabled ¿Are you sure that you want apply to this job?")
-                                    .setPositiveButton("Yes, apply",(dialogInterface, i) -> {
+                            new MaterialAlertDialogBuilder(this).setTitle(R.string.job_offered_dialog_be_worker_title)
+                                    .setMessage(R.string.job_offered_dialog_be_worker_message)
+                                    .setPositiveButton(R.string.job_offered_dialog_be_worker_positive_button,(dialogInterface, i) -> {
                                         dialogInterface.dismiss();
                                         dialogApplyJob.show();
-                                    }).setNegativeButton("No thanks",null)
+                                    }).setNegativeButton(R.string.job_offered_dialog_be_worker_negative_button,null)
                                     .show();
                         }
                     }
@@ -234,16 +243,16 @@ public class JobOfferedActivity extends AppCompatActivity {
         boolean ret2 = false;
 
         if (bindingDialog.message.getEditText().getText().toString().length() == 0) {
-            bindingDialog.message.setError("Introduzca algun mensaje");
+            bindingDialog.message.setError(getString(R.string.job_offered_type_message));
         } else if (bindingDialog.message.getEditText().getText().toString().length() > 240) {
-            bindingDialog.message.setError("Mensaje demasiado largo");
+            bindingDialog.message.setError(getString(R.string.job_offered_type_message_large));
         } else {
             bindingDialog.message.setError(null);
             ret = true;
         }
 
         if (bindingDialog.price.getEditText().getText().toString().length() == 0) {
-            bindingDialog.price.setError("Introduzca algun presupuesto");
+            bindingDialog.price.setError(getString(R.string.job_offered_price));
         } else {
             bindingDialog.price.setError(null);
             ret2 = true;
@@ -313,10 +322,9 @@ public class JobOfferedActivity extends AppCompatActivity {
                     String name = documentSnapshot.getString("name");
                     String lastName = documentSnapshot.getString("lastName");
                     String profileImage = documentSnapshot.getString("profileImage");
-                    System.out.println("nombrere " + name);
                     binding.nameUser.setText(name);
                     binding.lastNameUser.setText(lastName);
-                    Glide.with(JobOfferedActivity.this).load(profileImage).placeholder(R.drawable.loading_).thumbnail(Glide.with(JobOfferedActivity.this).load(R.drawable.loading_)).error(R.drawable.ic_error_404).centerInside().into(binding.ivPhotoProfile);
+                    Glide.with(JobOfferedActivity.this).load(profileImage).apply(Utils.getOptionsGlide(false)).centerInside().into(binding.ivPhotoProfile);
                 } else {
                     Log.e(TAG_LOG, "onSuccess: JobOfferedActivity->loadUserData");
                 }

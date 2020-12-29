@@ -3,8 +3,6 @@ package com.optic.projectofinal.providers;
 
 import android.util.Log;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -14,6 +12,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.optic.projectofinal.models.Opinion;
 import com.optic.projectofinal.models.User;
+import com.optic.projectofinal.utils.Utils;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -47,8 +46,7 @@ public class UserDatabaseProvider {
     }
     public Task<Void> updateUser( User user){
         //delete null fields
-        Map<String, Object> update = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL).convertValue(user, Map.class);
-        return database.document(user.getId()).update(update);
+        return database.document(user.getId()).update(Utils.convertClassToMap(user));
     }
 
     public void updateOnline(boolean status){
@@ -72,32 +70,6 @@ public class UserDatabaseProvider {
         return database.whereArrayContains("idsSubCategories",sub).get();
     }
 
-    public Query filterWorkers(int category, String priceSince, String priceUntil, Order order){
-        Query query = database.whereEqualTo("professional", true);///miss category
-
-        if(priceSince!=null&&priceUntil!=null){
-            Log.e(TAG_LOG, "filterWorkers: query 2" );
-
-            query= query.whereGreaterThanOrEqualTo("pricePerHour",priceSince).whereLessThanOrEqualTo("pricePerHour",priceUntil);
-        }
-        if(order!=null){
-            switch (order){
-                case HIGHER_TO_LOWER:
-                    Log.e(TAG_LOG, "filterWorkers: query 3" );
-
-                    query= query.orderBy("pricePerHour", Query.Direction.DESCENDING);
-                    break;
-                case DISTANCE:
-                    break;
-                case LOWER_TO_HIGHER:
-                    Log.e(TAG_LOG, "filterWorkers: query 4" );
-
-                    query= query.orderBy("pricePerHour", Query.Direction.ASCENDING);
-
-            }
-        }
-        return query;
-    }
 
     public Task<Void> putOpinion(String idUser, Opinion opinion) {
         return database.document(idUser).collection("Opinions").document().set(opinion);
@@ -110,9 +82,5 @@ public class UserDatabaseProvider {
 
 
 
-    public enum Order{
-        LOWER_TO_HIGHER,
-        HIGHER_TO_LOWER,
-        DISTANCE
-    }
+
 }

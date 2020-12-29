@@ -15,14 +15,12 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.Swipe.SwipeRVAdapter;
 import com.optic.projectofinal.Swipe.SwipeRVTouchHelper;
-import com.optic.projectofinal.UI.activities.CreateJobActivity;
+import com.optic.projectofinal.UI.activities.CreateEditJobActivity;
 import com.optic.projectofinal.adapters.JobsAdapterSettings;
 import com.optic.projectofinal.databinding.FragmentMyAuctionsBinding;
 import com.optic.projectofinal.models.Job;
@@ -102,41 +100,38 @@ public class MyAuctionsFragment extends Fragment implements SwipeRVTouchHelper.S
     }
 
     public void loadData() {
-        new JobsDatabaseProvider().getAllJobsById(new AuthenticationProvider().getIdCurrentUser()).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-                listJobsPublished = new ArrayList<Job>();
-                listJobsInProgress = new ArrayList<Job>();
-                listJobsFinished = new ArrayList<Job>();
-                for (DocumentSnapshot i : list) {
-                    Job it = i.toObject(Job.class);
-                    switch (it.getState()) {
-                        case FINISHED:
-                            listJobsFinished.add(it);
-                            break;
-                        case PUBLISHED:
-                            listJobsPublished.add(it);
-                            break;
-                        case IN_PROGRESS:
-                            listJobsInProgress.add(it);
-                            break;
-                    }
+        new JobsDatabaseProvider().getAllJobsById(new AuthenticationProvider().getIdCurrentUser()).addOnSuccessListener(queryDocumentSnapshots -> {
+            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+            listJobsPublished = new ArrayList<Job>();
+            listJobsInProgress = new ArrayList<Job>();
+            listJobsFinished = new ArrayList<Job>();
+            for (DocumentSnapshot i : list) {
+                Job it = i.toObject(Job.class);
+                switch (it.getState()) {
+                    case FINISHED:
+                        listJobsFinished.add(it);
+                        break;
+                    case PUBLISHED:
+                        listJobsPublished.add(it);
+                        break;
+                    case IN_PROGRESS:
+                        listJobsInProgress.add(it);
+                        break;
                 }
-                if (list.size() > 0) {
-                    adapterSwipe = new SwipeRVAdapter(listJobsPublished, MyAuctionsFragment.this, Job.class);
-                    setupRecyclerView();
-                    binding.containerExample.setVisibility(View.GONE);
+            }
+            if (list.size() > 0) {
+                adapterSwipe = new SwipeRVAdapter(listJobsPublished, MyAuctionsFragment.this, Job.class);
+                setupRecyclerView();
+                binding.containerExample.setVisibility(View.GONE);
 
-                    binding.listJobsInProgress.setLayoutManager(new LinearLayoutManager(getContext()));
-                    binding.listJobsInProgress.setAdapter(new JobsAdapterSettings(MyAuctionsFragment.this, listJobsInProgress, Job.State.IN_PROGRESS));
+                binding.listJobsInProgress.setLayoutManager(new LinearLayoutManager(getContext()));
+                binding.listJobsInProgress.setAdapter(new JobsAdapterSettings(MyAuctionsFragment.this, listJobsInProgress, Job.State.IN_PROGRESS));
 
-                    binding.listJobsFinished.setLayoutManager(new LinearLayoutManager(getContext()));
-                    binding.listJobsFinished.setAdapter(new JobsAdapterSettings(MyAuctionsFragment.this, listJobsFinished, Job.State.FINISHED));
+                binding.listJobsFinished.setLayoutManager(new LinearLayoutManager(getContext()));
+                binding.listJobsFinished.setAdapter(new JobsAdapterSettings(MyAuctionsFragment.this, listJobsFinished, Job.State.FINISHED));
 
-                } else {
-                    binding.listJobsPublished.setVisibility(View.GONE);
-                }
+            } else {
+                binding.listJobsPublished.setVisibility(View.GONE);
             }
         }).addOnFailureListener(v -> Log.e(TAG_LOG, "MyAuctionsFragment loadData: " + v.getMessage()));
     }
@@ -171,7 +166,7 @@ public class MyAuctionsFragment extends Fragment implements SwipeRVTouchHelper.S
                     })
                     .show();
         } else if (direction == ItemTouchHelper.RIGHT) {
-            Intent i = new Intent(getContext(), CreateJobActivity.class);
+            Intent i = new Intent(getContext(), CreateEditJobActivity.class);
             i.putExtra("idJob", job.getId());
             startActivityForResult(i, EDIT_JOB);
         }

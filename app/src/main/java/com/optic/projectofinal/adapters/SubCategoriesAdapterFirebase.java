@@ -26,7 +26,7 @@ public class SubCategoriesAdapterFirebase extends RecyclerView.Adapter<SubCatego
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View vista= LayoutInflater.from(context).inflate(R.layout.cardview_subcategory,parent,false);
+        View vista= LayoutInflater.from(context).inflate(R.layout.cardview_job_offered,parent,false);
         return new ViewHolder(vista);
     }
 
@@ -34,7 +34,6 @@ public class SubCategoriesAdapterFirebase extends RecyclerView.Adapter<SubCatego
     public void onBindViewHolder(@NonNull SubCategoriesAdapterFirebase.ViewHolder holder, int position) {
         SubCategory iterated=listSubcatories.get(position);
         holder.nameSubcategory.setText(Utils.capitalizeString(iterated.getName()));
-        holder.parent.setOnClickListener(v->context.selectionCategoryDone(iterated));
     }
 
     @Override
@@ -47,8 +46,7 @@ public class SubCategoriesAdapterFirebase extends RecyclerView.Adapter<SubCatego
         private View parent;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            nameSubcategory=itemView.findViewById(R.id.nameSubcategory);
-            sizeSubcategory=itemView.findViewById(R.id.sizeSubcategory);
+
             parent=itemView;
         }
     }

@@ -5,13 +5,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.optic.projectofinal.R;
 import com.optic.projectofinal.adapters.OpinionsAdapter;
 import com.optic.projectofinal.databinding.FragmentTabOpinionsBinding;
 import com.optic.projectofinal.models.Job;
@@ -58,7 +56,6 @@ public class OpinionsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding=FragmentTabOpinionsBinding.inflate(inflater,container,false);
-        binding.spinner.setAdapter(new ArrayAdapter<String>(getContext(),R.layout.support_simple_spinner_dropdown_item,new String[]{"Todos ","Cerrajero","Fontanero","Jardinero"}));
         loadOpinions();
 
         return binding.getRoot();
@@ -76,7 +73,7 @@ public class OpinionsFragment extends Fragment {
                 opinion.setValuationWorker(it.getValuation());
                 opinion.setTitleJob(it.getTitle());
                 opinion.setTimestamp(it.getTimestamp());
-                opinion.setImageJob(it.getImages().get(0));
+                opinion.setImageJob(it.getThumbnail());
                 if(it.getOpinionUserOffer()!=null)
                 opinion.setMessage(it.getOpinionUserOffer());
 

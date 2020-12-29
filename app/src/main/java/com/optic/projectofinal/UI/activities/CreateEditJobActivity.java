@@ -2,7 +2,6 @@ package com.optic.projectofinal.UI.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -56,7 +55,7 @@ import dmax.dialog.SpotsDialog;
 
 import static com.optic.projectofinal.utils.Utils.TAG_LOG;
 
-public class CreateJobActivity extends AppCompatActivity {
+public class CreateEditJobActivity extends AppCompatActivity {
 
     private ActivityCreateJobBinding binding;
     private int PICKER_IMAGE_CAMERA = 1;
@@ -115,36 +114,28 @@ public class CreateJobActivity extends AppCompatActivity {
         ///
         mDialogCreateJob = new SpotsDialog.Builder()
                 .setContext(this)
-                .setMessage("Subiendo imagen.")
+                .setMessage(R.string.create_edit_job_uploading_photos)
                 .setCancelable(false).build();
 
         //build dialog
         mDialogSelectFromPicture = new MaterialAlertDialogBuilder(this).
-                setTitle("Elige una opcion")
-                .setItems(new String[]{"Elegir de la galeria", "Tomar FOTO AHORA"}, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        ImagePicker.Builder show = ImagePicker.Companion.with(CreateJobActivity.this)
-                                .crop()                    //Crop image(Optional), Check Customization for more option
-                                .compress(1024)            //Final image size will be less than 1 MB(Optional)
-                                .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
-                                .galleryMimeTypes(new String[]{"image/png", "image/jpeg", "image/jpg"});
+                setTitle(R.string.create_edit_job_dialog_photo_title)
+                .setItems(new String[]{getString(R.string.create_edit_job_dialog_photo_option_1), getString(R.string.create_edit_job_dialog_photo_option_2)}, (dialogInterface, i) -> {
+                    ImagePicker.Builder show = ImagePicker.Companion.with(CreateEditJobActivity.this)
+                            .crop()                    //Crop image(Optional), Check Customization for more option
+                            .compress(1024)            //Final image size will be less than 1 MB(Optional)
+                            .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
+                            .galleryMimeTypes(new String[]{"image/png", "image/jpeg", "image/jpg"});
 
-                        if (i == 0) {
-                            show.galleryOnly()
-                                    .start(PICKER_IMAGE_CAMERA);
-                        } else {
-                            show.cameraOnly()
-                                    .start(PICKER_IMAGE_GALLERY);
-                        }
+                    if (i == 0) {
+                        show.galleryOnly()
+                                .start(PICKER_IMAGE_CAMERA);
+                    } else {
+                        show.cameraOnly()
+                                .start(PICKER_IMAGE_GALLERY);
                     }
                 })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(CreateJobActivity.this, "Cancelaste la opcion de elegir donde sacar imagen", Toast.LENGTH_SHORT).show();
-                    }
-                }).setCancelable(false);
+                .setNegativeButton(R.string.create_edit_job_dialog_photo_negative_button, null).setCancelable(false);
 
 
         binding.addPhoto.setOnClickListener(v -> {
@@ -212,7 +203,7 @@ public class CreateJobActivity extends AppCompatActivity {
                         positionSubcategorySelected = listSubcategories.indexOf(isEditing);
 
                     }
-                    binding.subCategory.setAdapter(new ArrayAdapter<SubCategory>(CreateJobActivity.this, R.layout.textbox_gender, listSubcategories));
+                    binding.subCategory.setAdapter(new ArrayAdapter<SubCategory>(CreateEditJobActivity.this, R.layout.textbox_gender, listSubcategories));
                 } else {
                     Log.e(TAG_LOG, "onSuccess:CreateJobActivity->loadSubCategories ");
                 }
@@ -337,7 +328,7 @@ public class CreateJobActivity extends AppCompatActivity {
         myJob.setId(idJobEdit==null?jobsDatabaseProvider.getIdDocument():idJobEdit);
         Tasks.whenAllComplete(getListTaskUploadPhotos(myJob.getId())).addOnSuccessListener(tasks -> {
             ///change dialog
-            mDialogCreateJob.setMessage("Ultimando detalles");
+            mDialogCreateJob.setMessage(getString(R.string.create_edit_job_dialog_message_finishing));
             ///create object
             Category category = listCategories.get(positionCategorySelected);
             SubCategory subCategory = listSubcategories.get(positionSubcategorySelected);
@@ -388,14 +379,15 @@ public class CreateJobActivity extends AppCompatActivity {
                             createThumbnail(urlImages.get(0),myJob.getId());
 
                             mDialogCreateJob.dismiss();
-                            Toast.makeText(CreateJobActivity.this, "Creado correctamente", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG_LOG, "onSuccess: "+myJob.getId());
+                            Toast.makeText(CreateEditJobActivity.this, R.string.create_edit_job_message_create, Toast.LENGTH_SHORT).show();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
 
                             Log.e(TAG_LOG, "onFailure: create CreateJobActivity->createJob");
-                            Toast.makeText(CreateJobActivity.this, "Fallo al crear ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CreateEditJobActivity.this, R.string.create_edit_job_message_fail_created, Toast.LENGTH_SHORT).show();
                             mDialogCreateJob.dismiss();
                         }
                     });
@@ -409,13 +401,14 @@ public class CreateJobActivity extends AppCompatActivity {
                             mDialogCreateJob.dismiss();
                             Intent intent = new Intent();
                             setResult(Activity.RESULT_OK, intent);
+                            Toast.makeText(CreateEditJobActivity.this, R.string.create_edit_job_update, Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Log.e(TAG_LOG, "onFailure: update CreateJobActivity->createJob");
-                            Toast.makeText(CreateJobActivity.this, "Fallo al Actualizado ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CreateEditJobActivity.this, R.string.create_edit_job_update_fail, Toast.LENGTH_SHORT).show();
                             mDialogCreateJob.dismiss();
                         }
                     });
@@ -463,7 +456,7 @@ public class CreateJobActivity extends AppCompatActivity {
         mDialogCreateJob.show();
         for (Uri _uri : listUris) {
             if (!_uri.toString().contains("https://")) {
-                StorageTask<UploadTask.TaskSnapshot> task = storageProvider.uploadImageNewJob(_uri, idDocument, CreateJobActivity.this).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                StorageTask<UploadTask.TaskSnapshot> task = storageProvider.uploadImageNewJob(_uri, idDocument, CreateEditJobActivity.this).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         if (taskSnapshot != null) {

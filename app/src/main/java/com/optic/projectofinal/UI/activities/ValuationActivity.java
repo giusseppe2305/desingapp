@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.databinding.ActivityValuationBinding;
 import com.optic.projectofinal.models.Job;
@@ -28,7 +29,7 @@ public class ValuationActivity extends AppCompatActivity {
         binding=ActivityValuationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar.ownToolbar);
-        getSupportActionBar().setTitle("Envia tu valoracion");
+        getSupportActionBar().setTitle(getString(R.string.valuation_activity_title));
 
         idJob=getIntent().getStringExtra("idJob");
 
@@ -66,11 +67,20 @@ public class ValuationActivity extends AppCompatActivity {
             finish();
             return true;
         }
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onBackPressed() {
-        finish();
+        new MaterialAlertDialogBuilder(this).setTitle(R.string.valuation_dialog_title)
+                .setMessage(R.string.valuation_dialog_message)
+                .setPositiveButton(R.string.valuation_dialog_positive_button,null)
+                .setNegativeButton(R.string.valuation_dialog_negative_button,(dialogInterface, i) -> finish())
+                .show();
+
+
     }
 }

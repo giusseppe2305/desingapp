@@ -258,4 +258,5 @@ public class User implements Serializable {
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
     }
+
 }

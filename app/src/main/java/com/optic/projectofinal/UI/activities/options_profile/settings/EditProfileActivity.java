@@ -2,7 +2,6 @@ package com.optic.projectofinal.UI.activities.options_profile.settings;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -156,6 +155,9 @@ public class EditProfileActivity extends AppCompatActivity {
             System.out.println(binding.birthDate.getEditText().getText().toString());
             updateDataUser();
         }
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -166,8 +168,7 @@ public class EditProfileActivity extends AppCompatActivity {
         if (requestCode == PICKER_IMAGE_COVER_IMAGE) {
             if (resultCode == Activity.RESULT_OK) {
                 //Image Uri will not be null for RESULT_OK
-                Uri fileUri = data.getData();
-                uriCoverImage = fileUri;
+                uriCoverImage = data.getData();
                 Glide.with(this).load(uriCoverImage).apply(Utils.getOptionsGlide(true)).transform(Utils.getTransformSquareRound()).into(binding.coverPageImage);
             } else if (resultCode == ImagePicker.RESULT_ERROR) {
                 Toast.makeText(this, ImagePicker.Companion.getError(data), Toast.LENGTH_SHORT).show();
@@ -178,8 +179,7 @@ public class EditProfileActivity extends AppCompatActivity {
         if (requestCode == PICKER_IMAGE_PROFILE_IMAGE) {
             if (resultCode == Activity.RESULT_OK) {
                 //Image Uri will not be null for RESULT_OK
-                Uri fileUri = data.getData();
-                uriImageProfile = fileUri;
+                uriImageProfile = data.getData();
                 Glide.with(this).load(uriImageProfile).apply(Utils.getOptionsGlide(true)).into(binding.imageProfile);
             } else if (resultCode == ImagePicker.RESULT_ERROR) {
                 Log.e(TAG_LOG, "fail on get select image "+ ImagePicker.Companion.getError(data) );
@@ -195,7 +195,8 @@ public class EditProfileActivity extends AppCompatActivity {
         basicInformationUser.setLastName(user.getLastName());
         if(uriImageProfile!=null)
             basicInformationUser.setPhotoUser(uriImageProfile.toString());
-
+        else
+            basicInformationUser.setPhotoUser("nonPhoto");
         Utils.setPersistantBasicUserInformation(basicInformationUser, this);
         Utils.setLanguage("es-Es", this);
     }
@@ -204,34 +205,26 @@ public class EditProfileActivity extends AppCompatActivity {
         new MaterialAlertDialogBuilder(this).
                 setTitle(R.string.edit_profile_dialog_select_image_from_tittle)
                 .setItems(new String[]{getString(R.string.edit_profile_dialog_select_image_from_option1),
-                        getString(R.string.edit_profile_dialog_select_image_from_option2)}, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        ImagePicker.Builder show = ImagePicker.Companion.with(EditProfileActivity.this)
-                                .compress(1024)            //Final image size will be less than 1 MB(Optional)
-                                .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
-                                .galleryMimeTypes(new String[]{"image/png", "image/jpeg", "image/jpg"});
-                        if (i == 0) {
-                            show.galleryOnly();
+                        getString(R.string.edit_profile_dialog_select_image_from_option2)}, (dialogInterface, i) -> {
+                            ImagePicker.Builder show = ImagePicker.Companion.with(EditProfileActivity.this)
+                                    .compress(1024)            //Final image size will be less than 1 MB(Optional)
+                                    .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
+                                    .galleryMimeTypes(new String[]{"image/png", "image/jpeg", "image/jpg"});
+                            if (i == 0) {
+                                show.galleryOnly();
 
-                        } else {
-                            show.cameraOnly();
-                        }
-                        if (type == TYPE_IMAGE.COVER_IMAGE) {
-                            show.crop(16f, 9f);
-                            show.start(PICKER_IMAGE_COVER_IMAGE);
-                        } else {
-                            show.crop();
-                            show.start(PICKER_IMAGE_PROFILE_IMAGE);
-                        }
-                    }
-                })
-                .setNegativeButton(R.string.edit_profile_dialog_select_image_from_negative_button, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Log.d(TAG_LOG, "the user cancel dialog where you selec option gallery or camera");
-                    }
-                }).setCancelable(false).show();
+                            } else {
+                                show.cameraOnly();
+                            }
+                            if (type == TYPE_IMAGE.COVER_IMAGE) {
+                                show.crop(16f, 9f);
+                                show.start(PICKER_IMAGE_COVER_IMAGE);
+                            } else {
+                                show.crop();
+                                show.start(PICKER_IMAGE_PROFILE_IMAGE);
+                            }
+                        })
+                .setNegativeButton(R.string.edit_profile_dialog_select_image_from_negative_button, (dialogInterface, i) -> Log.d(TAG_LOG, "the user cancel dialog where you selec option gallery or camera")).setCancelable(false).show();
     }
 
     private void updateDataUser() {
@@ -286,10 +279,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
             userDatabaseProvider.updateUser(userUpdate)
                     .addOnSuccessListener(n -> Toast.makeText(this, "Todo update ", Toast.LENGTH_SHORT).show())
-                    .addOnFailureListener(v -> {
-                        Log.e(TAG_LOG, "updateDataUser: " + v.getMessage());
-
-                    });
+                    .addOnFailureListener(v -> Log.e(TAG_LOG, "updateDataUser: " + v.getMessage()));
             //check all right
             finish();
         } else {
@@ -298,29 +288,26 @@ public class EditProfileActivity extends AppCompatActivity {
 
     }
     private void createThumbnail(String image,String idUser) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL(image);
-                    Bitmap imageBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    storageProvider.createThumbnail(idUser,imageBitmap,"all_jobs_thumbnail",idUser).addOnSuccessListener(taskSnapshot ->
-                            taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
-                                User update=new User();
-                                update.setId(idUser);
-                                update.setThumbnail(uri.toString());
-                                userDatabaseProvider.updateUser(update).addOnFailureListener(e-> Log.e(TAG_LOG, "fail to save thumbnail user "+e.getMessage() ));
-                                updateImageProfileBasicUserInformation(uri.toString(), EditProfileActivity.this);
+        new Thread(() -> {
+            try {
+                URL url = new URL(image);
+                Bitmap imageBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                storageProvider.createThumbnail(idUser,imageBitmap,"all_jobs_thumbnail",idUser).addOnSuccessListener(taskSnapshot ->
+                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
+                            User update=new User();
+                            update.setId(idUser);
+                            update.setThumbnail(uri.toString());
+                            userDatabaseProvider.updateUser(update).addOnFailureListener(e-> Log.e(TAG_LOG, "fail to save thumbnail user "+e.getMessage() ));
+                            updateImageProfileBasicUserInformation(uri.toString(), EditProfileActivity.this);
 
-                            }).addOnFailureListener(e -> Log.d(TAG_LOG, "fail get url thumbnail  "+e.getMessage())));
+                        }).addOnFailureListener(e -> Log.d(TAG_LOG, "fail get url thumbnail  "+e.getMessage())));
 
-                } catch (MalformedURLException e) {
-                    Log.e(TAG_LOG, "createThumbnail: "+e.getMessage() );
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    Log.e(TAG_LOG, "createThumbnail: "+e.getMessage() );
-                    e.printStackTrace();
-                }
+            } catch (MalformedURLException e) {
+                Log.e(TAG_LOG, "createThumbnail: "+e.getMessage() );
+                e.printStackTrace();
+            } catch (IOException e) {
+                Log.e(TAG_LOG, "createThumbnail: "+e.getMessage() );
+                e.printStackTrace();
             }
         }).start();
     }

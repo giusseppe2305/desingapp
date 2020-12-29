@@ -10,7 +10,7 @@ import com.optic.projectofinal.UI.activities.fragments.tabsFragments.auctions.Au
 import com.optic.projectofinal.UI.activities.fragments.tabsFragments.auctions.MyAuctionsFragment;
 
 public class ViewPagerAuctions extends FragmentStateAdapter {
-    private static final int CARD_ITEM_SIZE = 2;
+    private static final int CARD_ITEM_SIZE = 1;
     private final AuctionsParticipeFragment auctionsParticipe;
     private final MyAuctionsFragment myAuctions;
 
@@ -25,10 +25,10 @@ public class ViewPagerAuctions extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        if (position == 0)
+        //if (position == 0)
             return myAuctions;
 
-        return auctionsParticipe;
+        //return auctionsParticipe;
 
     }
 

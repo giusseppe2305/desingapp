@@ -12,7 +12,7 @@
         android:layout_gravity="center"
         android:layout_width="110dp"
         android:layout_height="150dp"
-        android:src="@color/teal_700"/>
+        android:src="@color/grey_500"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/deleteImage"

@@ -3,6 +3,7 @@ package com.optic.projectofinal.UI.activities;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -58,7 +59,7 @@ public class JobDoneActivity extends AppCompatActivity {
         jobsDatabaseProvider = new JobsDatabaseProvider();
         mUserProvider = new UserDatabaseProvider();
         setSupportActionBar(binding.toolbar);
-        getSupportActionBar().setTitle("trabajo hecho");
+        getSupportActionBar().setTitle(" ");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ///pre config slider
         imagesSlider = new ArrayList<>();
@@ -116,7 +117,9 @@ public class JobDoneActivity extends AppCompatActivity {
 
 
                     binding.description.setText(myJob.getDescription());
+                    binding.opinionUser.setText(myJob.getOpinionUserOffer());
                     binding.title.setText(myJob.getTitle());
+                    binding.price.setText(Utils.getFormatPrice(myJob.getTotalPrice(),JobDoneActivity.this));
                     //
                     for (String i : myJob.getImages()) {
                         adapterSlider.addItem(new SliderItem(i));
@@ -158,6 +161,14 @@ public class JobDoneActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void loadUserOfferData(String idUserOffer) {

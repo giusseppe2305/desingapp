@@ -59,7 +59,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Ver mi perfil" />
+                        android:text="@string/profile_see" />
                 </LinearLayout>
 
                 <FrameLayout
@@ -116,7 +116,7 @@
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Mis trabajadores favoritos" />
+                        android:text="@string/profile_favourites_workers" />
 
 
                 </LinearLayout>
@@ -173,7 +173,7 @@
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Subastas" />
+                        android:text="@string/profile_auctions" />
 
 
                 </LinearLayout>
@@ -193,6 +193,7 @@
 
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
+            android:visibility="gone"
             android:id="@+id/option_jobs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -288,7 +289,7 @@
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Modo vacaciones" />
+                        android:text="@string/profile_hollidays" />
 
 
                 </LinearLayout>
@@ -341,7 +342,7 @@
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Ajustes" />
+                        android:text="@string/profile_settings" />
 
 
                 </LinearLayout>
@@ -398,7 +399,7 @@
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Privacidad" />
+                        android:text="@string/profile_privacy" />
 
 
                 </LinearLayout>
@@ -455,7 +456,7 @@
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Sobre nosotros" />
+                        android:text="@string/profile_about_us" />
 
 
                 </LinearLayout>
@@ -512,7 +513,7 @@
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Centro de asistencia" />
+                        android:text="@string/profile_help" />
 
 
                 </LinearLayout>

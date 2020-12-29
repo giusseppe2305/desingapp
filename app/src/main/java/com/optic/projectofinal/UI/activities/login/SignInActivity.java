@@ -75,10 +75,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         boolean b = utilsUI.isEmailValid(binding.txtEmail);
         boolean c = utilsUI.isPasswordsValid(binding.txtPassword);
-        if (b && c) {
-            return true;
-        }
-        return false;
+        return b && c;
     }
 
     private void signInWithEmail() {

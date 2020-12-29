@@ -82,13 +82,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="Categoria: " />
+                        android:text="@string/job_offered_category" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chipCategory"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Fontaneria" />
+                />
                 </LinearLayout>
 
                 <LinearLayout
@@ -101,13 +101,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="Subcategoria: " />
+                        android:text="@string/job_offered_subcategory" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chipSubCategory"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Fontaneria" />
+                    />
                 </LinearLayout>
 
 
@@ -158,13 +158,12 @@
                             android:id="@+id/nameUser"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="Nombre Usuario" />
+                             />
 
                         <TextView
                             android:id="@+id/lastNameUser"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="Otro dato"
                             android:textSize="10sp" />
                     </LinearLayout>
 
@@ -176,7 +175,7 @@
                         android:layout_marginLeft="20dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
-                        android:text="Ver Perfil" />
+                        android:text="@string/job_offered_apply_see_profile" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -193,17 +192,12 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Descripcion"
+                android:text="@string/job_offered_apply_description"
                 android:textSize="20sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Descripcion" />
 
             <TextView
                 android:id="@+id/description"
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="" />
@@ -226,7 +220,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Profesionales aplicando" />
+                    android:text="@string/job_offered_applying" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/applyWorkers"
@@ -244,7 +238,7 @@
         android:layout_height="60dp"
         android:layout_gravity="bottom"
         android:textSize="20sp"
-        android:text="Aplicar trabajo"
+        android:text="@string/job_offered_apply_job"
         android:insetBottom="0dp"
         android:insetTop="0dp"
         android:includeFontPadding="false"

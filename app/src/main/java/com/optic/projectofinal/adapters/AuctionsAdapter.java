@@ -46,23 +46,25 @@ public class AuctionsAdapter extends RecyclerView.Adapter<AuctionsAdapter.ViewHo
         holder.binding.timestamp.setText(Utils.getStringFromTimestamp(job.getTimestamp()));
 
 //do subquery
-        Glide.with(context).load(job.getImages().get(0)).apply(Utils.getOptionsGlide(true))
+        Glide.with(context).load(job.getThumbnail()).apply(Utils.getOptionsGlide(true))
                 .transform(Utils.getTransformSquareRound()).into(holder.binding.imageJob);
 
         new ApplyJobWorkerDatabaseProvider().getAllById(job.getId()).get().addOnSuccessListener(queryDocumentSnapshots -> {
                     holder.binding.countApplyWorkers.setText(String.format(Utils.getLocale(context),
                             "%d %s", queryDocumentSnapshots.size(),
-                            context.getString(R.string.workers_on_auction)));
-                    double average=0;
-                    if(queryDocumentSnapshots.size()>0){
-                        for(QueryDocumentSnapshot it:queryDocumentSnapshots)
-                        {
-                            average+=it.getDouble("price");
+                            context.getString(R.string.jobs_adapter_workers_apply)));
+                    double average = 0;
+                    if (queryDocumentSnapshots.size() > 0) {
+                        for (QueryDocumentSnapshot it : queryDocumentSnapshots) {
+                            average += it.getDouble("price");
                         }
-                        average=average/queryDocumentSnapshots.size();
+                        average = average / queryDocumentSnapshots.size();
                     }
-            holder.binding.averagePrice.setText(String.format(Utils.getLocale(context),
-                    "%f %s",average,Utils.getCurrency(context).getSymbol()));
+                    if (average == 0) {
+                        holder.binding.averagePrice.setText(R.string.jobs_adapter_workers_be_first);
+                    } else {
+                        holder.binding.averagePrice.setText(Utils.getFormatPrice(average,context));
+                    }
                 }
         ).addOnFailureListener(e -> Log.e(TAG_LOG, "onBindViewHolder: failure get num applyworkers " + e.getMessage()));
 

@@ -13,30 +13,27 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.UI.activities.ProfileDetailsActivity;
 import com.optic.projectofinal.databinding.CardviewWorkerMainBinding;
-import com.optic.projectofinal.models.Job;
-import com.optic.projectofinal.models.User;
+import com.optic.projectofinal.modelsRetrofit.WorkerQueryModel;
 import com.optic.projectofinal.providers.AuthenticationProvider;
-import com.optic.projectofinal.providers.JobsDatabaseProvider;
 import com.optic.projectofinal.providers.LikeWorkersDatabaseProvider;
 import com.optic.projectofinal.utils.Utils;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import static com.optic.projectofinal.utils.Utils.TAG_LOG;
 
-public class WorkersAdapter extends RecyclerView.Adapter<WorkersAdapter.ViewHolder> {
+public class WorkersqueryAdapter extends RecyclerView.Adapter<WorkersqueryAdapter.ViewHolder> {
 
 
     private AuthenticationProvider mAuth;
     private final Context context;
-    private ArrayList<User> listWorker;
+    private List<WorkerQueryModel> listWorker;
     private LikeWorkersDatabaseProvider mLikeProvider;
 
-    public WorkersAdapter(Context c, ArrayList<User> listWorker) {
+    public WorkersqueryAdapter(Context c, List<WorkerQueryModel> listWorker) {
 
         context = c;
         this.listWorker = listWorker;
@@ -55,19 +52,21 @@ public class WorkersAdapter extends RecyclerView.Adapter<WorkersAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        User model = listWorker.get(position);
-        new JobsDatabaseProvider().getValuationsFromUser(model.getId()).addOnSuccessListener(queryDocumentSnapshots -> {
-            float totalAmountValuation = 0;
-            for (DocumentSnapshot it : queryDocumentSnapshots.getDocuments()) {
-                totalAmountValuation += it.toObject(Job.class).getValuation().getAverageTotal();
-            }
-            if (totalAmountValuation > 0) {
-                holder.binding.valuated.setRating(totalAmountValuation / queryDocumentSnapshots.getDocuments().size());
-            }
-        }).addOnFailureListener(v -> Log.e(TAG_LOG, "loadUserData onSuccess: addOnFailureListener "+v.getMessage()));
+        WorkerQueryModel model = listWorker.get(position);
 
+        checkIfExistLike(holder.binding.likeWorker, model.getId());
+        holder.binding.likeWorker.setOnClickListener(view -> {
+            if (holder.binding.likeWorker.getTag().equals(true)) {
+                //if exist like then we remove it
+                holder.binding.likeWorker.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.unLikedWorker)));
+                holder.binding.likeWorker.setTag(false);
+            } else {
+                holder.binding.likeWorker.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.likedWorker)));
+                holder.binding.likeWorker.setTag(true);
+            }
+            mLikeProvider.doLike(model.getId());
+        });
 
-        holder.binding.likeWorker.setVisibility(View.GONE);
         holder.binding.getRoot().setOnClickListener(view -> {
             Intent i = new Intent(context, ProfileDetailsActivity.class);
             i.putExtra("idUserToSee", model.getId());
@@ -75,12 +74,19 @@ public class WorkersAdapter extends RecyclerView.Adapter<WorkersAdapter.ViewHold
 
         });
 
-        holder.binding.price.setVisibility(View.GONE);
+
+        holder.binding.price.setText(Utils.roundToHalf(model.getPrice())+" "+Utils.getCurrency(context).getSymbol());
         holder.binding.lastNameWorker.setText(Utils.capitalizeString(model.getLastName()));
         holder.binding.nameWorker.setText(Utils.capitalizeString(model.getName()));
-        holder.binding.aboutWorker.setText(model.getAbout());
+        holder.binding.aboutWorker.setText(model.getAbout() );
+
+        holder.binding.valuated.setRating((float) model.getAverageValuation());
+
+
         Glide.with(context).load(model.getProfileImage()).apply(Utils.getOptionsGlide(false)).into(holder.binding.imageWorker);
-    }    @Override
+    }
+
+    @Override
     public int getItemCount() {
         return listWorker.size();
     }
@@ -94,7 +100,7 @@ public class WorkersAdapter extends RecyclerView.Adapter<WorkersAdapter.ViewHold
                 btnLikeWorker.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.unLikedWorker)));
                 btnLikeWorker.setTag(false);
             }
-        }).addOnFailureListener(e -> Log.e(TAG_LOG, "fail to get if exist like" + e.getMessage() ));
+        }).addOnFailureListener(e -> Log.e(TAG_LOG, "fail to get if exist like" + e.getMessage()));
     }
 
 

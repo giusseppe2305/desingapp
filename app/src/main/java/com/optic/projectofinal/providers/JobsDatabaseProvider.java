@@ -1,8 +1,6 @@
 package com.optic.projectofinal.providers;
 
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -11,8 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.optic.projectofinal.models.Job;
-
-import java.util.Map;
+import com.optic.projectofinal.utils.Utils;
 
 public class JobsDatabaseProvider {
 
@@ -38,7 +35,9 @@ public class JobsDatabaseProvider {
     public Task<DocumentSnapshot> getJobById(String idJobSelected) {
         return database.document(idJobSelected).get();
     }
-
+    public Query getAllJobs(){
+        return database.orderBy("timestamp");
+    }
     public Task<QuerySnapshot> getAllJobsById(String idUser) {
         return database.whereEqualTo("idUserOffer",idUser).get();
     }
@@ -48,8 +47,7 @@ public class JobsDatabaseProvider {
     }
 
     public Task<Void> updateJob(Job myJob) {
-        Map<String, Object> update = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL).convertValue(myJob, Map.class);
-        return database.document(myJob.getId()).update(update);
+        return database.document(myJob.getId()).update(Utils.convertClassToMap(myJob));
     }
 
     public Task<QuerySnapshot> getValuationsFromUser(String idUser) {

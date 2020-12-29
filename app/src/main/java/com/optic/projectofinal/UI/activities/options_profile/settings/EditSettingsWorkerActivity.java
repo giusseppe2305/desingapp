@@ -1,6 +1,5 @@
 package com.optic.projectofinal.UI.activities.options_profile.settings;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
@@ -9,7 +8,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,11 +19,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.Swipe.SwipeRVAdapter;
 import com.optic.projectofinal.Swipe.SwipeRVTouchHelper;
@@ -67,7 +61,7 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
         //set toolbar
         setSupportActionBar(binding.toolbar.ownToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Ajustes");
+        getSupportActionBar().setTitle(getString(R.string.edit_settings_worker_activity_title));
         //
         userDatabaseProvider = new UserDatabaseProvider();
         authenticationProvider = new AuthenticationProvider();
@@ -89,15 +83,11 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
             }
             temp.removeAll(listResources);
             new MaterialAlertDialogBuilder(this)
-                    .setTitle("Elije un recurso")
-                    .setAdapter(new ArrayAdapter<>(EditSettingsWorkerActivity.this, R.layout.support_simple_spinner_dropdown_item, temp), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Toast.makeText(EditSettingsWorkerActivity.this, "le dio", Toast.LENGTH_SHORT).show();
-                            adapterResources.addSwipeItem(listResources.size(), temp.get(i));
-                        }
+                    .setTitle(R.string.edit_settings_worker_dialog_resource_title)
+                    .setAdapter(new ArrayAdapter<>(EditSettingsWorkerActivity.this, R.layout.support_simple_spinner_dropdown_item, temp), (dialogInterface, i) -> {
+                        adapterResources.addSwipeItem(listResources.size(), temp.get(i));
                     })
-                    .setNegativeButton("cancelar", null)
+                    .setNegativeButton(R.string.edit_settings_worker_dialog_resource_cancel, null)
                     .show();
         });
 
@@ -135,43 +125,38 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
 
 
         MaterialAlertDialogBuilder d = new MaterialAlertDialogBuilder(this)
-                .setTitle("Elije un recurso")
+                .setTitle(R.string.edit_settings_worker_dialog_skill_title)
                 .setView(bindingAlertdialog.getRoot())
-                .setPositiveButton((itemToEdit != null) ? "Modificar" : "Crear", (dialogInterface, i) -> dialogInterface.dismiss())
+                .setPositiveButton((itemToEdit != null) ? getString(R.string.edit_settings_worker_dialog_skill_edit) : getString(R.string.edit_settings_worker_dialog_skill_create), (dialogInterface, i) -> dialogInterface.dismiss())
                 .setCancelable(false)
-                .setNegativeButton("cancelar", null);
+                .setNegativeButton(R.string.edit_settings_worker_dialog_skill_cancel, null);
         AlertDialog a = d.create();
-        a.setOnShowListener(new DialogInterface.OnShowListener() {
+        a.setOnShowListener(dialogInterface -> a.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onShow(DialogInterface dialogInterface) {
-                a.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //not cacel when click positive button only if fields are valid
-                        if (checFieldsAreValid(bindingAlertdialog)) {
-                            Category category = (Category) bindingAlertdialog.category.getItems().get(bindingAlertdialog.category.getSelectedIndex());
-                            SubCategory subCategory = (SubCategory) bindingAlertdialog.subCategory.getItems().get(bindingAlertdialog.subCategory.getSelectedIndex());
-                            Skill skill = new Skill();
-                            skill.setIdCategory(category.getId());
-                            skill.setIdSubcategory(subCategory.getId());
-                            skill.setPricePerHour(Double.parseDouble(bindingAlertdialog.priceSkill.getEditText().getText().toString()));
-                            skill.setTitle(bindingAlertdialog.titleSkill.getEditText().getText().toString());
-                            //change if edit
-                            if (isEditingSkillId != null) {
-                                listSkills.get(itemToEdit).update(skill);
-                                adapterSkills.notifyItemChanged(itemToEdit);
-                                isEditingSkillId = null;
-                            } else {
-                                adapterSkills.addSwipeItem(listSkills.size(), skill);
-                            }
-                            dialogInterface.dismiss();
-                        }
-
-
+            public void onClick(View view) {
+                //not cacel when click positive button only if fields are valid
+                if (checFieldsAreValid(bindingAlertdialog)) {
+                    Category category = (Category) bindingAlertdialog.category.getItems().get(bindingAlertdialog.category.getSelectedIndex());
+                    SubCategory subCategory = (SubCategory) bindingAlertdialog.subCategory.getItems().get(bindingAlertdialog.subCategory.getSelectedIndex());
+                    Skill skill = new Skill();
+                    skill.setIdCategory(category.getId());
+                    skill.setIdSubcategory(subCategory.getId());
+                    skill.setPricePerHour(Double.parseDouble(bindingAlertdialog.priceSkill.getEditText().getText().toString()));
+                    skill.setTitle(bindingAlertdialog.titleSkill.getEditText().getText().toString());
+                    //change if edit
+                    if (isEditingSkillId != null) {
+                        listSkills.get(itemToEdit).update(skill);
+                        adapterSkills.notifyItemChanged(itemToEdit);
+                        isEditingSkillId = null;
+                    } else {
+                        adapterSkills.addSwipeItem(listSkills.size(), skill);
                     }
-                });
+                    dialogInterface.dismiss();
+                }
+
+
             }
-        });
+        }));
         a.show();
 
     }
@@ -214,62 +199,44 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
         bindingAlertdialog.subCategory.setEnabled(true);
         Category categorySelected = (Category) bindingAlertdialog.category.getItems().get(position);
         Log.e(TAG_LOG, "loadSubCategories: " + categorySelected.getId());
-        subcategoriesDatabaseProvider.getAllByCategory(categorySelected.getId()).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
-                    List<SubCategory> result = queryDocumentSnapshots.toObjects(SubCategory.class);
-                    bindingAlertdialog.subCategory.setItems(result);
+        subcategoriesDatabaseProvider.getAllByCategory(categorySelected.getId()).addOnSuccessListener(queryDocumentSnapshots -> {
+            if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                List<SubCategory> result = queryDocumentSnapshots.toObjects(SubCategory.class);
+                bindingAlertdialog.subCategory.setItems(result);
 
-                    if (isEditingSkillId != null) {
-                        Log.e(TAG_LOG, "onSuccess: entra en is editing firebase " + bindingAlertdialog.subCategory.getItems().size());
-                        for (int i = 0; i < bindingAlertdialog.subCategory.getItems().size(); i++) {
-                            SubCategory sub = (SubCategory) bindingAlertdialog.subCategory.getItems().get(i);
-                            Log.e(TAG_LOG, sub.getId() + "-" + isEditingSkillId + "-> " + i);
-                            if (sub.getId().equals(isEditingSkillId)) {
-                                Log.e(TAG_LOG, "onSuccess: postition final " + i);
-                                bindingAlertdialog.subCategory.setSelectedIndex(i);
-                            }
+                if (isEditingSkillId != null) {
+                    Log.e(TAG_LOG, "onSuccess: entra en is editing firebase " + bindingAlertdialog.subCategory.getItems().size());
+                    for (int i = 0; i < bindingAlertdialog.subCategory.getItems().size(); i++) {
+                        SubCategory sub = (SubCategory) bindingAlertdialog.subCategory.getItems().get(i);
+                        Log.e(TAG_LOG, sub.getId() + "-" + isEditingSkillId + "-> " + i);
+                        if (sub.getId().equals(isEditingSkillId)) {
+                            Log.e(TAG_LOG, "onSuccess: postition final " + i);
+                            bindingAlertdialog.subCategory.setSelectedIndex(i);
                         }
-
-//                        for(int i=0;i<bindingAlertdialog.subCategory.getItems().size();i++){
-//                            if((((SubCategory)(bindingAlertdialog.subCategory.getItems().get(i))).getId()).equals(isEditingSkillId)){
-//                                bindingAlertdialog.subCategory.setSelectedIndex(position);
-//                                Log.e(TAG_LOG, "onSuccess: position "+i );
-//                            }
-//
-//                        }
-
                     }
-                } else {
-                    Log.e(TAG_LOG, "onSuccess:EditSettingsWorkerActivity->loadSubCategories ");
+
+
                 }
+            } else {
+                Log.e(TAG_LOG, "onSuccess:EditSettingsWorkerActivity->loadSubCategories ");
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG_LOG, "onFailure: EditSettingsWorkerActivity->loadSubCategories");
-            }
-        });
+        }).addOnFailureListener(e -> Log.e(TAG_LOG, "onFailure: EditSettingsWorkerActivity->loadSubCategories"));
     }
 
     private void loadData() {
-        userDatabaseProvider.getUser(authenticationProvider.getIdCurrentUser()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    User mUser = documentSnapshot.toObject(User.class);
-                    //load resources
-                    ArrayList<Integer> listR = mUser.getResources();
-                    loadResources(listR);
-                    //load skills
-                    ArrayList<Skill> listS = mUser.getSkills();
+        userDatabaseProvider.getUser(authenticationProvider.getIdCurrentUser()).addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                User mUser = documentSnapshot.toObject(User.class);
+                //load resources
+                ArrayList<Integer> listR = mUser.getResources();
+                loadResources(listR);
+                //load skills
+                ArrayList<Skill> listS = mUser.getSkills();
 
-                    loadSkills(listS);
+                loadSkills(listS);
 
-                } else {
-                    Log.e(TAG_LOG, "EditSettingsWorkerActivity->loadData -> onSuccess: ");
-                }
+            } else {
+                Log.e(TAG_LOG, "EditSettingsWorkerActivity->loadData -> onSuccess: ");
             }
         }).addOnFailureListener(v -> Log.e(TAG_LOG, "EditSettingsWorkerActivity->loadData->addOnFailureListener: " + v.getMessage()));
     }
@@ -300,36 +267,30 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_options_edit_settings_worker, menu);
         SwitchItemBinding bindSwitch = SwitchItemBinding.bind(menu.findItem(R.id.switch_settings_worker).getActionView());
-        bindSwitch.option.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b){
-                //checked
-                    binding.container.setAlpha(1);
-                    Utils.setEnabledAllViews(binding.container,true);
+        bindSwitch.option.setOnCheckedChangeListener((compoundButton, b) -> {
+            if(b){
+            //checked
+                binding.container.setAlpha(1);
+                Utils.setEnabledAllViews(binding.container,true);
 
-                    menu.findItem(R.id.btnSave).setVisible(true);
-                }else{
-                    //unchecked
-                    binding.container.setAlpha(0.3f);
-                    Utils.setEnabledAllViews(binding.container,false);
-                    menu.findItem(R.id.btnSave).setVisible(false);
+                menu.findItem(R.id.btnSave).setVisible(true);
+            }else{
+                //unchecked
+                binding.container.setAlpha(0.3f);
+                Utils.setEnabledAllViews(binding.container,false);
+                menu.findItem(R.id.btnSave).setVisible(false);
 
-                }
             }
         });
 
-        userDatabaseProvider.getUser(authenticationProvider.getIdCurrentUser()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()){
-                    if(documentSnapshot.getBoolean("professional")){
-                        bindSwitch.option.setChecked(true);
+        userDatabaseProvider.getUser(authenticationProvider.getIdCurrentUser()).addOnSuccessListener(documentSnapshot -> {
+            if(documentSnapshot.exists()){
+                if(documentSnapshot.getBoolean("professional")){
+                    bindSwitch.option.setChecked(true);
 
-                    }
-                }else{
-                    Log.e(TAG_LOG, "EditSettingsWorkerActivity onCreateOptionsMenu onSuccess: " );
                 }
+            }else{
+                Log.e(TAG_LOG, "EditSettingsWorkerActivity onCreateOptionsMenu onSuccess: " );
             }
         }).addOnFailureListener(v-> Log.e(TAG_LOG, " EditSettingsWorkerActivity addOnFailureListener onCreateOptionsMenu: "+v.getMessage() ));
 
@@ -342,6 +303,9 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
         if(item.getItemId()==R.id.btnSave){
             updateDataFirebase();
         }
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -351,12 +315,7 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
         userUpdate.setProfessional(listSkills.size()==0?false:true);
         userUpdate.setResources(Utils.createListIntResourcesByList(listResources));
         userUpdate.setSkills(listSkills);
-        userDatabaseProvider.updateUser(userUpdate).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Toast.makeText(EditSettingsWorkerActivity.this, "todo ok", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(v-> Log.e(TAG_LOG, "EditSettingsWorkerActivity updateDataFirebase: addOnFailureListener"+v.getMessage() ));
+        userDatabaseProvider.updateUser(userUpdate).addOnFailureListener(v-> Log.e(TAG_LOG, "EditSettingsWorkerActivity updateDataFirebase: addOnFailureListener"+v.getMessage() ));
     }
 
 
@@ -387,10 +346,10 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
             // If swipe left - delete the item
             if (direction == ItemTouchHelper.LEFT) {
                 new MaterialAlertDialogBuilder(EditSettingsWorkerActivity.this)
-                        .setTitle("Confimracion")
-                        .setMessage("¿Estas seguro que desea eliminar la siguiente skill: " + skill.getTitle() + "?")
-                        .setNegativeButton("Cancelar", null)
-                        .setPositiveButton("Eliminar", (dialogInterface, i) -> adapterSkills.removeSwipeItem(position))
+                        .setTitle(R.string.edit_settings_worker_dialog_delete_skill_title)
+                        .setMessage(getString(R.string.edit_settings_worker_dialog_delete_skill_message) + skill.getTitle() + "?")
+                        .setNegativeButton(R.string.edit_settings_worker_dialog_delete_skill_cancel, null)
+                        .setPositiveButton(R.string.edit_settings_worker_dialog_delete_skill_delete, (dialogInterface, i) -> adapterSkills.removeSwipeItem(position))
                         .show();
             } else if (direction == ItemTouchHelper.RIGHT) {
                 showAlertDialogSkill(position);
@@ -408,10 +367,10 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
             // If swipe left - delete the item
             if (direction == ItemTouchHelper.LEFT) {
                 new MaterialAlertDialogBuilder(EditSettingsWorkerActivity.this)
-                        .setTitle("Confimracion")
-                        .setMessage("¿Estas seguro que desea eliminar la siguiente skill: " + resource.getTitleString() + "?")
-                        .setNegativeButton("Cancelar", null)
-                        .setPositiveButton("Eliminar", (dialogInterface, i) -> adapterResources.removeSwipeItem(position))
+                        .setTitle(R.string.edit_settings_worker_dialog_delete_resource_title)
+                        .setMessage(getString(R.string.edit_settings_worker_dialog_delete_resource_message) + resource.getTitleString() + "?")
+                        .setNegativeButton(R.string.edit_settings_worker_dialog_delete_resource_cancel, null)
+                        .setPositiveButton(R.string.edit_settings_worker_dialog_delete_resource_delete, (dialogInterface, i) -> adapterResources.removeSwipeItem(position))
                         .show();
 //            Snackbar.make(binding.rvSkilsList, "Contact deleted", Snackbar.LENGTH_LONG)
 //                    .setActionTextColor(ContextCompat.getColor(this, R.color.spots_dialog_color))

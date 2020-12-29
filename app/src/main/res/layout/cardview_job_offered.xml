@@ -40,7 +40,6 @@
                     android:id="@+id/title"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Titulo del trabajo"
                     android:textStyle="bold|italic"
                     android:fontFamily="@font/cream_cake"
                     android:textSize="20sp"/>
@@ -53,14 +52,14 @@
                 android:textStyle="italic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Se el primero"
+
                 />
             <TextView
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lines="4"
-                android:text="Linea 1 \nLinea 2\nLinea 2\nLinea 2" />
+             />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -70,7 +69,7 @@
                     android:id="@+id/averagePrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Media: 87.00 €"
+
                     android:textStyle="bold"/>
                 <TextView
                     android:id="@+id/timestamp"
@@ -79,7 +78,7 @@
                     android:gravity="right"
                     android:layout_marginBottom="3dp"
                     android:paddingRight="10dp"
-                    android:text="18-05-2020" />
+                     />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

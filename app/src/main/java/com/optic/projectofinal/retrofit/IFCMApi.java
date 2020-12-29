@@ -1,7 +1,7 @@
 package com.optic.projectofinal.retrofit;
 
-import com.optic.projectofinal.models.FCMBody;
-import com.optic.projectofinal.models.FCMResponse;
+import com.optic.projectofinal.modelsRetrofit.FCMBody;
+import com.optic.projectofinal.modelsRetrofit.FCMResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.optic.projectofinal.R;
-import com.optic.projectofinal.UI.activities.CreateJobActivity;
+import com.optic.projectofinal.UI.activities.CreateEditJobActivity;
 
 import java.util.ArrayList;
 
@@ -21,9 +21,9 @@ import static com.optic.projectofinal.utils.Utils.MAX_IMAGE_CAN_BE_SELECTED;
 
 public class ImagePickerAdapter extends RecyclerView.Adapter<ImagePickerAdapter.ViewHolder> {
 
-    private CreateJobActivity context;
+    private CreateEditJobActivity context;
     private ArrayList<Uri>uris;
-    public ImagePickerAdapter(CreateJobActivity c, ArrayList<Uri> uris) {
+    public ImagePickerAdapter(CreateEditJobActivity c, ArrayList<Uri> uris) {
         context=c;
         this.uris=uris;
     }

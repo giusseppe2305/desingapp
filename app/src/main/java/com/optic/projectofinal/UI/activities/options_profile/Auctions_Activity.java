@@ -1,11 +1,11 @@
 package com.optic.projectofinal.UI.activities.options_profile;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.adapters.ViewPagerAuctions;
@@ -30,16 +30,22 @@ public class Auctions_Activity extends AppCompatActivity {
         binding.viewPagerAuctions.setAdapter(adapterPager);
 
         new TabLayoutMediator(binding.tabLayoutAuctions, binding.viewPagerAuctions,
-                new TabLayoutMediator.TabConfigurationStrategy() {
-                    @Override
-                    public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                        if (position == 0) {
-                            tab.setText("Mis subastas");
+                (tab, position) -> {
+                    if (position == 0) {
+                        tab.setText("Mis subastas");
 
-                        }else if (position == 1){
-                            tab.setText("Subastas que participo");
-                        }
                     }
+//                        else if (position == 1){
+//                            tab.setText("Subastas que participo");
+//                        }
                 }).attach();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

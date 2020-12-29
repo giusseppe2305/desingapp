@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'kotlin-android'
 }
 
 android {
@@ -75,6 +76,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.1.0')
 
     implementation 'com.jakewharton.rxbinding:rxbinding:0.4.0'
+    implementation 'com.github.todou:nestrefresh-androidx:0.0.8'//progress bar recyclerview
 
     implementation 'com.github.aqoong:ExpandableTextView:1.0.1'
     implementation 'com.github.dhaval2404:imagepicker:1.7.5'//image picker
@@ -112,6 +114,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.navigation:navigation-fragment:2.3.1'
     implementation 'androidx.navigation:navigation-ui:2.3.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     testImplementation 'junit:junit:4.13.1'
     // Optional -- Robolectric environment

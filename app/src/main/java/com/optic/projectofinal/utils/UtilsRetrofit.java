@@ -3,11 +3,11 @@ package com.optic.projectofinal.utils;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.optic.projectofinal.models.FCMBody;
-import com.optic.projectofinal.models.FCMResponse;
 import com.optic.projectofinal.models.Message;
 import com.optic.projectofinal.modelsNotification.NotificationMessageDTO;
 import com.optic.projectofinal.modelsNotification.WrapperNotification;
+import com.optic.projectofinal.modelsRetrofit.FCMBody;
+import com.optic.projectofinal.modelsRetrofit.FCMResponse;
 import com.optic.projectofinal.providers.AuthenticationProvider;
 import com.optic.projectofinal.providers.MessageProvider;
 import com.optic.projectofinal.providers.NotificationProvider;

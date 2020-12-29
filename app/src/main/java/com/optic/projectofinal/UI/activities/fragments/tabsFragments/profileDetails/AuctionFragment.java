@@ -5,13 +5,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.optic.projectofinal.R;
 import com.optic.projectofinal.adapters.AuctionsAdapter;
 import com.optic.projectofinal.databinding.FragmentTabAuctionsBinding;
 import com.optic.projectofinal.models.Job;
@@ -59,8 +57,7 @@ public class AuctionFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding =FragmentTabAuctionsBinding.inflate(inflater, container, false);
-        binding.spinner.setAdapter(new ArrayAdapter<>(getContext(),R.layout.support_simple_spinner_dropdown_item,new String[]{"Fecha (Ascedente)","Fecha (Descendiente)","Precio (Ascendente)"}));
-        
+
         loadAuctions();
         return binding.getRoot();
     }

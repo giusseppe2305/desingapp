@@ -207,7 +207,7 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Registrarme como trabajador" />
+                android:text="@string/register_setp_register_worker" />
 
 
         </LinearLayout>

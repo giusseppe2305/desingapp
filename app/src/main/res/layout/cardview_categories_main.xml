@@ -38,7 +38,6 @@
            android:layout_height="wrap_content"
            android:maxHeight="50dp"
            android:textAlignment="center"
-           android:text="@string/computingAndAudiovisualCategory"
            android:minLines="3"
            android:layout_marginStart="2dp"
            android:layout_marginEnd="2dp"

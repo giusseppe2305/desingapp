@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="primaryColor">#FCF9FF</color>
     <color name="primaryColorDark">#FAF5FF</color>
+    <color name="primaryColorDarkFull">@color/swipe_remove</color>
     <color name="likedWorker">#CEFF1A1A</color>
     <color name="unLikedWorker">#F5F5F5</color>
 

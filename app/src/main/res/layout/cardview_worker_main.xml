@@ -62,7 +62,6 @@
                         android:id="@+id/nameWorker"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="titulo"
                         android:textAppearance="?attr/textAppearanceHeadline6" />
                     <TextView
                         android:layout_marginLeft="5dp"
@@ -70,7 +69,6 @@
                         android:id="@+id/lastNameWorker"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="apellidos"
                         android:textAppearance="?attr/textAppearanceCaption"/>
                 </LinearLayout>
 
@@ -79,14 +77,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="texto secundario"
                     android:textAppearance="?attr/textAppearanceBody2"
                     android:textColor="?android:attr/textColorSecondary" />
                 <TextView
+                    android:id="@+id/price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="12 €/Hora"
                     android:textAppearance="?textAppearanceHeadline6"
                     android:textColor="?android:attr/textColorSecondary" />
 

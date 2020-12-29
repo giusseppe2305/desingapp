@@ -24,12 +24,14 @@
     <string name="resource_works_weekend_and_holidays">Trabaja findes</string>
     <!-- Strings used for tittles appbar of activities-->
     <string name="register_activity_title">Registrarse</string>
+    <string name="valuation_activity_title">Envia tu valoracion</string>
     <string name="job_offered_activity_title">Trabajos ofertados</string>
     <string name="create_job_activity_title">Crear un trabajo</string>
     <string name="sign_in_activity_title">Iniciar sesion</string>
     <string name="title_activity_chat_conversation">Conversacion</string>
     <string name="post_fragment_title">Menu principal</string>
     <string name="edit_profile_activity_title">Editar perfil</string>
+    <string name="edit_settings_worker_activity_title">Ajustes</string>
     <string name="auctions_activity_title">Subastas</string>
     <string name="favourites_workers_activity_title">Favoritos</string>
     <string name="jobs_activity_title">Trabajos</string>
@@ -91,10 +93,35 @@
     <!--    values job offered activity-->
     <string name="spinner_category_hint">Selecciona una categoria</string>
     <string name="spinner_subcategories_hint">Selecciona una subcateogria</string>
+    <string name="estimated_price">Precio estimado</string>
     <string name="description_new_job">Description</string>
+    <string name="price_per_hour">Precio por hora</string>
     <string name="title_new_job">Titulo</string>
     <string name="basic_information_new_job">Informacion basica</string>
     <string name="max_10_photos">Sube hasta 10 fotos</string>
+    <string name="job_offered_dialog_apply_title">Aplicar al trabajo</string>
+    <string name="job_offered_dialog_apply_message">Rellene los datos</string>
+    <string name="job_offered_dialog_apply_positive_button">Aplicar</string>
+    <string name="job_offered_dialog_apply_negative_button">Cancelar</string>
+    <string name="job_offered_dialog_confirm_cancel_title">Confirmacion</string>
+    <string name="job_offered_dialog_confirm_cancel_message">¿Esta seguro que quiera dejar de aplicar a este trabajo?</string>
+    <string name="job_offered_dialog_confirm_cancel_positive_button">Si,estoy seguro</string>
+    <string name="job_offered_dialog_confirm_cancel_negative_button">Cancelar</string>
+    <string name="job_offered_cancel">Cancelar aplicacion</string>
+    <string name="job_offered_apply">Aplicar trabajo</string>
+    <string name="job_offered_dialog_be_worker_title">Confirmation</string>
+    <string name="job_offered_dialog_be_worker_message">If you apply to any job, your status of worker wil be seated enabled ¿Are you sure that you want apply to this job?</string>
+    <string name="job_offered_dialog_be_worker_negative_button">No thanks</string>
+    <string name="job_offered_dialog_be_worker_positive_button">Yes, apply</string>
+    <string name="job_offered_type_message">Introduzca algun mensaje</string>
+    <string name="job_offered_type_message_large">Mensaje demasiado largo</string>
+    <string name="job_offered_price">Introduzca algun presupuesto</string>
+    <string name="job_offered_apply_job">Aplicar trabajo</string>
+    <string name="job_offered_applying">Profesionales aplicando</string>
+    <string name="job_offered_apply_description">Descripcion</string>
+    <string name="job_offered_apply_see_profile">Ver Perfil</string>
+    <string name="job_offered_subcategory">Subcategoria:</string>
+    <string name="job_offered_category">Categoria:</string>
     <!--    values dialog close create job activity-->
     <string name="dialog_confirm_close_create_job_activity_title">¿Desea salir?</string>
     <string name="dialog_confirm_close_create_job_activity_message">El trabajo no se ha creado, si sale se perderan todos los datos.</string>
@@ -140,6 +167,8 @@
 
     <!--    verify account-->
     <string name="fail_to_send_sms">Error al enviar el sms</string>
+    <string name="wrong_code">Codigo erroneo</string>
+    <string name="code_confirmed">Usuario verificado correctamente</string>
     <string name="jobs_activity_jobs_received">Trabajos recibidos</string>
     <!--    jobs activity-->
     <string name="jobs_activity_jobs_done">Trabajos realizados</string>
@@ -150,6 +179,8 @@
     <string name="chat_converstation_last_connection_yesterday">ult. vez ayer a las</string>
     <string name="chat_converstation_last_connection">ult. vez</string>
     <string name="chat_converstation_connected">conectado</string>
+    <string name="chat_conversation_typing">escribiendo...</string>
+
     <!--    notifications value-->
     <string name="notification_new_message">Nuevo Mensaje</string>
     <!--    edit profile-->
@@ -187,5 +218,128 @@
     <string name="job_done_amiability">Resultado final</string>
     <string name="job_done_speed_end_job">Precio</string>
     <string name="job_done_punctuality">Precio</string>
+    <string name="job_done_opinion">Opinion</string>
+    <string name="job_done_description">Descripcion del trabajo</string>
+
+
+    <string name="nest_refresh_bar_scroll_behavior" translatable="false">com.todou.nestrefresh.RefreshBarScrollBehavior</string>
+    <string name="nest_refresh_scroll_behavior" translatable="false">com.todou.nestrefresh.RefreshScrollBehavior</string>
+    <string name="nest_refresh_load_more_behavior" translatable="false">com.todou.nestrefresh.LoadMoreBehavior</string>
+    <string name="nest_refresh_single_behavior" translatable="false">com.todou.nestrefresh.RefreshBehavior</string>
+    <attr name="nr_title" format="string" />
+
+    <string name="nest_refresh_load_more_no_more">No hay mas</string>
+    <string name="nest_refresh_load_more_pull_label">Deslize para cargar mas</string>
+    <string name="nest_refresh_load_more_refreshing_label">Cargando\u2026</string>
+    <string name="nest_refresh_load_more_release_label">Suelta para cargar mas</string>
+    <string name="nest_refresh_pull">Desliza para actualizar</string>
+    <string name="nest_refresh_refreshing">Cargando\u2026</string>
+    <string name="nest_refresh_release">Suelta para cargar mas</string>
+    <string name="edit_settings_worker_dialog_resource_title">Elija un recurso</string>
+    <string name="edit_settings_worker_dialog_resource_cancel">Cancelar</string>
+    <string name="edit_settings_worker_dialog_skill_title">Habilidad</string>
+    <string name="edit_settings_worker_dialog_skill_edit">Modificar</string>
+    <string name="edit_settings_worker_dialog_skill_create">Crear</string>
+    <string name="edit_settings_worker_dialog_skill_cancel">cancelar</string>
+    <string name="edit_settings_worker_dialog_delete_skill_title">Confirmacion</string>
+    <string name="edit_settings_worker_dialog_delete_skill_message">\"¿Estas seguro que desea eliminar la siguiente skill: \"</string>
+    <string name="edit_settings_worker_dialog_delete_skill_cancel">Cancelar</string>
+    <string name="edit_settings_worker_dialog_delete_skill_delete">Eliminar</string>
+    <string name="edit_settings_worker_dialog_delete_resource_title">Confimracion</string>
+    <string name="edit_settings_worker_dialog_delete_resource_message">\"¿Estas seguro que desea eliminar la siguiente skill: \"</string>
+    <string name="edit_settings_worker_dialog_delete_resource_cancel">Cancelar</string>
+    <string name="edit_settings_worker_dialog_delete_resource_delete">Eliminar</string>
+
+    <!--    valuation activity-->
+    <string name="valuation_dialog_title">Confirmacion</string>
+    <string name="valuation_dialog_message">Esta seguro que no quiere continuar con la evaluacion ¿Desea salir?</string>
+    <string name="valuation_dialog_positive_button">Continuar</string>
+    <string name="valuation_dialog_negative_button">Salir</string>
+    <!--    swipe rv adapter-->
+    <string name="swipe_adapter_job_dialog_title">elige a quien le vas a dar el trabajo ofertado</string>
+    <string name="swipe_adapter_job_dialog_confirm_title">estas seguro de elegir</string>
+    <string name="swipe_adapter_job_dialog_message">todavia nadie ha aplicado a este trabajo</string>
+    <string name="swipe_adapter_job_dialog_cancel">cancelar</string>
+    <string name="swipe_adapter_job_dialog_close">Cerrar</string>
+    <string name="swipe_adapter_job_dialog_confirm_selected">has elegido a </string>
+    <string name="swipe_adapter_job_dialog_confirm_positive_button">elegir</string>
+    <!--    dinamic link user-->
+    <string name="dinamic_link_know">Conoces a: </string>
+    <string name="dinamic_link_description">description </string>
+    <string name="dinamic_link_share_user">Comparte a este trabajador</string>
+    <string name="jobs_adapter_workers_apply"> trabajadores aplicando.</string>
+    <string name="jobs_adapter_workers_be_first">Se el primero</string>
+
+
+    <!--    create edit job-->
+    <string name="create_edit_job_dialog_photo_title">Elige una opcion</string>
+    <string name="create_edit_job_dialog_photo_option_1">Elegir de la galeria</string>
+    <string name="create_edit_job_dialog_photo_option_2">Tomar FOTO AHORA</string>
+    <string name="create_edit_job_uploading_photos">Subiendo imagen.</string>
+    <string name="create_edit_job_dialog_photo_negative_button">Cancelar</string>
+    <string name="create_edit_job_dialog_message_finishing">Ultimando detalles</string>
+    <string name="create_edit_job_message_create">Creado correctamente </string>
+    <string name="create_edit_job_message_fail_created">Fallo al crear </string>
+    <string name="create_edit_job_update_fail">fallo al actualizar</string>
+    <string name="create_edit_job_update">Acualizado correctamente</string>
+
+    <!--    category selected-->
+
+    <string name="category_selected_order">Ordenar</string>
+    <string name="category_selected_price">Precio</string>
+    <string name="category_selected_last_conexion">Ultima conexion</string>
+
+    <!--    login activity-->
+    <string name="login_description">Encuentra el profesional que necesitas, da igual en que sector, tenemos una persona para ti.</string>
+    <string name="join">¡Únete ahora!</string>
+    <string name="login_create_profile">Crea tu perfil</string>
+    <string name="login_i_have_account">Ya tengo cuenta</string>
+    <!--    profile activity-->
+    <string name="profile_see">Ver mi perfil</string>
+    <string name="profile_favourites_workers">Mis trabajadores favoritos</string>
+    <string name="profile_auctions">Subastas</string>
+    <string name="profile_hollidays">Modo vacaciones</string>
+    <string name="profile_settings">Ajustes</string>
+    <string name="profile_privacy">Privacidad</string>
+    <string name="profile_about_us">Sobre nosotros</string>
+    <string name="profile_help">Centro de asistencia</string>
+    <string name="profile_detail_call">llamar</string>
+    <string name="profile_detail_chat">Chat</string>
+    <string name="profile_detail_description">Descripcion:</string>
+    <string name="profile_detail_location">Localizacion Ver Ubicaion</string>
+    <!--    register_step 1-->
+    <string name="register_setp_register_worker">Registrarme como trabajador</string>
+    <!--    settings activity-->
+    <string name="settings_data_profile">Datos de perfil</string>
+    <string name="settings_data_profile_self">Datos autonomo</string>
+    <string name="settings_change_password">Cambiar contraseña</string>
+    <string name="settings_verified">Verificar Cuenta</string>
+    <string name="settings_notifications">Notificaciones</string>
+    <string name="settings_notifications_app">Notificaciones de la app</string>
+    <string name="settings_notifications_email">Notificaciones por e-mail</string>
+    <string name="settings_laguange_app">Idioma de la app</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_log_out">Cerrar sesion</string>
+    <string name="settings_version_app">Version de la app v1.0.0</string>
+<!--    valuation activity-->
+    <string name="valuation_header">Valora tu experiencia</string>
+    <string name="valuation_body">Pulsa en las estrellas para dejar tu valoracion.A mas estrellas, mejor experiencia</string>
+    <string name="valuation_put_comment">deja un comentario</string>
+<!--    verify_account-->
+    <string name="verify_account_number">Introduzca numero</string>
+    <string name="verify_send_sms">Enviar sms</string>
+    <string name="verify_confirm">confirmar</string>
+    <string name="sheet_last_conexion_title">Selecciona ultima conexion</string>
+    <string name="sheet_last_conexion_delet">Borrar</string>
+    <string name="sheet_last_conexion_today">Hoy</string>
+    <string name="sheet_last_conexion_three_last_days">Ultimos 3 dias</string>
+    <string name="sheet_last_conexion_this_week">Esta semana</string>
+    <string name="sheet_last_conexion_this_month">Este mes</string>
+    <string name="sheet_last_conexion_always">Desde siempre</string>
+    <string name="auctions_participate_title">Participa en una subasta</string>
+    <string name="auctions_participate_title_2">Aqui encontraras a todas las subastas en las que estes participando.</string>
+    <string name="my_auctions_title">Tus subastas</string>
+    <string name="my_auctions_title_2">Aqui encontraras a todas tus subastas de trabajos.</string>
+
 
 </resources>

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -182,7 +183,13 @@ public class ChatConversationActivity extends AppCompatActivity {
         }
 
     }
-
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
     private void getAllMessages() {
         Query query = mMessageProvider.getMessageByChat(idCurrentChat);
         FirestoreRecyclerOptions<Message> options =
@@ -221,6 +228,11 @@ public class ChatConversationActivity extends AppCompatActivity {
         }
         if (listeningChangeTyping != null) {
             listeningChangeTyping.remove();
+        }
+        if (nonExistChat != null && nonExistChat) {
+
+            ///delete chat because dont wrote any message
+            mChatsProvider.deleteChat(idCurrentChat).addOnFailureListener(v -> Log.e(TAG_LOG, "onBackPressed: " + v.getMessage()));
         }
     }
 

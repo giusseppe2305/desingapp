@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -26,7 +25,6 @@ import com.optic.projectofinal.utils.Utils;
  * create an instance of this fragment.
  */
 public class ProfileFragment extends Fragment {
-    private Toolbar mToolbar;
     private ActivityProfileBinding binding;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

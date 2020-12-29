@@ -2,6 +2,7 @@ package com.optic.projectofinal.UI.activities.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -179,11 +180,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private void checkUserExist(final String id, Utils.REGISTER option) {
         mUserDatabase.getUser(id).addOnSuccessListener(documentSnapshot -> {
+            Log.d(Utils.TAG_LOG, "checkUserExist: "+documentSnapshot.exists());
             if (documentSnapshot.exists()) {
                 ///the user exist
                 ///set share preference
                 saveSharePreference(documentSnapshot);
-
+                
                 Intent i = new Intent(LoginActivity.this, MainActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
@@ -217,7 +219,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void saveSharePreference(DocumentSnapshot documentSnapshot) {
         BasicInformationUser basicInformationUser = new BasicInformationUser();
-        basicInformationUser.setPhotoUser(documentSnapshot.getString("profileImage"));
+        basicInformationUser.setPhotoUser((documentSnapshot.getString("profileImage"))==null?"nonPhoto":documentSnapshot.getString("profileImage"));
         basicInformationUser.setName(documentSnapshot.getString("name"));
         basicInformationUser.setLastName(documentSnapshot.getString("lastName"));
         Utils.setPersistantBasicUserInformation(basicInformationUser, LoginActivity.this);

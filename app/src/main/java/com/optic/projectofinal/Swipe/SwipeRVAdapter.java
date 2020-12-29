@@ -1,7 +1,6 @@
 package com.optic.projectofinal.Swipe;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +28,7 @@ import com.optic.projectofinal.models.Skill;
 import com.optic.projectofinal.models.User;
 import com.optic.projectofinal.providers.ApplyJobWorkerDatabaseProvider;
 import com.optic.projectofinal.providers.JobsDatabaseProvider;
+import com.optic.projectofinal.providers.SubcategoriesDatabaseProvider;
 import com.optic.projectofinal.providers.UserDatabaseProvider;
 import com.optic.projectofinal.utils.Utils;
 
@@ -95,14 +95,19 @@ public class SwipeRVAdapter<T> extends RecyclerView.Adapter<SwipeRVAdapter<T>.Sw
         if (ibIterated instanceof Skill) {
 
             Skill obj = (Skill) ibIterated;
+
             swipeRVViewHolder.binding.skill.title.setText(obj.getTitle());
-            swipeRVViewHolder.binding.skill.price.setText(String.valueOf(obj.getPricePerHour()));
+            swipeRVViewHolder.binding.skill.price.setText(Utils.getFormatPrice(obj.getPricePerHour(),context));
             ///category
             Category categ = Utils.getCategoryByIdJson(context, obj.getIdCategory());
             swipeRVViewHolder.binding.skill.category.setText(categ.getTitleString());
             swipeRVViewHolder.binding.skill.imgSkill.setImageResource(categ.getIdImage());
-            //Glide.with(context).load(categ.getIdImage()).into(swipeRVViewHolder.binding.skill.imgSkill);
-            swipeRVViewHolder.binding.skill.subCategory.setText(obj.getIdSubcategory());
+            new SubcategoriesDatabaseProvider().getSubCategoryById(obj.getIdSubcategory()).addOnSuccessListener(documentSnapshot ->
+            {
+                if(documentSnapshot.exists()){
+                    swipeRVViewHolder.binding.skill.subCategory.setText(documentSnapshot.getString("name"));
+                }
+            }).addOnFailureListener(e -> Log.e(TAG_LOG, "onBindViewHolder: "+e.getMessage() ));
 
         }
         if (ibIterated instanceof Resource) {
@@ -117,14 +122,14 @@ public class SwipeRVAdapter<T> extends RecyclerView.Adapter<SwipeRVAdapter<T>.Sw
             Job obj = (Job) ibIterated;
             swipeRVViewHolder.binding.jobOffered.title.setText(obj.getTitle());
             swipeRVViewHolder.binding.jobOffered.description.setText(obj.getDescription());
-            swipeRVViewHolder.binding.jobOffered.timestamp.setText(Utils.getDateFormatted(obj.getTimestamp(),context));
+            swipeRVViewHolder.binding.jobOffered.timestamp.setText(Utils.getDateFormattedSimple(obj.getTimestamp(),context));
 
 
-            Glide.with(context).load(obj.getImages().get(0)).apply(Utils.getOptionsGlide(true)).transform(Utils.getTransformSquareRound()).into(swipeRVViewHolder.binding.jobOffered.imageJob);
+            Glide.with(context).load(obj.getThumbnail()).apply(Utils.getOptionsGlide(true)).transform(Utils.getTransformSquareRound()).into(swipeRVViewHolder.binding.jobOffered.imageJob);
 
             swipeRVViewHolder.binding.jobOffered.getRoot().setOnClickListener(v -> {
-                MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context).setTitle("elige a quien le vas a dar el trabajo ofertado")
-                        .setNegativeButton("Cerrar", null);
+                MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context).setTitle(R.string.swipe_adapter_job_dialog_title)
+                        .setNegativeButton(R.string.swipe_adapter_job_dialog_close, null);
                 new ApplyJobWorkerDatabaseProvider().getAllById(obj.getId()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -146,30 +151,26 @@ public class SwipeRVAdapter<T> extends RecyclerView.Adapter<SwipeRVAdapter<T>.Sw
                                      DocumentSnapshot itUser= (DocumentSnapshot) itTask.getResult();
                                      listUsersApplyThisJob.add(itUser.toObject(User.class));
                                  }
-                                 dialog.setSingleChoiceItems(new ArrayAdapter<User>(context, R.layout.textbox_gender, listUsersApplyThisJob), 0, new DialogInterface.OnClickListener() {
-                                     @Override
-                                     public void onClick(DialogInterface dialogInterface, int i12) {
-                                        new MaterialAlertDialogBuilder(context).setTitle("estas seguro de elegir")
-                                                .setMessage("has elegido a "+listUsersApplyThisJob.get(i12))
-                                                .setPositiveButton("elegir",(dialogInterface1, i1) -> {
-                                                    Job updateJob=new Job();
-                                                    updateJob.setId(obj.getId());
-                                                    updateJob.setIdUserApply(listUsersApplyThisJob.get(i12).getId());
-                                                    updateJob.setState(Job.State.IN_PROGRESS);
-                                                    new JobsDatabaseProvider().updateJob(updateJob).addOnFailureListener(v1 -> Log.e(TAG_LOG, "updatejob select worker onClick: "+ v1.getMessage() ));
-                                                    myAuctionsFragment.loadData();
-                                                    dialogInterface.dismiss();
-                                                })
-                                                .setNegativeButton("cancelar",(dialogInterface1, i1) -> dialogInterface1.dismiss())
-                                                .show();
-                                     }
-                                 }).show();
+                                 dialog.setSingleChoiceItems(new ArrayAdapter<User>(context, R.layout.textbox_gender, listUsersApplyThisJob), 0, (dialogInterface, numb) ->
+                                         new MaterialAlertDialogBuilder(context).setTitle(R.string.swipe_adapter_job_dialog_confirm_title)
+                                         .setMessage(context.getString(R.string.swipe_adapter_job_dialog_confirm_selected)+listUsersApplyThisJob.get(numb))
+                                         .setPositiveButton(R.string.swipe_adapter_job_dialog_confirm_positive_button,(dialogInterface1, i1) -> {
+                                             Job updateJob=new Job();
+                                             updateJob.setId(obj.getId());
+                                             updateJob.setIdUserApply(listUsersApplyThisJob.get(numb).getId());
+                                             updateJob.setState(Job.State.IN_PROGRESS);
+                                             new JobsDatabaseProvider().updateJob(updateJob).addOnFailureListener(v1 -> Log.e(TAG_LOG, "updatejob select worker onClick: "+ v1.getMessage() ));
+                                             myAuctionsFragment.loadData();
+                                             dialogInterface.dismiss();
+                                         })
+                                         .setNegativeButton(R.string.swipe_adapter_job_dialog_cancel,(dialogInterface1, i1) -> dialogInterface1.dismiss())
+                                         .show()).show();
 
                              });
 
 
                          }else{
-                             dialog.setMessage("todavia nadie ha aplicado a este trabajo");
+                             dialog.setMessage(R.string.swipe_adapter_job_dialog_message);
                              dialog.show();
                          }
                     }

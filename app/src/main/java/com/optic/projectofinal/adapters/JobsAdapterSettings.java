@@ -11,12 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.UI.activities.ValuationActivity;
 import com.optic.projectofinal.UI.activities.fragments.tabsFragments.auctions.MyAuctionsFragment;
 import com.optic.projectofinal.databinding.CardviewJobOfferedBinding;
 import com.optic.projectofinal.models.Job;
+import com.optic.projectofinal.providers.ApplyJobWorkerDatabaseProvider;
 import com.optic.projectofinal.providers.JobsDatabaseProvider;
 import com.optic.projectofinal.utils.Utils;
 
@@ -55,8 +58,16 @@ public class JobsAdapterSettings extends RecyclerView.Adapter<JobsAdapterSetting
                         Job update = new Job();
                         update.setId(job.getId());
                         update.setState(Job.State.FINISHED);
-                        new JobsDatabaseProvider().updateJob(update).addOnFailureListener(v -> Log.e(TAG_LOG, "put finished job onClick: " + v.getMessage()));
-                        context.loadData();
+
+                        new ApplyJobWorkerDatabaseProvider().getApplyWorker(job.getId(),job.getIdUserApply()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                update.setTotalPrice(documentSnapshot.getDouble("price"));
+                                new JobsDatabaseProvider().updateJob(update).addOnFailureListener(v -> Log.e(TAG_LOG, "put finished job onClick: " + v.getMessage()));
+                                context.loadData();
+                            }
+                        }).addOnFailureListener(e -> Log.e(TAG_LOG, "onBindViewHolder: "+e.getMessage() ));
+
                         dialogInterface.dismiss();
 
                         new MaterialAlertDialogBuilder(context.getContext())
@@ -77,8 +88,8 @@ public class JobsAdapterSettings extends RecyclerView.Adapter<JobsAdapterSetting
         }
         holder.binding.title.setText(job.getTitle());
         holder.binding.description.setText(job.getDescription());
-        holder.binding.timestamp.setText(Utils.getDateFormatted(job.getTimestamp(),context.getContext()));
-        Glide.with(context).load(job.getImages().get(0)).apply(Utils.getOptionsGlide(true)).transform(Utils.getTransformSquareRound()).into(holder.binding.imageJob);
+        holder.binding.timestamp.setText(Utils.getDateFormattedSimple(job.getTimestamp(),context.getContext()));
+        Glide.with(context).load(job.getThumbnail()).apply(Utils.getOptionsGlide(true)).transform(Utils.getTransformSquareRound()).into(holder.binding.imageJob);
     }
 
     @Override

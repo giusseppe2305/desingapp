@@ -27,27 +27,27 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textSize="20sp"
-            android:text="Encuentra el profesional que necesitas, da igual en que sector, tenemos una persona para ti."/>
+            android:text="@string/login_description"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:text="¡Únete ahora!"/>
+            android:text="@string/join"/>
 
         <Button
             android:id="@+id/loginCreateProfile"
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Crea tu perfil"/>
+            android:text="@string/login_create_profile"/>
         <Button
             android:id="@+id/loginHaveAccount"
             android:backgroundTint="@color/white"
             android:layout_marginBottom="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ya tengo cuenta"/>
+            android:text="@string/login_i_have_account"/>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -20,7 +20,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="10dp"
-                android:text="Selecciona ultima conexion"
+                android:text="@string/sheet_last_conexion_title"
                 android:textAlignment="textStart"
                 android:textSize="20dp" />
 
@@ -32,7 +32,7 @@
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:paddingEnd="10dp"
-                android:text="Borrar" />
+                android:text="@string/sheet_last_conexion_delet" />
         </LinearLayout>
 
         <RadioGroup
@@ -44,36 +44,36 @@
                 android:id="@+id/today"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:tag="1"
-                android:text="Hoy" />
+                android:tag="0"
+                android:text="@string/sheet_last_conexion_today" />
 
             <RadioButton
                 android:id="@+id/lastThreeDays"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:tag="2"
-                android:text="Ultimos 3 dias" />
+                android:tag="1"
+                android:text="@string/sheet_last_conexion_three_last_days" />
 
             <RadioButton
                 android:id="@+id/thisWeek"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:tag="3"
-                android:text="Esta semana" />
+                android:tag="2"
+                android:text="@string/sheet_last_conexion_this_week" />
 
             <RadioButton
                 android:id="@+id/thisMonth"
-                android:tag="4"
+                android:tag="3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Este mes" />
+                android:text="@string/sheet_last_conexion_this_month" />
 
             <RadioButton
                 android:id="@+id/always"
-                android:tag="5"
+                android:tag="4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Desde siempre" />
+                android:text="@string/sheet_last_conexion_always" />
 
         </RadioGroup>
 

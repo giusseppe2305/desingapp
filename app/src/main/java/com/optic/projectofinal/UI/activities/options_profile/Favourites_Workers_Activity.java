@@ -2,7 +2,9 @@ package com.optic.projectofinal.UI.activities.options_profile;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 
@@ -19,7 +21,6 @@ import com.optic.projectofinal.providers.AuthenticationProvider;
 import com.optic.projectofinal.providers.UserDatabaseProvider;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.optic.projectofinal.utils.Utils.TAG_LOG;
 
@@ -51,17 +52,16 @@ public class Favourites_Workers_Activity extends AppCompatActivity {
                 for(DocumentSnapshot it:documentSnapshot.getDocuments()){
                     tasks.add(mUserProvider.getUser(it.getString("idWorker")));
                 }
-                Tasks.whenAllComplete(tasks).addOnSuccessListener(new OnSuccessListener<List<Task<?>>>() {
-                    @Override
-                    public void onSuccess(List<Task<?>> tasks) {
-                        for(Task<?> i:tasks){
-                            Task<DocumentSnapshot> iterated=(Task<DocumentSnapshot>)i;
-                            listWorkersSaved.add(iterated.getResult().toObject(User.class));
-                        }
-                        workersAdapter = new WorkersAdapter(Favourites_Workers_Activity.this, listWorkersSaved);
-                        binding.favouritesWorkers.setAdapter(workersAdapter);
-                        binding.favouritesWorkers.setLayoutManager(new GridLayoutManager(Favourites_Workers_Activity.this,2));
+                Tasks.whenAllComplete(tasks).addOnSuccessListener(tasks1 -> {
+                    for(Task<?> i: tasks1){
+                        Task<DocumentSnapshot> iterated=(Task<DocumentSnapshot>)i;
+                        User it = iterated.getResult().toObject(User.class);
+                        listWorkersSaved.add(it);
                     }
+
+                    workersAdapter = new WorkersAdapter(Favourites_Workers_Activity.this, listWorkersSaved);
+                    binding.favouritesWorkers.setAdapter(workersAdapter);
+                    binding.favouritesWorkers.setLayoutManager(new GridLayoutManager(Favourites_Workers_Activity.this,2));
                 }).addOnFailureListener(v-> Log.e(TAG_LOG, "getAllSaveWorkersById onSuccess: "+v.getMessage() ));
             }
         }).addOnFailureListener(v-> Log.e(TAG_LOG, "getAllSaveWorkersById onCreate: failure"+v.getMessage() ));
@@ -78,5 +78,13 @@ public class Favourites_Workers_Activity extends AppCompatActivity {
 
             }
         }).addOnFailureListener(runnable -> Log.e(TAG_LOG, "onStart: "+runnable.getMessage() ));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

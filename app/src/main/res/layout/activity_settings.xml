@@ -48,7 +48,7 @@
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Datos de perfil" />
+                        android:text="@string/settings_data_profile" />
 
 
                 </LinearLayout>
@@ -99,7 +99,7 @@
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Datos autonomo" />
+                        android:text="@string/settings_data_profile_self" />
 
 
                 </LinearLayout>
@@ -150,7 +150,7 @@
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Cambiar contraseña" />
+                        android:text="@string/settings_change_password" />
 
 
                 </LinearLayout>
@@ -200,7 +200,7 @@
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Verificar Cuenta" />
+                        android:text="@string/settings_verified" />
 
 
                 </LinearLayout>
@@ -235,7 +235,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Notificaciones"
+                    android:text="@string/settings_notifications"
                     android:textSize="10dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="5dp"/>
@@ -264,7 +264,7 @@
 
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Notificaciones de la app" />
+                            android:text="@string/settings_notifications_app" />
 
 
                     </LinearLayout>
@@ -319,7 +319,7 @@
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Notificaciones por e-mail" />
+                        android:text="@string/settings_notifications_email" />
 
 
                 </LinearLayout>
@@ -356,7 +356,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Idioma de la app"
+                    android:text="@string/settings_laguange_app"
                     android:textSize="10dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="5dp"/>
@@ -387,7 +387,7 @@
 
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Idioma" />
+                            android:text="@string/settings_language" />
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -453,7 +453,7 @@
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Cerrar sesion" />
+                        android:text="@string/settings_log_out" />
 
 
                 </LinearLayout>
@@ -467,7 +467,7 @@
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Version de la app v1.0.0"
+            android:text="@string/settings_version_app"
             android:textAlignment="center"/>
 
     </LinearLayout>

@@ -36,11 +36,17 @@
                 android:text="Precio (Mayor a menor)" />
 
             <RadioButton
-                android:id="@+id/distance"
+                android:id="@+id/recent"
                 android:tag="3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Distancia" />
+                android:text="Recientes" />
+            <RadioButton
+                android:id="@+id/old"
+                android:tag="3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mas antiguos" />
         </RadioGroup>
     </LinearLayout>
 

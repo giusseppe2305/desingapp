@@ -3,18 +3,12 @@ package com.optic.projectofinal.models;
 import java.util.ArrayList;
 
 public class Job {
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
-    }
 
     public enum State{PUBLISHED,IN_PROGRESS,FINISHED}
     private String id;
     private String idUserOffer;
     private String idUserApply;
+
     private long timestamp;
     private String description;
     private String opinionUserOffer;
@@ -29,6 +23,13 @@ public class Job {
     private String thumbnail;
     public Job() {
 
+    }
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     public double getTotalPrice() {
