@@ -85,10 +85,10 @@ public class WorkersFragment extends Fragment {
             public void onResponse(@NotNull Call<List<WorkerQueryModel>> call, @NotNull Response<List<WorkerQueryModel>> response) {
                 Log.d(TAG_LOG, "onResponse: entro");
                 if(response.isSuccessful()){
-                    for(WorkerQueryModel it:response.body())
-                    {
-                        Log.d(TAG_LOG, "onResponse: "+it.toString());
-                    }
+//                    for(WorkerQueryModel it:response.body())
+//                    {
+//                        Log.d(TAG_LOG, "onResponse: "+it.toString());
+//                    }
                     binding.loading.setVisibility(View.GONE);
 
                     workersAdapter = new WorkersqueryAdapter(getContext(), response.body());

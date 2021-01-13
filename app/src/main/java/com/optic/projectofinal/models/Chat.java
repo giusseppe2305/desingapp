@@ -9,6 +9,7 @@ public class Chat {
     private long timestamp;
     private String idUserTo;
     private String idLastMessage;
+    private String idUserFrom;
 
     public String getIdLastMessage() {
         return idLastMessage;
@@ -58,7 +59,6 @@ public class Chat {
         this.idUserFrom = idUserFrom;
     }
 
-    private String idUserFrom;
 
 
     public long getTimestamp() {

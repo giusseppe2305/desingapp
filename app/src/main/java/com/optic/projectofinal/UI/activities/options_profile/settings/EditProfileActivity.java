@@ -40,7 +40,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static com.optic.projectofinal.utils.Utils.TAG_LOG;
-import static com.optic.projectofinal.utils.Utils.updateImageProfileBasicUserInformation;
 
 public class EditProfileActivity extends AppCompatActivity {
     private final int PICKER_IMAGE_PROFILE_IMAGE = 1;
@@ -58,6 +57,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private AlertDialog dialogUpdate;
     private boolean hasProfileImage;
     private boolean hasCoverImage;
+    private String urlImageProfileThumbnail;
 
     private enum TYPE_IMAGE {COVER_IMAGE, PROFILE_IMAGE}
 
@@ -124,7 +124,9 @@ public class EditProfileActivity extends AppCompatActivity {
             binding.name.getEditText().setText(userIterated.getName());
             binding.lastName.getEditText().setText(userIterated.getLastName());
             binding.about.getEditText().setText(userIterated.getAbout());
-            binding.schedule.getEditText().setText(userIterated.getSchedule());
+            ///save thumbnail
+            urlImageProfileThumbnail =userIterated.getProfileImage();
+
             Sex sex=Utils.getSexByIdJson(EditProfileActivity.this,userIterated.getSex());
             sexSelected=sex.getId();
             binding.sex.setText(sex.getTitleString(),false);
@@ -142,7 +144,28 @@ public class EditProfileActivity extends AppCompatActivity {
             Glide.with(EditProfileActivity.this).load(userIterated.getProfileImage()).apply(Utils.getOptionsGlide(false)).into(binding.imageProfile);
         }).addOnFailureListener(v-> Log.e(TAG_LOG, "loadUserData: "+v.getMessage() ));
     }
+    private void createThumbnail(String image,String idUser) {
+        new Thread(() -> {
+            try {
+                URL url = new URL(image);
+                Bitmap imageBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                storageProvider.createThumbnail(idUser,imageBitmap,"imagesUsers",idUser).addOnSuccessListener(taskSnapshot ->
+                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
+                            User update=new User();
+                            update.setId(idUser);
+                            update.setThumbnail(uri.toString());
+                            userDatabaseProvider.updateUser(update).addOnFailureListener(e-> Log.e(TAG_LOG, "fail to save thumbnail job "+e.getMessage() ));
+                        }).addOnFailureListener(e -> Log.d(TAG_LOG, "fail get url thumbnail  "+e.getMessage())));
 
+            } catch (MalformedURLException e) {
+                Log.e(TAG_LOG, "createThumbnail: "+e.getMessage() );
+                e.printStackTrace();
+            } catch (IOException e) {
+                Log.e(TAG_LOG, "createThumbnail: "+e.getMessage() );
+                e.printStackTrace();
+            }
+        }).start();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_edit_done, menu);
@@ -198,7 +221,7 @@ public class EditProfileActivity extends AppCompatActivity {
         else
             basicInformationUser.setPhotoUser("nonPhoto");
         Utils.setPersistantBasicUserInformation(basicInformationUser, this);
-        Utils.setLanguage("es-Es", this);
+//        Utils.setLanguage("es-Es", this);
     }
 
     private void showDialogSelectImage(TYPE_IMAGE type) {
@@ -234,7 +257,6 @@ public class EditProfileActivity extends AppCompatActivity {
             userUpdate.setName(binding.name.getEditText().getText().toString());
             userUpdate.setLastName(binding.lastName.getEditText().getText().toString());
             userUpdate.setAbout(binding.about.getEditText().getText().toString());
-            userUpdate.setSchedule(binding.schedule.getEditText().getText().toString());
             if (sexSelected != null)
                 userUpdate.setSex(sexSelected);
             userUpdate.setBirthdate(Utils.getTimestampFromString(binding.birthDate.getEditText().getText().toString()));
@@ -243,9 +265,9 @@ public class EditProfileActivity extends AppCompatActivity {
             updateSharePreference(userUpdate);
 
             if (uriCoverImage != null) {
-
+                Log.d(TAG_LOG, "updateDataUser: has uriCoverImage");
                 storageProvider.uploadImageUser(uriCoverImage, StorageProvider.TYPE_IMAGE.COVER_IMAGE).addOnSuccessListener(v->{
-
+                    Log.d(TAG_LOG, "updateDataUser: change cover image "+hasCoverImage);
                     if(!hasCoverImage){
                         v.getStorage().getDownloadUrl().addOnSuccessListener(c->{
                             User mUser=new User();
@@ -258,21 +280,25 @@ public class EditProfileActivity extends AppCompatActivity {
                 }).addOnFailureListener(v -> Log.e(TAG_LOG, "fail update cover image prifle " + v.getMessage()));
             }
             if (uriImageProfile != null) {
+                Log.d(TAG_LOG, "updateDataUser: has image profile");
                 storageProvider.uploadImageUser(uriImageProfile, StorageProvider.TYPE_IMAGE.PROFILE_IMAGE)
                         .addOnSuccessListener(v-> {
-                            Log.e(TAG_LOG, "updateDataUser: cambio profile image");
+                            Log.d(TAG_LOG, "updateDataUser: cambio profile image");
                             if (!hasProfileImage) {
                                 v.getStorage().getDownloadUrl().addOnSuccessListener(c -> {
                                     User mUser = new User();
                                     mUser.setId(authenticationProvider.getIdCurrentUser());
                                     mUser.setProfileImage(c.toString());
                                     userDatabaseProvider.updateUser(mUser);
-                                    //create thumbnail
-                                    createThumbnail(c.toString(),mUser.getId());
+
 
                                 }).addOnFailureListener(cc -> Log.e(TAG_LOG, "updateDataUser: profile " + cc.getMessage()));
 
                             }
+                            //create thumbnail
+                            Log.d(TAG_LOG, "updateDataUser: create thumbnail "+urlImageProfileThumbnail+"- "+authenticationProvider.getIdCurrentUser());
+                            createThumbnail(urlImageProfileThumbnail,authenticationProvider.getIdCurrentUser());
+
                         })
                         .addOnFailureListener(v -> Log.e(TAG_LOG, "fail update  image prifle " + v.getMessage()));
             }
@@ -287,30 +313,7 @@ public class EditProfileActivity extends AppCompatActivity {
         }
 
     }
-    private void createThumbnail(String image,String idUser) {
-        new Thread(() -> {
-            try {
-                URL url = new URL(image);
-                Bitmap imageBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                storageProvider.createThumbnail(idUser,imageBitmap,"all_jobs_thumbnail",idUser).addOnSuccessListener(taskSnapshot ->
-                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
-                            User update=new User();
-                            update.setId(idUser);
-                            update.setThumbnail(uri.toString());
-                            userDatabaseProvider.updateUser(update).addOnFailureListener(e-> Log.e(TAG_LOG, "fail to save thumbnail user "+e.getMessage() ));
-                            updateImageProfileBasicUserInformation(uri.toString(), EditProfileActivity.this);
 
-                        }).addOnFailureListener(e -> Log.d(TAG_LOG, "fail get url thumbnail  "+e.getMessage())));
-
-            } catch (MalformedURLException e) {
-                Log.e(TAG_LOG, "createThumbnail: "+e.getMessage() );
-                e.printStackTrace();
-            } catch (IOException e) {
-                Log.e(TAG_LOG, "createThumbnail: "+e.getMessage() );
-                e.printStackTrace();
-            }
-        }).start();
-    }
     private boolean checkFieldAreValid() {
         boolean ret = false;
         boolean ret2 = false;

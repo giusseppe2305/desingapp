@@ -1,5 +1,6 @@
 package com.optic.projectofinal.models;
 
+
 import java.util.Objects;
 
 public class SubCategory {

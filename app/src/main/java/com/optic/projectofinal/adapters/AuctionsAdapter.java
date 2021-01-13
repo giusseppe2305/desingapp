@@ -18,6 +18,7 @@ import com.optic.projectofinal.providers.ApplyJobWorkerDatabaseProvider;
 import com.optic.projectofinal.utils.Utils;
 
 import java.util.List;
+import java.util.Locale;
 
 import static com.optic.projectofinal.utils.Utils.TAG_LOG;
 
@@ -50,7 +51,7 @@ public class AuctionsAdapter extends RecyclerView.Adapter<AuctionsAdapter.ViewHo
                 .transform(Utils.getTransformSquareRound()).into(holder.binding.imageJob);
 
         new ApplyJobWorkerDatabaseProvider().getAllById(job.getId()).get().addOnSuccessListener(queryDocumentSnapshots -> {
-                    holder.binding.countApplyWorkers.setText(String.format(Utils.getLocale(context),
+                    holder.binding.countApplyWorkers.setText(String.format(Locale.getDefault(),
                             "%d %s", queryDocumentSnapshots.size(),
                             context.getString(R.string.jobs_adapter_workers_apply)));
                     double average = 0;

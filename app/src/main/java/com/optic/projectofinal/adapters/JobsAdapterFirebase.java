@@ -57,7 +57,7 @@ public class JobsAdapterFirebase extends FirestoreRecyclerAdapter<Job, JobsAdapt
         RetrofitClient.getClient(RetrofitClient.FIREBASE_FUNCTIONS).create(FunctionsApi.class).jobs(model.getId()).enqueue(new Callback<JobsQueryModel>() {
             @Override
             public void onResponse(Call<JobsQueryModel> call, Response<JobsQueryModel> response) {
-                Log.d(TAG_LOG, "onResponse: "+call.request().url().toString());
+
                 if(response.isSuccessful()){
                     if(response.body().getCount()==0){
                         holder.binding.countApplyWorkers.setText("Se el primero");

@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">ProjectoFinal</string>
-    <string name="facebook_app_id">1065592847246745</string>
-    <string name="fb_login_protocol_scheme">fb1065592847246745</string>
+    <string name="app_name" translatable="false">ProjectoFinal</string>
+    <string name="facebook_app_id" translatable="false">1065592847246745</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb1065592847246745</string>
     <!-- TODO: Remove or change this placeholder text -->
 
 
@@ -85,7 +85,6 @@
     <string name="register_with_facebook">Registrate con facebook</string>
     <string name="register_with_email">Registrarte con e-mail</string>
     <!-- name values bottomnavigation -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="menuNameWorkers">Trabajadores</string>
     <string name="menuNameJobs">Trabajos</string>
     <string name="menuNameChats">Chats</string>
@@ -109,10 +108,10 @@
     <string name="job_offered_dialog_confirm_cancel_negative_button">Cancelar</string>
     <string name="job_offered_cancel">Cancelar aplicacion</string>
     <string name="job_offered_apply">Aplicar trabajo</string>
-    <string name="job_offered_dialog_be_worker_title">Confirmation</string>
-    <string name="job_offered_dialog_be_worker_message">If you apply to any job, your status of worker wil be seated enabled ¿Are you sure that you want apply to this job?</string>
-    <string name="job_offered_dialog_be_worker_negative_button">No thanks</string>
-    <string name="job_offered_dialog_be_worker_positive_button">Yes, apply</string>
+    <string name="job_offered_dialog_be_worker_title">Confirmar</string>
+    <string name = "job_offered_dialog_be_worker_message"> Si postula a cualquier trabajo, su estado de trabajador estará habilitado para sentarse. ¿Está seguro de que desea postularse para este trabajo? </string>
+    <string name = "job_offered_dialog_be_worker_negative_button"> No, gracias </string>
+    <string name = "job_offered_dialog_be_worker_positive_button"> Sí, aplicar </string>
     <string name="job_offered_type_message">Introduzca algun mensaje</string>
     <string name="job_offered_type_message_large">Mensaje demasiado largo</string>
     <string name="job_offered_price">Introduzca algun presupuesto</string>
@@ -173,13 +172,13 @@
     <!--    jobs activity-->
     <string name="jobs_activity_jobs_done">Trabajos realizados</string>
     <!--    chat conversation-->
-    <string name="chat_conversation_write_message">Escribir mensaje...</string>
+    <string name="chat_conversation_write_message">Escribir mensaje…</string>
     <string name="chat_conversation_field_message_void">Escriba un mensaje</string>
     <string name="chat_converstation_last_connection_today">ult. vez hoy a las</string>
     <string name="chat_converstation_last_connection_yesterday">ult. vez ayer a las</string>
     <string name="chat_converstation_last_connection">ult. vez</string>
     <string name="chat_converstation_connected">conectado</string>
-    <string name="chat_conversation_typing">escribiendo...</string>
+    <string name="chat_conversation_typing">escribiendo…</string>
 
     <!--    notifications value-->
     <string name="notification_new_message">Nuevo Mensaje</string>
@@ -242,11 +241,11 @@
     <string name="edit_settings_worker_dialog_skill_create">Crear</string>
     <string name="edit_settings_worker_dialog_skill_cancel">cancelar</string>
     <string name="edit_settings_worker_dialog_delete_skill_title">Confirmacion</string>
-    <string name="edit_settings_worker_dialog_delete_skill_message">\"¿Estas seguro que desea eliminar la siguiente skill: \"</string>
+    <string name="edit_settings_worker_dialog_delete_skill_message">¿Estas seguro que desea eliminar la siguiente skill: </string>
     <string name="edit_settings_worker_dialog_delete_skill_cancel">Cancelar</string>
     <string name="edit_settings_worker_dialog_delete_skill_delete">Eliminar</string>
     <string name="edit_settings_worker_dialog_delete_resource_title">Confimracion</string>
-    <string name="edit_settings_worker_dialog_delete_resource_message">\"¿Estas seguro que desea eliminar la siguiente skill: \"</string>
+    <string name="edit_settings_worker_dialog_delete_resource_message">¿Estas seguro que desea eliminar la siguiente skill: </string>
     <string name="edit_settings_worker_dialog_delete_resource_cancel">Cancelar</string>
     <string name="edit_settings_worker_dialog_delete_resource_delete">Eliminar</string>
 
@@ -340,6 +339,9 @@
     <string name="auctions_participate_title_2">Aqui encontraras a todas las subastas en las que estes participando.</string>
     <string name="my_auctions_title">Tus subastas</string>
     <string name="my_auctions_title_2">Aqui encontraras a todas tus subastas de trabajos.</string>
+    <string name="select_language">Selecciona un idioma</string>
+    <string name="spanish">Español</string>
+    <string name="english">Ingles</string>
 
 
 </resources>

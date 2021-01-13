@@ -5,12 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.optic.projectofinal.R;
 import com.optic.projectofinal.UI.activities.MainActivity;
 import com.optic.projectofinal.databinding.ActivitySignInBinding;
@@ -81,17 +77,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private void signInWithEmail() {
         String email = binding.txtEmail.getEditText().getText().toString();
         String pass = binding.txtPassword.getEditText().getText().toString();
-        mAuth.logIn(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(SignInActivity.this, "Login correcto!!!!", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(SignInActivity.this, MainActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(i);
-                } else {
-                    Toast.makeText(SignInActivity.this, "Login fallido!!!!!", Toast.LENGTH_SHORT).show();
-                }
+        mAuth.logIn(email, pass).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(SignInActivity.this, "Login correcto!!!!", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(SignInActivity.this, MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+            } else {
+                Toast.makeText(SignInActivity.this, "Login failed "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

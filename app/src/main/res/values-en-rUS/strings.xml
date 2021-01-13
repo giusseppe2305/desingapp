@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <!-- Strings used for titles sex-->
+    <string name = "sex_male">Male </string>
+    <string name = "sex_female">Woman </string>
+    <string name = "sex_other">Other </string>
+    <!-- Strings used for tittles categories-->
+    <string name = "homeCategory">Home </string>
+    <string name = "educationAndSportsCategory">Education and Sports </string>
+    <string name = "estheticCategory">Esthetic </string>
+    <string name = "careAndHealhCategory">Care and Health </string>
+    <string name = "computingAndAudiovisualCategory">Computer Science and Audiovisual </string>
+    <string name = "othersCategory">Others </string>
+    <!-- Strings used for tittles resources-->
+    <string name = "resource_always_available">24 hours available </string>
+    <string name = "resource_has_car">Has a car </string>
+    <string name = "resource_credit_card">Accept credit card </string>
+    <string name = "resource_home_service">Home service </string>
+    <string name = "resource_works_weekend_and_holidays">Works weekends </string>
+    <!-- Strings used for tittles appbar of activities-->
+    <string name = "register_activity_title">Register </string>
+    <string name = "valuation_activity_title">Submit your valuation </string>
+    <string name = "job_offered_activity_title">Jobs offered </string>
+    <string name = "create_job_activity_title">Create a job </string>
+    <string name = "sign_in_activity_title">Sign in </string>
+    <string name = "title_activity_chat_conversation">Conversation </string>
+    <string name = "post_fragment_title">Main menu </string>
+    <string name = "edit_profile_activity_title">Edit profile </string>
+    <string name = "edit_settings_worker_activity_title">Settings </string>
+    <string name = "auctions_activity_title">Auctions </string>
+    <string name = "favourites_workers_activity_title">Favorites </string>
+    <string name = "jobs_activity_title">Jobs </string>
+    <string name = "settings_activity_title">Settings </string>
+    <string name = "verify_account_activity_title">Verify phone number </string>
+    <!-- Register Activiy values-->
+    <string name = "activity_register_hint_password_input_text">Password <font fgcolor = 'red'>* </font></string>
+    <string name = "activity_register_hint_password_repeat_input_text">Repeat password <font fgcolor = 'red'>* </font></string>
+    <string name = "activity_register_hint_email_input_text">Email <font fgcolor = 'red'>* </font></string>
+    <string name = "activity_register_text_accept_conditions">By registering I confirm that I have read and accept all the terms of use and the privacy policy. Also, I\'m at least 18 years old. </string>
+    <string name = "activity_register_want_receive_newsletter">I want to receive newsletter </string>
+    <string name = "activity_register_btn_register">Register me </string>
+    <!-- Sign in Activiy values-->
+    <string name="btn_sign_in">Sign In</string>
+
+    <!-- Values pattern category spinner-->
+    <string name = "patter_spinner_subcategories">Select some category / subcategory </string>
+    <string name = "patter_select_almost_one_image">Select an image </string>
+    <!-- Values pattern password-->
+    <string name = "pattern_password_digits_between_0_9">Must have less than a number between 0–9. </string>
+    <string name = "pattern_password_min_lower_case">Must be at least one lowercase. </string>
+    <string name = "pattern_password_min_upper_case">Must be at least one uppercase. </string>
+    <string name = "pattern_password_corretly_length">Must be between 8–20 characters </string>
+    <!-- Values pattern last name-->
+    <string name = "pattern_last_name_correct_length">Last name too long </string>
+    <string name = "pattern_last_name_void_field">You must enter a surname. </string>
+    <!-- Values pattern about-->
+    <string name = "pattern_about_correct_length">About me too long </string>
+    <!-- Values pattern schedule-->
+    <string name="pattern_schedule_correct_length">Schedule too long</string>
+    <!-- Values pattern title-->
+    <string name = "pattern_title_correct_length">Must be between 0–40 characters. </string>
+    <string name = "pattern_title_void_field">You must enter a title. </string>
+    <!-- Values pattern name-->
+    <string name = "pattern_name_correct_length">Name too long </string>
+    <string name = "pattern_name_void_field">You must enter a name. </string>
+    <!-- Values pattern description job-->
+    <string name = "pattern_description_correct_length">Must be between 0–240 characters. </string>
+    <string name = "pattern_description_void_field">You must enter some description. </string>
+    <!-- Values pattern email-->
+    <string name = "pattern_email_void_field">Enter some email. </string>
+    <string name = "pattern_email_wrong_pattern">Please enter any valid email. </string>
+    <!-- Values pattern password-->
+    <string name = "pattern_password_not_equal_passwords">Passwords are not the same </string>
+    <string name = "pattern_pasword_header_result">The password: </string>
+    <string name = "sign_in_with_google">Enter with google </string>
+    <string name = "sign_in_with_facebook">Login with facebook </string>
+    <string name = "sign_in_with_email">Sign in with e-mail </string>
+    <!--Values-->
+    <string name = "register_with_google">Register with google </string>
+    <string name = "register_with_facebook">Register with facebook </string>
+    <string name = "register_with_email">Register with e-mail </string>
+    <!-- name values bottomnavigation -->
+    <string name = "menuNameWorkers">Workers</string>
+    <string name = "menuNameJobs">Jobs</string>
+    <string name = "menuNameChats">Chats</string>
+    <string name = "menuNameProfile">Profile</string>
+    <!--    values job offered activity-->
+    <string name = "spinner_category_hint">Please select a category </string>
+    <string name = "spinner_subcategories_hint">Please select a subcategory </string>
+    <string name = "estimated_price">Estimated price </string>
+    <string name = "description_new_job">Description </string>
+    <string name = "price_per_hour">Price per hour </string>
+    <string name = "title_new_job">Title </string>
+    <string name = "basic_information_new_job">Basic information </string>
+    <string name = "max_10_photos">Upload up to 10 photos </string>
+    <string name = "job_offered_dialog_apply_title">Apply to job </string>
+    <string name = "job_offered_dialog_apply_message">Fill in the details </string>
+    <string name = "job_offered_dialog_apply_positive_button">Apply </string>
+    <string name = "job_offered_dialog_apply_negative_button">Cancel </string>
+    <string name = "job_offered_dialog_confirm_cancel_title">Confirmation </string>
+    <string name = "job_offered_dialog_confirm_cancel_message">Are you sure you want to stop applying for this job? </string>
+    <string name = "job_offered_dialog_confirm_cancel_positive_button">Yes I\'m sure </string>
+    <string name = "job_offered_dialog_confirm_cancel_negative_button">Cancel </string>
+    <string name = "job_offered_cancel">Cancel the request </string>
+    <string name = "job_offered_apply">Apply for job </string>
+    <string name = "job_offered_dialog_be_worker_title">Confirmation </string>
+    <string name = "job_offered_dialog_be_worker_message">If you apply for any job, your worker status will be allowed to sit. Are you sure you want to apply for this job? </string>
+    <string name = "job_offered_dialog_be_worker_negative_button">No thanks </string>
+    <string name = "job_offered_dialog_be_worker_positive_button">Yes, apply </string>
+    <string name = "job_offered_type_message">Enter any message </string>
+    <string name = "job_offered_type_message_large">Message too long </string>
+    <string name = "job_offered_price">Enter any budget </string>
+    <string name = "job_offered_apply_job">Apply for a job </string>
+    <string name = "job_offered_applying">Professionals applying </string>
+    <string name = "job_offered_apply_description">Description </string>
+    <string name = "job_offered_apply_see_profile">View profile </string>
+    <string name = "job_offered_subcategory">Subcategory: </string>
+    <string name = "job_offered_category">Category: </string>
+    <!--    values dialog close create job activity-->
+    <string name = "dialog_confirm_close_create_job_activity_title">Do you want to exit? </string>
+    <string name = "dialog_confirm_close_create_job_activity_message">The job has not been created, if it exits all data will be lost. </string>
+    <string name = "dialog_confirm_close_create_job_activity_cancel">I\'m staying! </string>
+    <string name = "dialog_confirm_close_create_job_activity_ok">Exit </string>
+
+
+    <string-array name="job_states">
+        <item>Published </item>
+        <item>In progress </item>
+        <item>Finished </item>
+    </string-array>
+
+    <!--    permision call values-->
+    <string name = "permission_call_reject_message">You have to enable permissions </string>
+    <string name = "permission_call_try_again">Try again </string>
+    <string name = "permission_call_no_thanks">No thanks </string>
+    <string name = "permission_call_enable_manually">You have to enable permissions manually </string>
+    <string name = "permission_call_title">Required permissions </string>
+    <string name = "permission_call_reject_many_times_message">You have rejected the permissions many times so if you want to use this function, you need to enable them manually </string>
+    <string name = "permission_call_ok">Ok </string>
+    <!--    values date format-->
+    <string name="date_format_of">of</string>
+    <string name="date_format_yesterday">Today</string>
+    <string name="date_format_today">Yesterday</string>
+
+    <!--    auctions adapter-->
+    <string name="workers_on_auction">workers in bid</string>
+    <!--    jobs adapter-->
+    <string name = "jobs_adapter_alert_confirm_title">Confirmation </string>
+    <string name = "jobs_adapter_alert_confirm_message">Be sure to mark the job as finished </string>
+    <string name = "jobs_adapter_alert_confirm_positive_button">Done </string>
+    <string name = "jobs_adapter_alert_confirm_negative_button">Cancel </string>
+    <string name = "jobs_adapter_alert_opinion_title">Opinion </string>
+    <string name = "jobs_adapter_alert_opinion_message">Do you want to post your opinion now? </string>
+    <string name = "jobs_adapter_alert_opinion_positive_button">Comment </string>
+    <string name = "jobs_adapter_alert_opinion_negative_button">After </string>
+    <!--    my_auctions_fragment-->
+    <string name = "my_auctions_fragment_alert_title">Confirmation </string>
+    <string name = "my_auctions_fragment_alert_message">Are you sure you want to delete the following skill </string>
+    <string name = "my_auctions_fragment_alert_negative_button">Cancel </string>
+    <string name = "my_auctions_fragment_alert_positive_button">Delete </string>
+
+    <!--    verify account-->
+    <string name = "fail_to_send_sms">Error sending the sms </string>
+    <string name = "wrong_code">Wrong code </string>
+    <string name = "code_confirmed">User verified successfully </string>
+    <string name = "jobs_activity_jobs_received">Jobs received </string>
+    <!--    jobs activity-->
+    <string name="jobs_activity_jobs_done">Trabajos realizados</string>
+    <!--    chat conversation-->
+    <string name = "chat_conversation_write_message">Write message… </string>
+    <string name = "chat_conversation_field_message_void">Enter a message </string>
+    <string name = "chat_converstation_last_connection_today">last seen today at </string>
+    <string name = "chat_converstation_last_connection_yesterday">last seen yesterday at </string>
+    <string name = "chat_converstation_last_connection">last connexion </string>
+    <string name = "chat_converstation_connected">connected </string>
+    <string name = "chat_conversation_typing">typing ... </string>
+
+    <!--    notifications value-->
+    <string name="notification_new_message">New message</string>
+    <!--    edit profile-->
+    <string name = "edit_profile_delete_account">DELETE ACCOUNT </string>
+    <string name = "edit_profile_location_exact">Exact location </string>
+    <string name = "edit_profile_location">Location </string>
+    <string name = "edit_profile_birthdate">Date of birth </string>
+    <string name = "edit_profile_sex">Gender </string>
+    <string name = "edit_profile_private_information">Private information </string>
+    <string name = "edit_profile_schedule">Schedule </string>
+    <string name = "edit_profile_about">About me </string>
+    <string name = "edit_profile_last_name">Surname </string>
+    <string name = "edit_profile_name">Name </string>
+    <string name = "edit_profile_basic_information">Basic information </string>
+    <string name = "edit_profile_change">Change </string>
+    <string name = "edit_profile_change_photo_profile">Change profile photo </string>
+    <string name = "edit_profile_change_landscape_photo">Change cover photo </string>
+    <string name = "edit_profile_select_date">Select a date </string>
+    <string name = "edit_profile_dialog_select_image_from_tittle">Choose an option </string>
+    <string name = "edit_profile_dialog_select_image_from_option1">Choose from gallery </string>
+    <string name = "edit_profile_dialog_select_image_from_option2">Take PHOTO NOW </string>
+    <string name = "edit_profile_dialog_select_image_from_negative_button">Cancel </string>
+    <string name = "edit_profile_fields_are_invalid">Invalid fields </string>
+    <!--    edit settings-->
+    <string name="edit_settings_worker_skills">Skills</string>
+    <string name="edit_settings_resources">Resources</string>
+    <!--    favourites workers-->
+    <string name = "favourites_workers_save_favourites">Save your favorites </string>
+    <string name = "favourites_workers_description">Here you will find all the workers that you mark as favorites </string>
+    <!--    job done-->
+    <string name = "job_done_category">Category: </string>
+    <string name = "job_done_subcategory">Subcategory: </string>
+    <string name = "job_done_valuation">Score </string>
+    <string name = "job_done_speed_contact">Time </string>
+    <string name = "job_done_amiability">Final result </string>
+    <string name = "job_done_speed_end_job">Price </string>
+    <string name = "job_done_punctuality">Price </string>
+    <string name = "job_done_opinion">Opinion </string>
+    <string name = "job_done_description">Job description </string>
+
+
+    <attr name="nr_title" format="string" />
+
+    <string name = "nest_refresh_load_more_no_more">There are no more </string>
+    <string name = "nest_refresh_load_more_pull_label">Slide to load more </string>
+    <string name = "nest_refresh_load_more_refreshing_label">Loading \ u2026 </string>
+    <string name = "nest_refresh_load_more_release_label">Drop to load more </string>
+    <string name = "nest_refresh_pull">Swipe to update </string>
+    <string name = "nest_refresh_refreshing">Loading \ u2026 </string>
+    <string name = "nest_refresh_release">Drop to load more </string>
+    <string name = "edit_settings_worker_dialog_resource_title">Choose a resource </string>
+    <string name = "edit_settings_worker_dialog_resource_cancel">Cancel </string>
+    <string name = "edit_settings_worker_dialog_skill_title">Skill </string>
+    <string name = "edit_settings_worker_dialog_skill_edit">Modify </string>
+    <string name = "edit_settings_worker_dialog_skill_create">Create </string>
+    <string name = "edit_settings_worker_dialog_skill_cancel">Cancel </string>
+    <string name = "edit_settings_worker_dialog_delete_skill_title">Confirmation </string>
+    <string name = "edit_settings_worker_dialog_delete_skill_message">Are you sure you want to delete the following skill: </string>
+    <string name = "edit_settings_worker_dialog_delete_skill_cancel">Cancel </string>
+    <string name = "edit_settings_worker_dialog_delete_skill_delete">Delete </string>
+    <string name = "edit_settings_worker_dialog_delete_resource_title">Confirmation </string>
+    <string name = "edit_settings_worker_dialog_delete_resource_message">Are you sure you want to delete the following skill: </string>
+    <string name = "edit_settings_worker_dialog_delete_resource_cancel">Cancel </string>
+    <string name = "edit_settings_worker_dialog_delete_resource_delete">Delete </string>
+
+    <!--    valuation activity-->
+    <string name = "valuation_dialog_title">Confirmation </string>
+    <string name = "valuation_dialog_message">You are sure you do not want to continue with the evaluation. Do you want to exit? </string>
+    <string name = "valuation_dialog_positive_button">Continue </string>
+    <string name = "valuation_dialog_negative_button">Exit </string>
+    <!--    swipe rv adapter-->
+    <string name = "swipe_adapter_job_dialog_title">choose who you are going to give the job to </string>
+    <string name = "swipe_adapter_job_dialog_confirm_title">are you sure to choose </string>
+    <string name = "swipe_adapter_job_dialog_message">No one has applied to this job yet </string>
+    <string name = "swipe_adapter_job_dialog_cancel">Cancel </string>
+    <string name = "swipe_adapter_job_dialog_close">Close </string>
+    <string name = "swipe_adapter_job_dialog_confirm_selected">you have chosen </string>
+    <string name = "swipe_adapter_job_dialog_confirm_positive_button">choose </string>
+    <!--    dinamic link user-->
+    <string name = "dinamic_link_know">You know: </string>
+    <string name = "dinamic_link_description">description </string>
+    <string name = "dinamic_link_share_user">Share this worker </string>
+    <string name = "jobs_adapter_workers_apply">workers applying. </string>
+    <string name = "jobs_adapter_workers_be_first">Be the first </string>
+
+
+    <!--    create edit job-->
+    <string name = "create_edit_job_dialog_photo_title">Choose an option </string>
+    <string name = "create_edit_job_dialog_photo_option_1">Choose from gallery </string>
+    <string name = "create_edit_job_dialog_photo_option_2">Take PHOTO NOW </string>
+    <string name = "create_edit_job_uploading_photos">Uploading image. </string>
+    <string name = "create_edit_job_dialog_photo_negative_button">Cancel </string>
+    <string name = "create_edit_job_dialog_message_finishing">Finalizing details </string>
+    <string name = "create_edit_job_message_create">Created successfully </string>
+    <string name = "create_edit_job_message_fail_created">Create failed </string>
+    <string name = "create_edit_job_update_fail">update failed </string>
+    <string name = "create_edit_job_update">Updated correctly </string>
+
+    <!--    category selected-->
+
+    <string name = "category_selected_order">Sort </string>
+    <string name = "category_selected_price">Price </string>
+    <string name = "category_selected_last_conexion">Last connection </string>
+
+    <!--    login activity-->
+    <string name = "login_description">Find the professional you need, no matter what sector, we have a person for you. </string>
+    <string name = "join">Join now! </string>
+    <string name = "login_create_profile">Create your profile </string>
+    <string name = "login_i_have_account">I already have an account </string>
+    <!--    profile activity-->
+    <string name = "profile_see">View my profile </string>
+    <string name = "profile_favourites_workers">My favorite workers </string>
+    <string name = "profile_auctions">Auctions </string>
+    <string name = "profile_hollidays">Vacation mode </string>
+    <string name = "profile_settings">Settings </string>
+    <string name = "profile_privacy">Privacy </string>
+    <string name = "profile_about_us">About us </string>
+    <string name = "profile_help">Help Center </string>
+    <string name = "profile_detail_call">call </string>
+    <string name = "profile_detail_chat">Chat </string>
+    <string name = "profile_detail_description">Description: </string>
+    <string name = "profile_detail_location">Location View Location </string>
+    <!--    register_step 1-->
+    <string name = "register_setp_register_worker">Register as a worker </string>
+    <!--    settings activity-->
+    <string name = "settings_data_profile">Profile data </string>
+    <string name = "settings_data_profile_self">Autonomous data </string>
+    <string name = "settings_change_password">Change password </string>
+    <string name = "settings_verified">Verify Account </string>
+    <string name = "settings_notifications">Notifications </string>
+    <string name = "settings_notifications_app">App notifications </string>
+    <string name = "settings_notifications_email">Email notifications </string>
+    <string name = "settings_laguange_app">App language </string>
+    <string name = "settings_language">Language </string>
+    <string name = "settings_log_out">Close session </string>
+    <string name = "settings_version_app">App version v1.0.0 </string>
+    <!--    valuation activity-->
+    <string name = "valuation_header">Rate your experience </string>
+    <string name = "valuation_body">Click on the stars to leave your valuation. More stars, better experience </string>
+    <string name = "valuation_put_comment">leave a comment </string>
+    <!--    verify_account-->
+    <string name = "verify_account_number">Enter number </string>
+    <string name = "verify_send_sms">Send sms </string>
+    <string name = "verify_confirm">confirm </string>
+    <string name = "sheet_last_conexion_title">Select last connection </string>
+    <string name = "sheet_last_conexion_delet">Delete </string>
+    <string name = "sheet_last_conexion_today">Today </string>
+    <string name = "sheet_last_conexion_three_last_days">Last 3 days </string>
+    <string name = "sheet_last_conexion_this_week">This week </string>
+    <string name = "sheet_last_conexion_this_month">This month </string>
+    <string name = "sheet_last_conexion_always">Always </string>
+    <string name = "auctions_participate_title">Participate in an auction </string>
+    <string name = "auctions_participate_title_2">Here you will find all the auctions in which you are participating. </string>
+    <string name = "my_auctions_title">Your auctions </string>
+    <string name = "my_auctions_title_2">Here you will find all your job auctions. </string>
+    <string name="select_language">Select a language</string>
+    <string name="spanish">Spanish</string>
+    <string name="english">English</string>
+
+
+
+</resources>

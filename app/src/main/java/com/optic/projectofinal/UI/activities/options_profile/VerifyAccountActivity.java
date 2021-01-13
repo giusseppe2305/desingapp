@@ -62,7 +62,7 @@ public class VerifyAccountActivity extends AppCompatActivity {
                 PhoneAuthOptions options =
                         PhoneAuthOptions.newBuilder(mAuth)
                                 .setPhoneNumber("+34"+binding.numberPhone.getEditText().getText().toString())       // Phone number to verify
-                                .setTimeout(200L, TimeUnit.SECONDS) // Timeout and unit
+                                .setTimeout(120L, TimeUnit.SECONDS) // Timeout and unit
                                     .setActivity(VerifyAccountActivity.this)                 // Activity (for callback binding)
                                 .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                                     @Override

@@ -206,10 +206,10 @@ public class CategorySelectedActivity extends AppCompatActivity {
                     binding.loading.setVisibility(View.GONE);
                     listWorkers.clear();
                     if (response.body().size() > 0) {
-                        Log.d(TAG_LOG, "onResponse: " + call.request().url().toString());
-                        for (WorkerQueryModel it : response.body()) {
-                            Log.d(TAG_LOG, "onResponse: " + it);
-                        }
+
+//                        for (WorkerQueryModel it : response.body()) {
+//                            Log.d(TAG_LOG, "onResponse: " + it);
+//                        }
 //                        int positionStart=listWorkers.size()+1;
 //                        listWorkers.addAll(response.body());
 //                        adapter.notifyItemRangeInserted(positionStart,response.body().size());

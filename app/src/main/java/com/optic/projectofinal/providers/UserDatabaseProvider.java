@@ -35,7 +35,7 @@ public class UserDatabaseProvider {
     }
 
     public Task<Void> createUser(User miUser) {
-        return database.document(miUser.getId()).set(miUser);
+        return database.document(miUser.getId()).set(Utils.convertClassToMap(miUser));
     }
 
     public Task<DocumentSnapshot> getUser(String idUser){

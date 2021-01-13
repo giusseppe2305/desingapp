@@ -2,18 +2,21 @@ package com.optic.projectofinal.UI.activities.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.optic.projectofinal.R;
-import com.optic.projectofinal.UI.activities.MainActivity;
+import com.optic.projectofinal.UI.activities.login.register.RegisterStep1Activity;
 import com.optic.projectofinal.databinding.ActivityRegiterBinding;
 import com.optic.projectofinal.models.User;
 import com.optic.projectofinal.providers.AuthenticationProvider;
 import com.optic.projectofinal.providers.UserDatabaseProvider;
+import com.optic.projectofinal.utils.Utils;
 import com.optic.projectofinal.utils.UtilsUI;
+
+import static com.optic.projectofinal.utils.Utils.TAG_LOG;
 
 public class RegisterActivity extends AppCompatActivity {
     private ActivityRegiterBinding binding;
@@ -94,20 +97,17 @@ public class RegisterActivity extends AppCompatActivity {
                 mUser.setDefaultData();
                 mUser.setEmail(email);
                 mUser.setId(mAuth.getIdCurrentUser());
-                mUserProvider.createUser(mUser).addOnCompleteListener(task1 -> {
-                    if (task1.isSuccessful()) {
-                        Toast.makeText(RegisterActivity.this, "Registrado database normal ", Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(RegisterActivity.this, MainActivity.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(i);
-                    } else {
-                        Toast.makeText(RegisterActivity.this, "Ha habido un error database " + task1.getException(), Toast.LENGTH_LONG).show();
-                    }
-                });
-                Toast.makeText(RegisterActivity.this, "Usuario registrado Authentication", Toast.LENGTH_LONG).show();
+                mUserProvider.createUser(mUser).addOnSuccessListener(aVoid -> {
+                    Intent i = new Intent(RegisterActivity.this, RegisterStep1Activity.class);
+                    i.putExtra("idUser",mAuth.getIdCurrentUser());
+                    i.putExtra("optionRegister",Utils.REGISTER.EMAIL);
+                    startActivity(i);
+                    Log.d(TAG_LOG, "User registered "+task.getResult().getUser().getUid());
+                }).addOnFailureListener(error-> Log.e(TAG_LOG, "createUserWithAuthentication: error "+error.getMessage() ));
             } else {
-                Toast.makeText(RegisterActivity.this, "Ha habido un error AUTHENTICATION " + task.getException(), Toast.LENGTH_LONG).show();
+                Log.e(TAG_LOG, "Ha habido un error AUTHENTICATION " + task.getException());
             }
         });
     }
+
 }

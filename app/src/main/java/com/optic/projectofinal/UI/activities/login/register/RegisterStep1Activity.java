@@ -219,7 +219,7 @@ public class RegisterStep1Activity extends AppCompatActivity {
 
 
         Utils.setPersistantBasicUserInformation(basicInformationUser, this);
-        Utils.setLanguage("es-Es", this);
+//        Utils.setLanguage("es-Es", this);
     }
 
     private void loadData() {

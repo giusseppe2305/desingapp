@@ -15,10 +15,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectoFinal">
-        <activity android:name=".prueba.RefreshJava">
-
-
-        </activity>
         <activity android:name=".UI.activities.login.register.RegisterStep1Activity"></activity>
         <activity android:name=".UI.activities.options_profile.VerifyAccountActivity" />
         <activity

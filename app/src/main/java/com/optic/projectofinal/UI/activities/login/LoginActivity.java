@@ -200,7 +200,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             ///set share preference
-                            saveSharePreference(documentSnapshot);
+
                             Intent i = new Intent(LoginActivity.this, RegisterStep1Activity.class);
                             i.putExtra("idUser",id);
                             i.putExtra("optionRegister",option);
@@ -223,7 +223,7 @@ public class LoginActivity extends AppCompatActivity {
         basicInformationUser.setName(documentSnapshot.getString("name"));
         basicInformationUser.setLastName(documentSnapshot.getString("lastName"));
         Utils.setPersistantBasicUserInformation(basicInformationUser, LoginActivity.this);
-        Utils.setLanguage("es-Es", this);
+       // Utils.setLanguage("es-Es", this);
     }
 
 

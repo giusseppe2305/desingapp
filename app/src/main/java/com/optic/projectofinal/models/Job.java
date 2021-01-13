@@ -8,7 +8,6 @@ public class Job {
     private String id;
     private String idUserOffer;
     private String idUserApply;
-
     private long timestamp;
     private String description;
     private String opinionUserOffer;

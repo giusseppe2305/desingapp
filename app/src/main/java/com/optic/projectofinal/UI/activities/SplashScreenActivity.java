@@ -17,6 +17,7 @@ import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.optic.projectofinal.UI.activities.login.LoginActivity;
 import com.optic.projectofinal.databinding.ActivitySplashScreenBinding;
 import com.optic.projectofinal.providers.AuthenticationProvider;
+import com.optic.projectofinal.utils.Utils;
 
 import static com.optic.projectofinal.utils.Utils.TAG_LOG;
 
@@ -30,10 +31,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         binding = ActivitySplashScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
-
-
-
+        Utils.setAppLocale(this);
     }
 
     @Override

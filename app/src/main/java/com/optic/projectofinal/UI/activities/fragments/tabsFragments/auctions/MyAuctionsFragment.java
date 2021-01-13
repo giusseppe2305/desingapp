@@ -155,10 +155,9 @@ public class MyAuctionsFragment extends Fragment implements SwipeRVTouchHelper.S
         // If swipe left - delete the item
         if (direction == ItemTouchHelper.LEFT) {
 
-            String message =String.format(getString(R.string.my_auctions_fragment_alert_message)+": %d ?",job.getTitle());
             new MaterialAlertDialogBuilder(getContext())
                     .setTitle(R.string.my_auctions_fragment_alert_title)
-                    .setMessage(message)
+                    .setMessage(getString(R.string.my_auctions_fragment_alert_message)+": "+job.getTitle()+"?")
                     .setNegativeButton(R.string.my_auctions_fragment_alert_negative_button, null)
                     .setPositiveButton(R.string.my_auctions_fragment_alert_positive_button, (dialogInterface, i) -> {
                         adapterSwipe.removeSwipeItem(position);

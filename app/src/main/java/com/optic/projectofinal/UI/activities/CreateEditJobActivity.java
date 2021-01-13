@@ -158,14 +158,11 @@ public class CreateEditJobActivity extends AppCompatActivity {
                     positionCategorySelected = listCategories.indexOf(new Category(job.getCategory()));
                     Category category = listCategories.get(positionCategorySelected);
                     binding.category.setText(category.getTitleString(), false);
-                    new SubcategoriesDatabaseProvider().getSubCategoryById(job.getSubcategory()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    new SubcategoriesDatabaseProvider().getSubCategoryById(job.getSubcategory()).addOnSuccessListener(documentSnapshot1 -> {
 
-                            loadSubCategories(job.getCategory(), new SubCategory(documentSnapshot.getString("id")));
-                            binding.subCategory.setText(documentSnapshot.getString("name"), false);
+                        loadSubCategories(job.getCategory(),documentSnapshot1.getString("id") );
+                        binding.subCategory.setText(documentSnapshot1.getString("name"), false);
 
-                        }
                     }).addOnFailureListener(v -> Log.e(TAG_LOG, " SubcategoriesDatabaseProvider CreateJobActivity onSuccess: " + v.getMessage()));
 
 
@@ -186,7 +183,7 @@ public class CreateEditJobActivity extends AppCompatActivity {
 
     }
 
-    private void loadSubCategories(int position, SubCategory isEditing) {
+    private void loadSubCategories(int position, String idSubcategory) {
         listSubcategories.clear();
         positionSubcategorySelected = null;
         binding.subCategory.setText("");
@@ -199,9 +196,12 @@ public class CreateEditJobActivity extends AppCompatActivity {
                     List<SubCategory> result = queryDocumentSnapshots.toObjects(SubCategory.class);
                     listSubcategories.clear();
                     listSubcategories.addAll(result);
-                    if (isEditing != null) {
-                        positionSubcategorySelected = listSubcategories.indexOf(isEditing);
+                    if (idSubcategory != null) {
+                        SubCategory subCategory = new SubCategory(idSubcategory);
 
+                        positionSubcategorySelected = listSubcategories.indexOf(subCategory);
+
+                        Log.d(TAG_LOG, "onSuccess: "+positionSubcategorySelected+subCategory.getId());
                     }
                     binding.subCategory.setAdapter(new ArrayAdapter<SubCategory>(CreateEditJobActivity.this, R.layout.textbox_gender, listSubcategories));
                 } else {
@@ -377,10 +377,9 @@ public class CreateEditJobActivity extends AppCompatActivity {
                         public void onSuccess(Void aVoid) {
                             //we create a thumbnail
                             createThumbnail(urlImages.get(0),myJob.getId());
-
                             mDialogCreateJob.dismiss();
-                            Log.d(TAG_LOG, "onSuccess: "+myJob.getId());
                             Toast.makeText(CreateEditJobActivity.this, R.string.create_edit_job_message_create, Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -426,27 +425,24 @@ public class CreateEditJobActivity extends AppCompatActivity {
     }
 
     private void createThumbnail(String image,String idJob) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL(image);
-                    Bitmap imageBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    storageProvider.createThumbnail(idJob,imageBitmap,"all_jobs_thumbnail",idJob).addOnSuccessListener(taskSnapshot ->
-                            taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
-                        Job update=new Job();
-                        update.setId(idJob);
-                        update.setThumbnail(uri.toString());
-                        jobsDatabaseProvider.updateJob(update).addOnFailureListener(e-> Log.e(TAG_LOG, "fail to save thumbnail job "+e.getMessage() ));
-                    }).addOnFailureListener(e -> Log.d(TAG_LOG, "fail get url thumbnail  "+e.getMessage())));
+        new Thread(() -> {
+            try {
+                URL url = new URL(image);
+                Bitmap imageBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                storageProvider.createThumbnail(idJob,imageBitmap,"all_jobs_thumbnail",idJob).addOnSuccessListener(taskSnapshot ->
+                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
+                    Job update=new Job();
+                    update.setId(idJob);
+                    update.setThumbnail(uri.toString());
+                    jobsDatabaseProvider.updateJob(update).addOnFailureListener(e-> Log.e(TAG_LOG, "fail to save thumbnail job "+e.getMessage() ));
+                }).addOnFailureListener(e -> Log.d(TAG_LOG, "fail get url thumbnail  "+e.getMessage())));
 
-                } catch (MalformedURLException e) {
-                    Log.e(TAG_LOG, "createThumbnail: "+e.getMessage() );
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    Log.e(TAG_LOG, "createThumbnail: "+e.getMessage() );
-                    e.printStackTrace();
-                }
+            } catch (MalformedURLException e) {
+                Log.e(TAG_LOG, "createThumbnail: "+e.getMessage() );
+                e.printStackTrace();
+            } catch (IOException e) {
+                Log.e(TAG_LOG, "createThumbnail: "+e.getMessage() );
+                e.printStackTrace();
             }
         }).start();
     }

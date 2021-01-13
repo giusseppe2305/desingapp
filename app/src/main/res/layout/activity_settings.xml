@@ -361,6 +361,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="5dp"/>
                 <LinearLayout
+                    android:id="@+id/chooseLanguage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -389,9 +390,10 @@
                             android:layout_height="wrap_content"
                             android:text="@string/settings_language" />
                         <TextView
+                            android:id="@+id/tagLanguage"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="ES"
+
                             android:gravity="right"
                             android:paddingRight="15dp"/>
 

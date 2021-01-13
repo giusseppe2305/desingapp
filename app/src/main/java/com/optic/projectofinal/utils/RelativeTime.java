@@ -94,7 +94,7 @@ public class RelativeTime extends Application {
             return context.getString(R.string.date_format_today);
         }else {
             String formatText=String.format("dd '%s' MMMM '%s' yyyy",context.getString(R.string.date_format_of),context.getString(R.string.date_format_of));
-            SimpleDateFormat format1 = new SimpleDateFormat(formatText,Locale.forLanguageTag(Utils.getLanguage(context)));
+            SimpleDateFormat format1 = new SimpleDateFormat(formatText,Locale.getDefault());
             return format1.format(date);
         }
 
@@ -114,7 +114,7 @@ public class RelativeTime extends Application {
                 now.get(Calendar.YEAR)==compare.get(Calendar.YEAR))   {
             formatText=String.format("'%s' HH:mm",context.getString(R.string.chat_converstation_last_connection_yesterday));
         }else {
-            formatText=String.format("'%s' dd/mm/yyyy HH:mm",context.getString(R.string.chat_converstation_last_connection));
+            formatText=String.format("'%s' dd/MM/yyyy HH:mm",context.getString(R.string.chat_converstation_last_connection));
 
         }
         return new SimpleDateFormat(formatText).format(date);

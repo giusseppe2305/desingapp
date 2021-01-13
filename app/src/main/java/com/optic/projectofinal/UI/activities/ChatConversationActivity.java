@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,8 +20,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -263,15 +260,12 @@ public class ChatConversationActivity extends AppCompatActivity {
                     binding.toolbar.nameUserToToolbar.setText(documentSnapshot.getString("name"));
                 }
                 if (documentSnapshot.contains("online") && documentSnapshot.contains("lastConnection")) {
-                    listeningChangeDataToolbar = mUserProvider.getIsOnlineUser(idUserToChat).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                            if (value.getBoolean("online")) {
-                                binding.toolbar.statusUserToToolbar.setText(getString(R.string.chat_converstation_connected));
-                            } else {
-                                binding.toolbar.statusUserToToolbar.setText(RelativeTime.getStringForlastConnection(ChatConversationActivity.this,
-                                        value.getLong("lastConnection")));
-                            }
+                    listeningChangeDataToolbar = mUserProvider.getIsOnlineUser(idUserToChat).addSnapshotListener((value, error) -> {
+                        if (value.getBoolean("online")) {
+                            binding.toolbar.statusUserToToolbar.setText(getString(R.string.chat_converstation_connected));
+                        } else {
+                            binding.toolbar.statusUserToToolbar.setText(RelativeTime.getStringForlastConnection(ChatConversationActivity.this,
+                                    value.getLong("lastConnection")));
                         }
                     });
                 }

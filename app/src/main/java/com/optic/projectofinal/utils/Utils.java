@@ -4,13 +4,17 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.OpenableColumns;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -69,11 +73,36 @@ public class Utils {
 
 
     public  enum REGISTER{GOOGLE,FACEBOOK,EMAIL}
+    public enum LANGUAGE{
+        SPANISH("es-ES"),
+        ENGLISH("en-US");
+        private String code;
+        LANGUAGE(String code) {
+            this.code = code;
+        }
+        public String getCode() {
+            return code;
+        }
+
+    }
     private static final String NAME_FILE_JSON_PROPERTIES = "properties.json";
     private static final String NODE_ALL_CATEGORIES = "all_categories";
     private static final String NODE_RESOURCES = "all_resources";
     public  static final int MAX_IMAGE_CAN_BE_SELECTED=10;
     public static final String TAG_LOG="own";
+
+    public static void setAppLocale( Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        Configuration config = resources.getConfiguration();
+
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.JELLY_BEAN_MR1){
+            config.setLocale(Locale.forLanguageTag(getLanguage(context)));
+        } else {
+            config.locale = Locale.forLanguageTag(getLanguage(context));
+        }
+        resources.updateConfiguration(config, dm);
+    }
 
     public static <T> Map<String, Object> convertClassToMap(T obj){
         Map<String, Object> update = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL).convertValue(obj, Map.class);
@@ -304,11 +333,11 @@ public class Utils {
     }
     public static String getDateFormattedAdvance(Long timestamp,Context context){
         Date date = new Date(timestamp);
-        SimpleDateFormat df2 = new SimpleDateFormat("HH:mm - dd MMMM yyyy",Locale.forLanguageTag(Utils.getLanguage(context)));
+        SimpleDateFormat df2 = new SimpleDateFormat("HH:mm - dd MMMM yyyy",Locale.getDefault());
         return df2.format(date);
     }public static String getDateFormattedSimple(Long timestamp,Context context){
         Date date = new Date(timestamp);
-        SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yyyy",Locale.forLanguageTag(Utils.getLanguage(context)));
+        SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yyyy",Locale.getDefault());
         return df2.format(date);
     }
     public static long getTimestampFromString(String date){
@@ -477,21 +506,20 @@ public class Utils {
     public static void setLanguage(String language,Context context){
         SharedPreferences sharedPref = context.getSharedPreferences("language", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-
         editor.putString("language", language);
-
         editor.apply();
     }
     public static String getLanguage(Context context){
         SharedPreferences sharedPref = context.getSharedPreferences("language", MODE_PRIVATE);
-        return sharedPref.getString("language", "es-Es");
+        return sharedPref.getString("language", LANGUAGE.SPANISH.getCode());
     }
 
     public static Currency getCurrency(Context context){
-        return Currency.getInstance(getLocale(context));
+        return Currency.getInstance(getCurrentLocation(context));
     }
-    public static Locale getLocale(Context context){
-        return Locale.forLanguageTag(Utils.getLanguage(context));
+    public static Locale getCurrentLocation(Context context){
+        return  Locale.forLanguageTag(getLanguage(context));
     }
+
 }
 
