@@ -284,7 +284,7 @@ public class RegisterStep1Activity extends AppCompatActivity {
                                                     object1 = new JSONObject(response1.getRawResponse());
                                                     String image = object1.getJSONObject("data").getString("url");
                                                     Log.d(TAG_LOG, "onCompleted: image " + image);
-                                                    Glide.with(RegisterStep1Activity.this).load(image).apply(Utils.getOptionsGlide(true)).into(binding.imageProfile);
+                                                    Glide.with(RegisterStep1Activity.this).load(image).apply(Utils.getOptionsGlide(false)).into(binding.imageProfile);
                                                     urlImageFacebook = image;
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
@@ -325,7 +325,7 @@ public class RegisterStep1Activity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 //Image Uri will not be null for RESULT_OK
                 uriCoverImage = data.getData();
-                Glide.with(this).load(uriCoverImage).apply(Utils.getOptionsGlide(true)).centerCrop().into(binding.coverPageImage);
+                Glide.with(this).load(uriCoverImage).apply(Utils.getOptionsGlide(false)).centerCrop().into(binding.coverPageImage);
             } else if (resultCode == ImagePicker.RESULT_ERROR) {
                 Toast.makeText(this, ImagePicker.Companion.getError(data), Toast.LENGTH_SHORT).show();
             } else {
@@ -336,7 +336,7 @@ public class RegisterStep1Activity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 //Image Uri will not be null for RESULT_OK
                 uriImageProfile = data.getData();
-                Glide.with(this).load(uriImageProfile).apply(Utils.getOptionsGlide(true)).into(binding.imageProfile);
+                Glide.with(this).load(uriImageProfile).apply(Utils.getOptionsGlide(false)).into(binding.imageProfile);
             } else if (resultCode == ImagePicker.RESULT_ERROR) {
                 Log.e(TAG_LOG, "fail on get select image " + ImagePicker.Companion.getError(data));
             } else {

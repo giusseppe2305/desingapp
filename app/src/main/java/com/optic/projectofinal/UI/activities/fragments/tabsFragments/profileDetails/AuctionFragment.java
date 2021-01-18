@@ -63,7 +63,7 @@ public class AuctionFragment extends Fragment {
     }
 
     private void loadAuctions() {
-        new JobsDatabaseProvider().getAllJobsById(idUser).addOnSuccessListener(queryDocumentSnapshots -> {
+        new JobsDatabaseProvider().getAllJobsById(idUser, Job.State.PUBLISHED).addOnSuccessListener(queryDocumentSnapshots -> {
             List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
             ArrayList<Job> listJobs=new ArrayList<>();
             for(DocumentSnapshot i:list){

@@ -131,28 +131,24 @@ public class Utils {
     }
     public  static void downloadFile(String url,IDo function) {
         Log.d(TAG_LOG, "downloadFile: ENTRA METODO");
-        new Thread(new Runnable() {
-            
-            @Override
-            public void run() {
-                try {
-                    Log.d(TAG_LOG, "run: entra hilo");
-                    URL u = new URL(url);
-                    URLConnection conn = u.openConnection();
-                    int contentLength = conn.getContentLength();
-                    DataInputStream stream = new DataInputStream(u.openStream());
-                    byte[] buffer = new byte[contentLength];
-                    stream.readFully(buffer);
-                    stream.close();
-                    Log.d(TAG_LOG, "run: acaba hilo");
-                    function.upload(buffer);
-                } catch(FileNotFoundException e) {
-                    Log.e(TAG_LOG, "run: "+e.getMessage() );
-                    return; // swallow a 404
-                } catch (IOException e) {
-                    Log.e(TAG_LOG, "run: "+e.getMessage() );
-                    return; // swallow a 404
-                }
+        new Thread(() -> {
+            try {
+                Log.d(TAG_LOG, "run: entra hilo");
+                URL u = new URL(url);
+                URLConnection conn = u.openConnection();
+                int contentLength = conn.getContentLength();
+                DataInputStream stream = new DataInputStream(u.openStream());
+                byte[] buffer = new byte[contentLength];
+                stream.readFully(buffer);
+                stream.close();
+                Log.d(TAG_LOG, "run: acaba hilo");
+                function.upload(buffer);
+            } catch(FileNotFoundException e) {
+                Log.e(TAG_LOG, "run: "+e.getMessage() );
+                return; // swallow a 404
+            } catch (IOException e) {
+                Log.e(TAG_LOG, "run: "+e.getMessage() );
+                return; // swallow a 404
             }
         }).start();
     }

@@ -39,8 +39,6 @@ import static com.optic.projectofinal.utils.Utils.TAG_LOG;
 
 public class SwipeRVAdapter<T> extends RecyclerView.Adapter<SwipeRVAdapter<T>.SwipeRVViewHolder> {
 
-
-
     private final Class<T> type;
     private ArrayList<T> list;
     private Context context;
@@ -69,21 +67,13 @@ public class SwipeRVAdapter<T> extends RecyclerView.Adapter<SwipeRVAdapter<T>.Sw
         return list.size();
     }
 
-    /**
-     * Remove an item from the recyclerview at index *position*
-     *
-     * @param position
-     */
+
     public void removeSwipeItem(int position) {
         list.remove(position);
         this.notifyItemRemoved(position);
     }
 
-    /**
-     * Add a Contact *contact* into the recyclerview at index *position*
-     *
-     * @param position
-     */
+
     public void addSwipeItem(int position, T obj) {
         list.add(position, obj);
         this.notifyItemInserted(position);
@@ -125,7 +115,7 @@ public class SwipeRVAdapter<T> extends RecyclerView.Adapter<SwipeRVAdapter<T>.Sw
             swipeRVViewHolder.binding.jobOffered.timestamp.setText(Utils.getDateFormattedSimple(obj.getTimestamp(),context));
 
 
-            Glide.with(context).load(obj.getThumbnail()).apply(Utils.getOptionsGlide(true)).transform(Utils.getTransformSquareRound()).into(swipeRVViewHolder.binding.jobOffered.imageJob);
+            Glide.with(context).load(obj.getThumbnail()).apply(Utils.getOptionsGlide(false)).transform(Utils.getTransformSquareRound()).into(swipeRVViewHolder.binding.jobOffered.imageJob);
 
             swipeRVViewHolder.binding.jobOffered.getRoot().setOnClickListener(v -> {
                 MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context).setTitle(R.string.swipe_adapter_job_dialog_title)

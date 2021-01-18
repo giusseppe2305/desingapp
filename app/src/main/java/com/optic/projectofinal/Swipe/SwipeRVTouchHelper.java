@@ -45,7 +45,6 @@ public class SwipeRVTouchHelper extends ItemTouchHelper.SimpleCallback {
         }
     }
 
-    // Draw background differently, depending if it is a LEFT or RIGHT swipe
     @Override
     public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
         // User swipes the item
@@ -96,13 +95,11 @@ public class SwipeRVTouchHelper extends ItemTouchHelper.SimpleCallback {
         getDefaultUIUtil().clearView(foreground);
     }
 
-    // Enable swiping
     @Override
     public boolean isItemViewSwipeEnabled() {
         return true;
     }
 
-    // Disable dragging
     @Override
     public boolean isLongPressDragEnabled() {
         return false;

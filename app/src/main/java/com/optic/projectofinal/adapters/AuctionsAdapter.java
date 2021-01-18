@@ -1,6 +1,7 @@
 package com.optic.projectofinal.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.optic.projectofinal.R;
+import com.optic.projectofinal.UI.activities.JobOfferedActivity;
 import com.optic.projectofinal.databinding.CardviewJobOfferedBinding;
 import com.optic.projectofinal.models.Job;
 import com.optic.projectofinal.providers.ApplyJobWorkerDatabaseProvider;
@@ -47,7 +49,7 @@ public class AuctionsAdapter extends RecyclerView.Adapter<AuctionsAdapter.ViewHo
         holder.binding.timestamp.setText(Utils.getStringFromTimestamp(job.getTimestamp()));
 
 //do subquery
-        Glide.with(context).load(job.getThumbnail()).apply(Utils.getOptionsGlide(true))
+        Glide.with(context).load(job.getThumbnail()).apply(Utils.getOptionsGlide(false))
                 .transform(Utils.getTransformSquareRound()).into(holder.binding.imageJob);
 
         new ApplyJobWorkerDatabaseProvider().getAllById(job.getId()).get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -69,7 +71,12 @@ public class AuctionsAdapter extends RecyclerView.Adapter<AuctionsAdapter.ViewHo
                 }
         ).addOnFailureListener(e -> Log.e(TAG_LOG, "onBindViewHolder: failure get num applyworkers " + e.getMessage()));
 
-
+        holder.binding.getRoot().setOnClickListener(v->{
+            Intent i=new Intent(context, JobOfferedActivity.class);
+            i.putExtra("idJobSelected",job.getId());
+            i.putExtra("idUserCreateJobSelected",job.getIdUserOffer());
+            context.startActivity(i);
+        });
     }
 
     @Override

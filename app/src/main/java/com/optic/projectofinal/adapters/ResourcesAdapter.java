@@ -35,7 +35,7 @@ public class ResourcesAdapter extends RecyclerView.Adapter<ResourcesAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ResourcesAdapter.ViewHolder holder, int position) {
         Resource it=listResources.get(position);
-        Glide.with(context).load(it.getIdImage()).apply(Utils.getOptionsGlide(true)).into(holder.binding.image);
+        Glide.with(context).load(it.getIdImage()).apply(Utils.getOptionsGlide(false)).into(holder.binding.image);
         holder.binding.image.setOnClickListener(view -> Toast.makeText(context, it.getTitleString(), Toast.LENGTH_SHORT).show());
     }
 

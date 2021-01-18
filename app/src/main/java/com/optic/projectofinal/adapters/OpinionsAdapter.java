@@ -42,7 +42,7 @@ public class OpinionsAdapter extends RecyclerView.Adapter<OpinionsAdapter.ViewHo
         holder.binding.message.setText(opinion.getMessage());
         holder.binding.timestamp.setText(Utils.getStringFromTimestamp(opinion.getTimestamp()));
         holder.binding.title.setText(opinion.getTitleJob());
-        Glide.with(context).load(opinion.getImageJob()).apply(Utils.getOptionsGlide(true)).transform(Utils.getTransformSquareRound()).into(holder.binding.image);
+        Glide.with(context).load(opinion.getImageJob()).apply(Utils.getOptionsGlide(false)).transform(Utils.getTransformSquareRound()).into(holder.binding.image);
 
 
         holder.binding.getRoot().setOnClickListener(view -> {

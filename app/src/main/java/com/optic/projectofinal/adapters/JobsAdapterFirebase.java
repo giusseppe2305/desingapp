@@ -44,7 +44,7 @@ public class JobsAdapterFirebase extends FirestoreRecyclerAdapter<Job, JobsAdapt
         holder.binding.title.setText(model.getTitle());
         holder.binding.description.setText(model.getDescription());
         holder.binding.timestamp.setText(Utils.getDateFormattedSimple(model.getTimestamp(), context));
-        Glide.with(context).load(model.getThumbnail()).apply(Utils.getOptionsGlide(true)).transform(Utils.getTransformSquareRound()).into(holder.binding.imageJob);
+        Glide.with(context).load(model.getThumbnail()).apply(Utils.getOptionsGlide(false)).transform(Utils.getTransformSquareRound()).into(holder.binding.imageJob);
 
         //load image
         holder.binding.getRoot().setOnClickListener(v -> {

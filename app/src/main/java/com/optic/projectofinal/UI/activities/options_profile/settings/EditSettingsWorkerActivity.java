@@ -316,6 +316,7 @@ public class EditSettingsWorkerActivity extends AppCompatActivity {
         userUpdate.setResources(Utils.createListIntResourcesByList(listResources));
         userUpdate.setSkills(listSkills);
         userDatabaseProvider.updateUser(userUpdate).addOnFailureListener(v-> Log.e(TAG_LOG, "EditSettingsWorkerActivity updateDataFirebase: addOnFailureListener"+v.getMessage() ));
+        finish();
     }
 
 

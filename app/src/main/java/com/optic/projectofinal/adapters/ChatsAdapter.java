@@ -62,7 +62,7 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
                 }
                 if (documentSnapshot.contains("profileImage")) {
                     String urlImage = documentSnapshot.getString("profileImage");
-                    Glide.with(context).load(urlImage).apply(Utils.getOptionsGlide(true)).into(holder.binding.imageUserTo);
+                    Glide.with(context).load(urlImage).apply(Utils.getOptionsGlide(false)).into(holder.binding.imageUserTo);
 
                 }
 
@@ -79,7 +79,8 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
         });
         listener=mChatProvider.getChatFromUserToAndUserFrom(model.getIdUserTo(),model.getIdUserFrom()).addSnapshotListener((value, error) -> {
             if(value!=null && !value.isEmpty()){
-                messageProvider.getMessage(value.getDocuments().get(0).getString("idLastMessage")).get().addOnSuccessListener(lastMessage -> {
+                messageProvider.getMessage(value.getDocuments().get(0).getString("idLastMessage")).addSnapshotListener((lastMessage, error1) -> {
+                    if(lastMessage !=null && lastMessage.exists()) {
                         if(lastMessage!=null && lastMessage.exists()){
                             String ultimoMensaje=lastMessage.getString("message");
                             holder.binding.lastMessage.setText(ultimoMensaje);
@@ -97,10 +98,31 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
                             }
                             holder.binding.timestampLastMessage.setText(RelativeTime.timeFormatAMPM(lastMessage.getLong("timestamp")));
                         }
-
+                    }
                 });
+//                messageProvider.getMessage(value.getDocuments().get(0).getString("idLastMessage")).get().addOnSuccessListener(lastMessage -> {
+//                        if(lastMessage!=null && lastMessage.exists()){
+//                            String ultimoMensaje=lastMessage.getString("message");
+//                            holder.binding.lastMessage.setText(ultimoMensaje);
+//                            if(lastMessage.get("idsUserFrom").equals(mAuth.getIdCurrentUser())){
+//                                ///check if the message is viewed
+//                                if (lastMessage.getBoolean("viewed")){
+//                                    holder.binding.viewed.setColorFilter(ContextCompat.getColor(context,R.color.checkMessage));
+//                                }else{
+//                                    holder.binding.viewed.setColorFilter(ContextCompat.getColor(context,R.color.unCheckMessage));
+//                                }
+//                                holder.binding.viewed.setVisibility(View.VISIBLE);
+//                            }else{
+//                                setCountMessagesNoSee(model, holder);
+//                                holder.binding.viewed.setVisibility(View.GONE);
+//                            }
+//                            holder.binding.timestampLastMessage.setText(RelativeTime.timeFormatAMPM(lastMessage.getLong("timestamp")));
+//                        }
+
+//                });
             }
         });
+
     }
 
     private void setCountMessagesNoSee(@NonNull final Chat model, @NonNull final ViewHolder holder) {

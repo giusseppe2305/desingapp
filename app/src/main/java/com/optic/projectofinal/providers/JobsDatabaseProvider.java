@@ -41,7 +41,9 @@ public class JobsDatabaseProvider {
     public Task<QuerySnapshot> getAllJobsById(String idUser) {
         return database.whereEqualTo("idUserOffer",idUser).get();
     }
-
+    public Task<QuerySnapshot> getAllJobsById(String idUser,Job.State state) {
+        return database.whereEqualTo("idUserOffer",idUser).whereEqualTo("state",state.toString()).get();
+    }
     public Task<Void> deleteJob(String id) {
         return database.document(id).delete();
     }

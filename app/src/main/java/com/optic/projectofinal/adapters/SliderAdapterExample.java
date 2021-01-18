@@ -60,12 +60,12 @@ public class SliderAdapterExample extends
         viewHolder.binding.tvAutoImageSlider.setTextSize(16);
         viewHolder.binding.tvAutoImageSlider.setTextColor(Color.WHITE);
 
-        Glide.with(context).load(sliderItem.getImage()).apply(Utils.getOptionsGlide(true))
+        Glide.with(context).load(sliderItem.getImage()).apply(Utils.getOptionsGlide(false))
                 .into(viewHolder.binding.ivAutoImageSlider);
         viewHolder.itemView.setOnClickListener(view ->
                 new StfalconImageViewer.Builder<>(context, mSliderItems.toArray(new SliderItem[]{}),
                             (imageView, image) ->
-                                    Glide.with(context).load(image.getImage()).apply(Utils.getOptionsGlide(true))
+                                    Glide.with(context).load(image.getImage()).apply(Utils.getOptionsGlide(false))
                                             .into(imageView))
                         .withStartPosition(mSliderItems.indexOf(sliderItem)).withHiddenStatusBar(false).show());
     }

@@ -89,7 +89,7 @@ public class JobsAdapterSettings extends RecyclerView.Adapter<JobsAdapterSetting
         holder.binding.title.setText(job.getTitle());
         holder.binding.description.setText(job.getDescription());
         holder.binding.timestamp.setText(Utils.getDateFormattedSimple(job.getTimestamp(),context.getContext()));
-        Glide.with(context).load(job.getThumbnail()).apply(Utils.getOptionsGlide(true)).transform(Utils.getTransformSquareRound()).into(holder.binding.imageJob);
+        Glide.with(context).load(job.getThumbnail()).apply(Utils.getOptionsGlide(false)).transform(Utils.getTransformSquareRound()).into(holder.binding.imageJob);
     }
 
     @Override

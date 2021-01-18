@@ -26,14 +26,14 @@ import static com.optic.projectofinal.utils.Utils.TAG_LOG;
 public class NotificationHelper extends ContextWrapper {
     private static final String CHANNEL_ID="com.optic.projectofinal";
     private static final String CHANNEL_NAME="SocialMedia";
-
+    private Context context;
     private  int idNotification;
     public enum TYPE_NOTIFICATION {MESSAGE_CHAT};
     private NotificationManager manager;
 
     public NotificationHelper(Context context) {
         super(context);
-
+        this.context=context;
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
             //solo es obiligatorio crea el canal en versiones superiorres o iguales a android 8
             createChannerls();
@@ -81,8 +81,8 @@ public class NotificationHelper extends ContextWrapper {
     
     public NotificationCompat.Builder getNotificaionMessage(NotificationMessageDTO messages){
         Person person1= new Person.Builder()
-                .setName("Andres")
-                .setIcon(IconCompat.createWithResource(getApplicationContext(),R.mipmap.ic_launcher))
+                .setName(Utils.getPersistentBasicUserInformation(context).getName())
+                .setIcon(IconCompat.createWithBitmap(Utils.getBitmapFromURL(Utils.getPersistentBasicUserInformation(context).getPhotoUser())))
                 .build();
         Log.d(TAG_LOG, "getNotificaionMessage: "+messages.getPhotoProfile());
         Uri uriPhoto= Uri.parse(messages.getPhotoProfile());
